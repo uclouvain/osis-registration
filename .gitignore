@@ -1,0 +1,10 @@
+static/admin/*
+venv
+.env
+*.pycosis_registration/static/admin
+__pycache__/
+osis_registration/static/admin/css
+osis_registration/static/admin/fonts
+osis_registration/static/admin/img
+osis_registration/static/admin/js
+.idea
