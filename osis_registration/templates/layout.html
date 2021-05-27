@@ -1,0 +1,198 @@
+<!doctype html>
+{% load static i18n statici18n %}
+
+{% comment "License" %}
+* OSIS stands for Open Student Information System. It's an application
+* designed to manage the core business of higher education institutions,
+* such as universities, faculties, institutes and professional schools.
+* The core business involves the administration of students, teachers,
+* courses, programs and so on.
+*
+* Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* A copy of this license - GNU General Public License - is available
+* at the root of the source code of this program.  If not,
+* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8">
+    {% block title %}
+        <title>OSIS-Registration</title>
+    {% endblock %}
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    {% if environment == 'LOCAL' %}
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/local/apple-touch-icon.png" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "img/favicon/local/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "img/favicon/local/favicon-16x16.png" %}">
+        <link rel="manifest" href="{% static "img/favicon/local/site.webmanifest" %}">
+        <link rel="mask-icon" href="{% static "img/favicon/local/safari-pinned-tab.svg" %}" color="#5bbad5">
+    {% else %}
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/apple-touch-icon.png" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "img/favicon/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "img/favicon/favicon-16x16.png" %}">
+        <link rel="manifest" href="{% static "img/favicon/site.webmanifest" %}">
+        <link rel="mask-icon" href="{% static "img/favicon/safari-pinned-tab.svg" %}" color="#5bbad5">
+    {% endif %}
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/osis.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/spinner.js' %}"></script>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% statici18n LANGUAGE_CODE %}"></script>
+
+    {% block header %}
+        <noscript>
+            <meta http-equiv="refresh" content="0;url={% url 'noscript' %}">
+        </noscript>
+    {% endblock %}
+    {% block style %}
+    {% endblock style %}
+    <style>
+        #alert_wrong_version {
+            display: none;
+        }
+
+        body {
+            font-family: 'Armata', sans-serif;
+        }
+    </style>
+</head>
+<body {% if environment == 'DEV' %} class="devmode"
+{% elif environment == 'LOCAL' %} class="localmode"
+{% elif environment == 'QA' %} class="qamode"
+{% elif environment == 'TEST' %} class="testmode"
+{% endif %}>
+<div id="overlay" class="overlay"></div>
+<div id="overlay-fade-in" class="overlay fadein"></div>
+<div id="loader"></div>
+
+
+{% block layout_navbar_top %}
+    {% include "blocks/navbar_top.html" %}
+{% endblock %}
+
+{% if environment == 'DEV' %}
+    <div class="devorange">DEV</div>
+{% elif environment == 'LOCAL' %}
+    <div class="localred">LOCAL</div>
+{% elif environment == 'QA' %}
+    <div class="qagreen">QA</div>
+{% elif environment == 'TEST' %}
+    <div class="testblue">TEST</div>
+{% endif %}
+
+<div id="alert_wrong_version" class="container">
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {% trans 'Your browser is out of date. This can lead to unknown behaviour.' %}
+    </div>
+</div>
+
+{% if subject %}
+    <div class="container-fluid p0-50">
+        <div id="notice-header" class="alert alert-danger" role="alert"><strong>{{ subject|safe }}</strong><br>{{ notice|safe }}</div>
+    </div>
+{% endif %}
+
+{% block sidebar %}{% endblock %}
+
+<div class="container" id="main">
+    {% block breadcrumbarea %}
+        <ol class="breadcrumb">
+            <li><a href="{% url 'registration' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                    aria-hidden="true"></span></a></li>
+            {% block breadcrumb %}
+            {% endblock %}
+        </ol>
+    {% endblock %}
+    {% if experimental_phase %}
+        <div class="alert alert-warning" style="margin-bottom: 10px;">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans 'This feature is in testing phase' %}.
+        </div>
+    {% endif %}
+
+    {% if warnings %}
+        <div class="alert alert-warning" style="margin-bottom: 10px">
+            <i class="fa fa-exclamation-triangle"
+               aria-hidden="true"></i> {% trans 'We detected inconsistencies in the following data :' %}
+            <button id="btn_expandButton" type="button" class="btn" data-toggle="collapse"
+                    data-target="#CollapseWarnings"
+                    style="background-color: transparent;">
+                <span id="expandButton" class="glyphicon glyphicon-collapse-down" aria-hidden="true"
+                      style="color:#8a6d3b"></span>
+            </button>
+            <div class="collapse" id="CollapseWarnings">
+                <ul>
+                    {% for warning in warnings %}
+                        <li>{{ warning }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% block header_content %}{% endblock %}
+    {% block content %}{% endblock %}
+    {% block modal %}{% endblock %}
+
+    <div class="modal fade" id="form-ajax-modal" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" id="modal_dialog_id">
+            <div class="modal-content" id="form-modal-ajax-content">
+                {# loading ajax requests #}
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+<footer class="footer">
+    <div class="container-fluid p0-50">
+        <p class="navbar-text pull-left">
+            <a href="{{ user_manual.global }}"
+               target="_blank" id="lnk_user_manual">{% trans 'Documentation' %}</a> |
+            <a href="http://uclouvain.github.io/osis/" target="_blank"
+               id="lnk_osis_website">{% trans 'Website' %}</a> |
+            <a href="https://github.com/uclouvain/osis" target="_blank"
+               id="lnk_osis_source_code">{% trans 'Source code' %}</a>
+            {% if release_tag %}
+                |<a href="https://github.com/uclouvain/osis/releases/tag/{{ release_tag }}" target="_blank"
+                    id="lnk_latest_tag">v{{ release_tag }}</a>
+            {% endif %}
+        </p>
+
+        <p class="navbar-text pull-right">
+            <span class="glyphicon glyphicon-copyright-mark"></span> {% now "Y" %} <a
+                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a>
+        </p>
+    </div>
+</footer>
+
+{% block script %}{% endblock %}
+
+</body>
+</html>
