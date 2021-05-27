@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'statici18n',
     'rest_framework',
+    'osis_registration'
 ]
 
 MIDDLEWARE = [
