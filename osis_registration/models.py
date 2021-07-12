@@ -38,3 +38,29 @@ class UserAccountCreationRequest(models.Model):
     retry = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
+
+
+class UserAccountDeletionRequest(models.Model):
+
+    # user data
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateField()
+    retry = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app_name = models.CharField(max_length=50)
+
+
+class UserAccountRenewalRequest(models.Model):
+
+    # user data
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateField()
+    retry = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app_name = models.CharField(max_length=50)
