@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from dotenv import load_dotenv
 
 
 def main():
@@ -18,4 +19,7 @@ def main():
 
 
 if __name__ == '__main__':
+    project_folder = os.path.expanduser('osis_registration')
+    load_dotenv(os.path.join(project_folder, '.env'))
+
     main()
