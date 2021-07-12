@@ -113,12 +113,6 @@
     </div>
 </div>
 
-{% if subject %}
-    <div class="container-fluid p0-50">
-        <div id="notice-header" class="alert alert-danger" role="alert"><strong>{{ subject|safe }}</strong><br>{{ notice|safe }}</div>
-    </div>
-{% endif %}
-
 {% block sidebar %}{% endblock %}
 
 <div class="container" id="main">
@@ -130,11 +124,6 @@
             {% endblock %}
         </ol>
     {% endblock %}
-    {% if experimental_phase %}
-        <div class="alert alert-warning" style="margin-bottom: 10px;">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans 'This feature is in testing phase' %}.
-        </div>
-    {% endif %}
 
     {% if warnings %}
         <div class="alert alert-warning" style="margin-bottom: 10px">
