@@ -2,3 +2,4 @@ Django==3.2.3
 psycopg2-binary==2.8.6
 django-statici18n==2.0.1
 djangorestframework==3.12.4
+python-dotenv==0.18.0
