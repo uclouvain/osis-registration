@@ -29,7 +29,6 @@ from osis_registration.api.views.create_account import CreateAccount
 from osis_registration.api.views.delete_account import DeleteAccount
 from osis_registration.api.views.renew_account import RenewAccount
 
-app_name = "osis_registration"
 urlpatterns = [
     path('create_account/', CreateAccount.as_view(), name=CreateAccount.name),
     path('delete_account/', DeleteAccount.as_view(), name=DeleteAccount.name),
