@@ -23,14 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path
 
-from osis_registration.api.views.create_account import CreateAccount
-from osis_registration.api.views.delete_account import DeleteAccount
-from osis_registration.api.views.renew_account import RenewAccount
+from django.db import models
 
-urlpatterns = [
-    path('create_account/', CreateAccount.as_view(), name=CreateAccount.name),
-    path('delete_account/', DeleteAccount.as_view(), name=DeleteAccount.name),
-    path('renew_account/', RenewAccount.as_view(), name=RenewAccount.name),
-]
+
+class UserAccountCreationRequest(models.Model):
+
+    # user data
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateField()
+    retry = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app_name = models.CharField(max_length=50)
