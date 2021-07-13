@@ -50,6 +50,12 @@ def run() -> dict:
             user_creation_request.save()
             logger.info('User created : {}'.format(user_creation_request.email))
         else:
+            user_creation_request.error_payload.update(
+                {
+                   'error_{}'.format(user_creation_request.retry): response['message']
+                }
+            )
+            user_creation_request.save()
             logger.info('Error - user not created : {}'.format(user_creation_request.email))
 
     pending_creation_requests.update(retry=F('retry') + 1)
