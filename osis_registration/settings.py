@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = os.environ.get('DEBUG', False)
 
 ALLOWED_HOSTS = []
 
@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'statici18n',
     'rest_framework',
-    'osis_registration'
+    'osis_registration',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -112,3 +114,18 @@ USE_TZ = os.environ.get('USE_TZ', 'False').lower() == 'true'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'osis_registration/static'),)
+
+LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
+LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
+
+DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
+
+# Celery settings
+CELERY_BROKER_URL = "amqp://{user}:{password}@{host}:{port}".format(
+    user=os.environ.get('RABBITMQ_USER', 'guest'),
+    password=os.environ.get('RABBITMQ_PASSWORD', 'guest'),
+    host=os.environ.get('RABBITMQ_HOST', 'localhost'),
+    port=os.environ.get('RABBITMQ_PORT', '5672')
+)
+CELERY_CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'django-db')
