@@ -23,21 +23,23 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import uuid as uuid
+import uuid
+
 from django.db import models
 
 
 class UserAccountCreationRequest(models.Model):
 
-    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    # user data
+    # user data needed to create account
+    person_uuid =  models.UUIDField(default=uuid.uuid4())
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
 
-    requested_at = models.DateField()
-    retry = models.SmallIntegerField(default=0)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
@@ -46,15 +48,14 @@ class UserAccountCreationRequest(models.Model):
 
 class UserAccountDeletionRequest(models.Model):
 
-    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    # user data
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    # user data needed to delete account
+    person_uuid =  models.UUIDField(default=uuid.uuid4())
     email = models.CharField(max_length=50)
 
-    requested_at = models.DateField()
-    retry = models.SmallIntegerField(default=0)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
@@ -63,16 +64,35 @@ class UserAccountDeletionRequest(models.Model):
 
 class UserAccountRenewalRequest(models.Model):
 
-    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    # user data
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    # user data needed to renew account
+    person_uuid =  models.UUIDField(default=uuid.uuid4())
     email = models.CharField(max_length=50)
 
-    requested_at = models.DateField()
-    retry = models.SmallIntegerField(default=0)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
     account_renewed = models.BooleanField(default=False)
+
+
+class UserAccountRequestResult(models.Model):
+
+    person_uuid =  models.UUIDField()
+    request_type = models.CharField(
+        max_length=9,
+        choices=[
+            ('CREATION','CREATION'),
+            ('DELETION','DELETION'),
+            ('RENEWAL','RENEWAL')
+        ]
+    )
+    status = models.CharField(
+        max_length=7,
+        choices=[
+            ('SUCCESS','SUCCESS'),
+            ('ERROR','ERROR')
+        ]
+    )

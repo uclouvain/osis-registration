@@ -27,6 +27,7 @@ import json
 import random
 
 import requests as requests
+from requests.exceptions import Timeout
 
 from osis_registration import settings
 
@@ -42,16 +43,20 @@ def create_ldap_user_account(user_creation_request):
         else:
             response = {"status": ERROR, "message": "Missing data"}
     else:
-        response = requests.post(
-            headers={'Content-Type': 'application/json'},
-            data=json.dumps({
-                "id": str(user_creation_request.uuid),
-                "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
-                "prenom": user_creation_request.first_name,
-                "nom": user_creation_request.last_name,
-                "email": user_creation_request.email
-            }),
-            url=settings.LDAP_ACCOUNT_CREATION_URL
-        )
+        try:
+            response = requests.post(
+                headers={'Content-Type': 'application/json'},
+                data=json.dumps({
+                    "id": str(user_creation_request.person_uuid),
+                    "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
+                    "prenom": user_creation_request.first_name,
+                    "nom": user_creation_request.last_name,
+                    "email": user_creation_request.email
+                }),
+                url=settings.LDAP_ACCOUNT_CREATION_URL,
+                timeout=1,
+            )
+        except Timeout:
+            response = {"status": ERROR, "message": "Request timed out"}
 
     return response

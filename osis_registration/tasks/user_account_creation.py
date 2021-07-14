@@ -30,11 +30,14 @@ from osis_registration.celery import app as celery_app
 from osis_registration.models import UserAccountCreationRequest
 from osis_registration.services.user_account_creation import create_ldap_user_account, SUCCESS
 
-from django.db.models import F
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-RETRY_LIMIT = 3
+ATTEMPT_LIMIT = 3
+
+
+class TooManyCreationRequestAttemptsException(Exception):
+    pass
+
 
 @celery_app.task
 def run() -> dict:
@@ -42,13 +45,18 @@ def run() -> dict:
     This job will get user creation requests stored in db and create users via ldap user creation endpoint.
     """
 
-    pending_creation_requests = UserAccountCreationRequest.objects.filter(account_created=False, retry__lte=RETRY_LIMIT)
+    too_many_attempts_requests = []
+
+    pending_creation_requests = UserAccountCreationRequest.objects.filter(
+        account_created=False,
+        attempt__lte=ATTEMPT_LIMIT
+    )
 
     for user_creation_request in pending_creation_requests:
         response = create_ldap_user_account(user_creation_request)
         if response['status'] == SUCCESS:
             user_creation_request.account_created = True
-            user_creation_request.retry += 1
+            user_creation_request.attempt += 1
             user_creation_request.save()
             logger.info('User created : {}'.format(user_creation_request.email))
         else:
@@ -57,8 +65,15 @@ def run() -> dict:
                    'error_{}'.format(user_creation_request.retry): response['message']
                 }
             )
-            user_creation_request.retry += 1
+            user_creation_request.attempt += 1
             user_creation_request.save()
+
+            if user_creation_request.attempt > ATTEMPT_LIMIT:
+                too_many_attempts_requests.append(user_creation_request)
+
             logger.info('Error - user not created : {}'.format(user_creation_request.email))
+
+    if too_many_attempts_requests:
+        raise TooManyCreationRequestAttemptsException()
 
     return {}
