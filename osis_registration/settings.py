@@ -129,3 +129,5 @@ CELERY_BROKER_URL = "amqp://{user}:{password}@{host}:{port}".format(
 )
 CELERY_CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'django-db')
+
+REQUEST_ATTEMPT_LIMIT = os.environ.get('REQUEST_ATTEMPT_LIMIT', 3)

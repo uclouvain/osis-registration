@@ -32,9 +32,6 @@ from osis_registration.services.user_account_creation import create_ldap_user_ac
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-ATTEMPT_LIMIT = 3
-
-
 class TooManyCreationRequestAttemptsException(Exception):
     pass
 
@@ -49,7 +46,7 @@ def run() -> dict:
 
     pending_creation_requests = UserAccountCreationRequest.objects.filter(
         account_created=False,
-        attempt__lte=ATTEMPT_LIMIT
+        attempt__lte=settings.REQUEST_ATTEMPT_LIMIT
     )
 
     for user_creation_request in pending_creation_requests:
@@ -68,7 +65,7 @@ def run() -> dict:
             user_creation_request.attempt += 1
             user_creation_request.save()
 
-            if user_creation_request.attempt > ATTEMPT_LIMIT:
+            if user_creation_request.attempt > settings.REQUEST_ATTEMPT_LIMIT:
                 too_many_attempts_requests.append(user_creation_request)
 
             logger.info('Error - user not created : {}'.format(user_creation_request.email))
