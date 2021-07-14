@@ -9,9 +9,7 @@ class UserAccountCreationRequestFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     email = factory.Faker('email')
 
-    requested_at = factory.Faker('date')
-
-    retry = 0
+    attempt = 0
     account_created = False
     app_name = factory.Faker('word')
 

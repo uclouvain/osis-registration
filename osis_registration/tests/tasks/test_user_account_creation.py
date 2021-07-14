@@ -25,8 +25,7 @@
 ##############################################################################
 from django.test import TestCase
 
-from osis_registration import tasks
-from osis_registration.tasks.user_account_creation import RETRY_LIMIT
+from osis_registration import tasks, settings
 from osis_registration.tests.factories.user_account_creation_request import UserAccountCreationRequestFactory
 
 
@@ -35,23 +34,25 @@ class UserAccountCreationTaskTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.pending_requests = [UserAccountCreationRequestFactory() for _ in range(2)]
-        cls.exceeding_retry_requests = [UserAccountCreationRequestFactory(retry=RETRY_LIMIT+1) for _ in range(2)]
-        cls.processed_requests = [UserAccountCreationRequestFactory(account_created=True, retry=1) for _ in range(2)]
+        cls.exceeding_retry_requests = [UserAccountCreationRequestFactory(
+            attempt=settings.REQUEST_ATTEMPT_LIMIT+1) for _ in range(2)
+        ]
+        cls.processed_requests = [UserAccountCreationRequestFactory(account_created=True, attempt=1) for _ in range(2)]
 
     def test_task_should_attempt_to_create_user_account_for_pending_requests(self):
         tasks.user_account_creation.run()
         for request in self.pending_requests:
             request.refresh_from_db()
-            self.assertEqual(request.retry, 1)
+            self.assertEqual(request.attempt, 1)
 
     def test_task_should_not_attempt_to_create_user_account_for_exceeding_retry_requests(self):
         tasks.user_account_creation.run()
         for request in self.exceeding_retry_requests:
             request.refresh_from_db()
-            self.assertEqual(request.retry, RETRY_LIMIT+1)
+            self.assertEqual(request.attempt, settings.REQUEST_ATTEMPT_LIMIT+1)
 
     def test_task_should_not_attempt_to_create_user_account_for_processed_requests(self):
         tasks.user_account_creation.run()
         for request in self.processed_requests:
             request.refresh_from_db()
-            self.assertEqual(request.retry, 1)
+            self.assertEqual(request.attempt, 1)

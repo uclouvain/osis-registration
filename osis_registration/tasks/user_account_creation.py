@@ -59,7 +59,7 @@ def run() -> dict:
         else:
             user_creation_request.error_payload.update(
                 {
-                   'error_{}'.format(user_creation_request.retry): response['message']
+                   'error_{}'.format(user_creation_request.attempt): response['message']
                 }
             )
             user_creation_request.attempt += 1
