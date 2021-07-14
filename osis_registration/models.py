@@ -27,6 +27,8 @@ import uuid
 
 from django.db import models
 
+SUCCESS = 'SUCCESS'
+ERROR = 'ERROR'
 
 class UserAccountCreationRequest(models.Model):
 
@@ -43,7 +45,7 @@ class UserAccountCreationRequest(models.Model):
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
-    account_created = models.BooleanField(default=False)
+    success = models.BooleanField(default=False)
 
 
 class UserAccountDeletionRequest(models.Model):
@@ -59,7 +61,7 @@ class UserAccountDeletionRequest(models.Model):
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
-    account_deleted = models.BooleanField(default=False)
+    success = models.BooleanField(default=False)
 
 
 class UserAccountRenewalRequest(models.Model):
@@ -75,7 +77,7 @@ class UserAccountRenewalRequest(models.Model):
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
 
-    account_renewed = models.BooleanField(default=False)
+    success = models.BooleanField(default=False)
 
 
 class UserAccountRequestResult(models.Model):
@@ -84,15 +86,15 @@ class UserAccountRequestResult(models.Model):
     request_type = models.CharField(
         max_length=9,
         choices=[
-            ('CREATION','CREATION'),
-            ('DELETION','DELETION'),
-            ('RENEWAL','RENEWAL')
+            (UserAccountCreationRequest,'CREATION'),
+            (UserAccountDeletionRequest,'DELETION'),
+            (UserAccountRenewalRequest,'RENEWAL')
         ]
     )
     status = models.CharField(
         max_length=7,
         choices=[
-            ('SUCCESS','SUCCESS'),
-            ('ERROR','ERROR')
+            (SUCCESS,'SUCCESS'),
+            (ERROR,'ERROR')
         ]
     )

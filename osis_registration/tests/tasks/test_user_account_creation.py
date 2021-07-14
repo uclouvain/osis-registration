@@ -37,7 +37,7 @@ class UserAccountCreationTaskTestCase(TestCase):
         cls.exceeding_retry_requests = [UserAccountCreationRequestFactory(
             attempt=settings.REQUEST_ATTEMPT_LIMIT+1) for _ in range(2)
         ]
-        cls.processed_requests = [UserAccountCreationRequestFactory(account_created=True, attempt=1) for _ in range(2)]
+        cls.processed_requests = [UserAccountCreationRequestFactory(success=True, attempt=1) for _ in range(2)]
 
     def test_task_should_attempt_to_create_user_account_for_pending_requests(self):
         tasks.user_account_creation.run()

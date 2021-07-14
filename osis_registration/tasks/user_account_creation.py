@@ -28,6 +28,7 @@ import logging
 from osis_registration import settings
 from osis_registration.celery import app as celery_app
 from osis_registration.models import UserAccountCreationRequest
+from osis_registration.services import request_result
 from osis_registration.services.user_account_creation import create_ldap_user_account, SUCCESS
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -45,16 +46,18 @@ def run() -> dict:
     too_many_attempts_requests = []
 
     pending_creation_requests = UserAccountCreationRequest.objects.filter(
-        account_created=False,
+        success=False,
         attempt__lte=settings.REQUEST_ATTEMPT_LIMIT
     )
 
     for user_creation_request in pending_creation_requests:
         response = create_ldap_user_account(user_creation_request)
         if response['status'] == SUCCESS:
-            user_creation_request.account_created = True
+            user_creation_request.success = True
             user_creation_request.attempt += 1
             user_creation_request.save()
+
+            request_result.store(user_creation_request)
             logger.info('User created : {}'.format(user_creation_request.email))
         else:
             user_creation_request.error_payload.update(
@@ -67,6 +70,7 @@ def run() -> dict:
 
             if user_creation_request.attempt > settings.REQUEST_ATTEMPT_LIMIT:
                 too_many_attempts_requests.append(user_creation_request)
+                request_result.store(user_creation_request)
 
             logger.info('Error - user not created : {}'.format(user_creation_request.email))
 

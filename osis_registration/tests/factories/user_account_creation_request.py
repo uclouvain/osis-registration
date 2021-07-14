@@ -10,6 +10,6 @@ class UserAccountCreationRequestFactory(factory.django.DjangoModelFactory):
     email = factory.Faker('email')
 
     attempt = 0
-    account_created = False
+    success = False
     app_name = factory.Faker('word')
 
