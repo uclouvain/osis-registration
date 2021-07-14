@@ -23,11 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+import uuid as uuid
 from django.db import models
 
 
 class UserAccountCreationRequest(models.Model):
+
+    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     # user data
     first_name = models.CharField(max_length=50)
@@ -44,6 +46,8 @@ class UserAccountCreationRequest(models.Model):
 
 class UserAccountDeletionRequest(models.Model):
 
+    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
     # user data
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -58,6 +62,8 @@ class UserAccountDeletionRequest(models.Model):
 
 
 class UserAccountRenewalRequest(models.Model):
+
+    uuid =  models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     # user data
     first_name = models.CharField(max_length=50)

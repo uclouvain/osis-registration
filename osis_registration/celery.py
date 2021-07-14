@@ -28,10 +28,8 @@ from __future__ import absolute_import, unicode_literals
 import os
 import sys
 
-from dotenv import load_dotenv
 from celery import Celery
-
-from osis_registration import settings
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if 'test' in sys.argv:
