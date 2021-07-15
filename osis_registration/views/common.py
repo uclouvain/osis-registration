@@ -24,7 +24,8 @@
 #
 ##############################################################################
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils import translation
 
 from osis_registration import settings
 
@@ -91,3 +92,8 @@ def common_context_processor(request):
         'environment': env,
     }
     return context
+
+def edit_language(request, lang):
+    translation.activate(lang)
+    request.session[translation.LANGUAGE_SESSION_KEY] = lang
+    return redirect(request.META['HTTP_REFERER'])

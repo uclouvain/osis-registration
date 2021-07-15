@@ -4,6 +4,9 @@ Django settings for osis_registration project.
 
 import os
 
+from django.utils.translation import gettext_lazy as _
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,6 +34,8 @@ INSTALLED_APPS = [
     'osis_registration',
     'django_celery_beat',
     'django_celery_results',
+    'captcha',
+    'bootstrap3'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +136,19 @@ CELERY_CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'django-db')
 
 REQUEST_ATTEMPT_LIMIT = os.environ.get('REQUEST_ATTEMPT_LIMIT', 3)
+
+CAPTCHA_FONT_SIZE = 50
+CAPTCHA_IMAGE_SIZE = (300, 80)
+CAPTCHA_LENGTH = 6
+CAPTCHA_FOREGROUND_COLOR = '#163c69'
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.9/topics/i18n/
+# If you want to change the default settings,
+# you have to redefine the LANGUAGE_CODE and LANGUAGES vars in environment settings (ex: dev.py)
+LANGUAGES = [
+    ('fr-be', _('French')),
+    ('en', _('English')),
+]
+LANGUAGE_CODE_FR = 'fr-be'
+LANGUAGE_CODE_EN = 'en'

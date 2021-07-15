@@ -23,14 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.views.generic.edit import FormView
+import datetime
 
-from osis_registration.forms.registration import RegistrationForm
+from django.utils.translation import gettext_lazy as _
 
+from django import forms
+from captcha.fields import CaptchaField
 
-class RegistrationFormView(FormView):
-    name = 'registration'
-    template_name = 'home.html'
-    form_class = RegistrationForm
+CURRENT_YEAR = datetime.date.today().year
+
+class RegistrationForm(forms.Form):
+    first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
+    last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
+    email = forms.CharField(label=_('Email'), max_length=100, required=True)
+    birth_date = forms.DateField(
+        initial=datetime.datetime.now(),
+        label=_('Date of birth'),
+        required=True,
+        widget=forms.SelectDateWidget(years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)),
+    )
+    captcha = CaptchaField()
+
 
 

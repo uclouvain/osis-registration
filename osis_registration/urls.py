@@ -3,14 +3,17 @@ osis_registration URL Configuration
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from osis_registration.views import common
-from osis_registration.views.registration import RegistrationView
+from osis_registration.views.common import edit_language
+from osis_registration.views.registration import RegistrationFormView
 
 urlpatterns = [
-    path('', RegistrationView.as_view(), name=RegistrationView.name),
-    path('home/', RegistrationView.as_view(), name=RegistrationView.name),
+    path('', RegistrationFormView.as_view(), name=RegistrationFormView.name),
+    path('home/', RegistrationFormView.as_view(), name=RegistrationFormView.name),
     path('admin/', admin.site.urls),
     path('noscript/', common.noscript, name='noscript'),
+    path('captcha/', include('captcha.urls')),
+    path('lang/edit/<lang>/', edit_language, name='lang_edit'),
 ]

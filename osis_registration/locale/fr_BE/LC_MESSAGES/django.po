@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-15 16:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms/registration.py:36
+msgid "First name"
+msgstr "Prénom"
+
+#: forms/registration.py:37
+msgid "Last name"
+msgstr "Nom"
+
+#: forms/registration.py:38
+msgid "Email"
+msgstr ""
+
+#: forms/registration.py:41
+msgid "Date of birth"
+msgstr "Date de naissance"
+
+#: settings.py:150
+msgid "French"
+msgstr "Français"
+
+#: settings.py:151
+msgid "English"
+msgstr "Anglais"
+
+#: templates/home.html:53
+msgid ""
+"To determine whether you are a human visitor and to prevent automated spam "
+"submissions, please solve the following CAPTCHA."
+msgstr ""
+"Pour déterminer si vous êtes bien un visiteur humain et afin d'éliminer les "
+"soumissions automatisées, veuillez résoudre le CAPTCHA suivant."
+
+#: templates/home.html:55
+msgid "Write down the sequence of characters visible in the image above"
+msgstr "Écrivez ici la séquence de caractères visible dans l'image ci-dessus"
+
+#: templates/layout.html:113
+msgid "Your browser is out of date. This can lead to unknown behaviour."
+msgstr ""
+"Votre navigateur n'est pas à jour. Certaines fonctionnalités peuvent ne pas "
+"fonctionner correctement."
+
+#: templates/layout.html:136
+msgid "This feature is in testing phase"
+msgstr "Cette fonctionnalité est en phase de test"
+
+#: templates/layout.html:158
+msgid "Documentation"
+msgstr "Documentation"
+
+#: templates/layout.html:160
+msgid "Website"
+msgstr "Site web"
+
+#: templates/layout.html:162
+msgid "Source code"
+msgstr "Code source"

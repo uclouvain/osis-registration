@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static i18n statici18n %}
+{% load bootstrap3 %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -133,26 +134,6 @@
     {% if experimental_phase %}
         <div class="alert alert-warning" style="margin-bottom: 10px;">
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {% trans 'This feature is in testing phase' %}.
-        </div>
-    {% endif %}
-
-    {% if warnings %}
-        <div class="alert alert-warning" style="margin-bottom: 10px">
-            <i class="fa fa-exclamation-triangle"
-               aria-hidden="true"></i> {% trans 'We detected inconsistencies in the following data :' %}
-            <button id="btn_expandButton" type="button" class="btn" data-toggle="collapse"
-                    data-target="#CollapseWarnings"
-                    style="background-color: transparent;">
-                <span id="expandButton" class="glyphicon glyphicon-collapse-down" aria-hidden="true"
-                      style="color:#8a6d3b"></span>
-            </button>
-            <div class="collapse" id="CollapseWarnings">
-                <ul>
-                    {% for warning in warnings %}
-                        <li>{{ warning }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
     {% endif %}
 

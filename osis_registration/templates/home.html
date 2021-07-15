@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% load static %}
 {% load i18n %}
-
+{% load bootstrap3 %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -36,7 +36,29 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+            <form method="post">
+                {% csrf_token %}
 
+                {% bootstrap_field form.first_name %}
+                {% bootstrap_field form.last_name %}
+                {% bootstrap_field form.birth_date %}
+                {% bootstrap_field form.email %}
+
+                <hr/>
+
+                <div class="form-group">
+                    <label>Captcha</label>
+                    <div class="alert alert-info">
+                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                        {% trans 'To determine whether you are a human visitor and to prevent automated spam submissions, please solve the following CAPTCHA.' %}
+                    </div>
+                    {% bootstrap_field form.captcha show_label=False placeholder=_("Write down the sequence of characters visible in the image above") %}
+                </div>
+
+                <hr/>
+
+                <input class="btn btn-primary" type="submit">
+            </form>
         </div>
     </div>
 {% endblock %}

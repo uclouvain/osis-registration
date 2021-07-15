@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-15 16:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms/registration.py:36
+msgid "First name"
+msgstr ""
+
+#: forms/registration.py:37
+msgid "Last name"
+msgstr ""
+
+#: forms/registration.py:38
+msgid "Email"
+msgstr ""
+
+#: forms/registration.py:41
+msgid "Date of birth"
+msgstr ""
+
+#: settings.py:150
+msgid "French"
+msgstr ""
+
+#: settings.py:151
+msgid "English"
+msgstr ""
+
+#: templates/home.html:53
+msgid ""
+"To determine whether you are a human visitor and to prevent automated spam "
+"submissions, please solve the following CAPTCHA."
+msgstr ""
+
+#: templates/home.html:55
+msgid "Write down the sequence of characters visible in the image above"
+msgstr ""
+
+#: templates/layout.html:113
+msgid "Your browser is out of date. This can lead to unknown behaviour."
+msgstr ""
+
+#: templates/layout.html:136
+msgid "This feature is in testing phase"
+msgstr ""
+
+#: templates/layout.html:158
+msgid "Documentation"
+msgstr ""
+
+#: templates/layout.html:160
+msgid "Website"
+msgstr ""
+
+#: templates/layout.html:162
+msgid "Source code"
+msgstr ""
