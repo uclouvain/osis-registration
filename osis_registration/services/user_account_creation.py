@@ -30,11 +30,13 @@ import requests as requests
 from requests.exceptions import Timeout
 
 from osis_registration import settings
+from osis_registration.models import UserAccountCreationRequest
 
 SUCCESS = "success"
 ERROR = "error"
 
-def create_ldap_user_account(user_creation_request):
+
+def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) -> dict:
     # mock endpoint in debug
     if settings.DEBUG:
         random_success_status = random.choice([True, False])

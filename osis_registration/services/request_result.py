@@ -23,14 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import List
+
 from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR
 
 
-def store(requests):
-    for request in requests:
-        result = UserAccountRequestResult(
-            person_uuid=request.person_uuid,
-            request_type=type(request),
-            status=SUCCESS if request.success else ERROR
-        )
-        result.save()
+def store(requests: List[UserAccountRequestResult]):
+    UserAccountRequestResult.objects.bulk_create(
+        [
+            UserAccountRequestResult(
+                person_uuid=request.person_uuid,
+                request_type=type(request),
+                status=SUCCESS if request.success else ERROR
+            ) for request in requests
+        ]
+    )
