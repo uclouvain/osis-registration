@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-16 12:08+0200\n"
+"POT-Creation-Date: 2021-07-16 16:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,6 +45,10 @@ msgstr "Anglais"
 msgid "Play CAPTCHA as audio file"
 msgstr ""
 
+#: templates/captcha.html:15
+msgid "Refresh CAPTCHA"
+msgstr "Réinitialiser le CAPTCHA"
+
 #: templates/home.html:45
 msgid ""
 "This form enables you to apply for a UCLouvain temporary account. Along with "
@@ -52,8 +56,9 @@ msgid ""
 "applications and prepare an admission file. The scope of these credentials "
 "is limited to the following applications: ..."
 msgstr ""
-"Ce formulaire vous permet de demander un compte UCLouvain temporaire. Avec ce compte, vous recevrez des identifiants "
-"qui vous permettront d'accéder aux applications suivantes pour préparer votre dossier d'admission: ..."
+"Ce formulaire vous permet de demander un compte UCLouvain temporaire. Avec "
+"ce compte, vous recevrez des identifiants qui vous permettront d'accéder aux "
+"applications suivantes pour préparer votre dossier d'admission: ..."
 
 #: templates/home.html:70
 msgid ""

@@ -53,7 +53,7 @@
 
     <div class="panel panel-default" style="border-radius: 0;">
         <div class="panel-body">
-            <form method="post">
+            <form id="form" method="post">
                 {% csrf_token %}
 
                 {% bootstrap_field form.first_name label_class="required" %}
@@ -78,4 +78,25 @@
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    const refreshButton = document.querySelector('.js-captcha-refresh');
+    const form = document.querySelector('#form');
+    const input = form.querySelector('input[name="captcha_0"]');
+    const img = form.querySelector('img.captcha');
+    const audio = form.querySelector('#captcha-audio');
+
+    refreshButton.addEventListener('click', () => {
+        // captcha_refresh in library filters requests based on header
+        const options = {headers: new Headers({'x-requested-with': 'XMLHttpRequest'})};
+
+        fetch('/captcha/refresh/', options).then(res => res.json()).then(json => {
+            input.value = json.key;
+            img.src = json.image_url;
+            audio.src = json.audio_url;
+        });
+    });
+</script>
 {% endblock %}
