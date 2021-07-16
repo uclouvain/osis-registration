@@ -104,17 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-
-LANGUAGE_CODE = 'fr-be'
-
-TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
-
-USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
-USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
-USE_TZ = os.environ.get('USE_TZ', 'False').lower() == 'true'
-
-
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
@@ -142,6 +131,9 @@ CAPTCHA_IMAGE_SIZE = (300, 80)
 CAPTCHA_LENGTH = 6
 CAPTCHA_FOREGROUND_COLOR = '#163c69'
 
+CAPTCHA_FLITE_PATH = '/usr/bin/espeak'
+CAPTCHA_SOX_PATH = '/usr/bin/sox'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 # If you want to change the default settings,
@@ -152,3 +144,12 @@ LANGUAGES = [
 ]
 LANGUAGE_CODE_FR = 'fr-be'
 LANGUAGE_CODE_EN = 'en'
+
+LANGUAGE_CODE = 'fr-be'
+
+TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
+
+USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
+USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
+USE_TZ = os.environ.get('USE_TZ', 'False').lower() == 'true'
+

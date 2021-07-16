@@ -28,9 +28,12 @@ import datetime
 from django.utils.translation import gettext_lazy as _
 
 from django import forms
-from captcha.fields import CaptchaField
+from captcha.fields import CaptchaField, CaptchaTextInput
 
 CURRENT_YEAR = datetime.date.today().year
+
+class CustomCaptchaTextInput(CaptchaTextInput):
+    template_name = "captcha.html"
 
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
@@ -42,7 +45,6 @@ class RegistrationForm(forms.Form):
         required=True,
         widget=forms.SelectDateWidget(years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)),
     )
-    captcha = CaptchaField()
-
-
-
+    captcha = CaptchaField(
+        widget=CustomCaptchaTextInput()
+    )

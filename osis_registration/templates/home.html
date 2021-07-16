@@ -34,20 +34,37 @@
         <h2>OSIS Registration</h2>
     </div>
 
-    <div class="panel panel-default">
+    <div class="alert alert-warning" role="alert" style="margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+        <table>
+            <tr>
+                <td style="padding-right:12px;"><i class="glyphicon glyphicon-warning-sign" style="font-size:180%" aria-hidden="true"></i></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                {% trans 'This form enables you to apply for a UCLouvain temporary account. Along with the account, you will receive credentials that may be used to access applications and prepare an admission file. The scope of these credentials is limited to the following applications: ...' %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel panel-default" style="border-radius: 0;">
         <div class="panel-body">
             <form method="post">
                 {% csrf_token %}
 
-                {% bootstrap_field form.first_name %}
-                {% bootstrap_field form.last_name %}
-                {% bootstrap_field form.birth_date %}
-                {% bootstrap_field form.email %}
+                {% bootstrap_field form.first_name label_class="required" %}
+                {% bootstrap_field form.last_name label_class="required" %}
+                {% bootstrap_field form.birth_date label_class="required" %}
+                {% bootstrap_field form.email label_class="required" %}
 
                 <hr/>
 
                 <div class="form-group">
-                    <label>Captcha</label>
+                    <label class="required">Captcha</label>
                     <div class="alert alert-info">
                         <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
                         {% trans 'To determine whether you are a human visitor and to prevent automated spam submissions, please solve the following CAPTCHA.' %}
