@@ -98,6 +98,6 @@ class UserAccountRequestResult(models.Model):
         max_length=7,
         choices=[
             (SUCCESS, SUCCESS),
-            (ERROR, SUCCESS)
+            (ERROR, ERROR)
         ]
     )
