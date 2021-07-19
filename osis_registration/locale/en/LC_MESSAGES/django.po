@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-16 16:37+0200\n"
+"POT-Creation-Date: 2021-07-19 15:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,39 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms/registration.py:39
 msgid "First name"
 msgstr ""
 
-#: forms/registration.py:40
 msgid "Last name"
 msgstr ""
 
-#: forms/registration.py:41
 msgid "Email"
 msgstr ""
 
-#: forms/registration.py:44
 msgid "Date of birth"
 msgstr ""
 
-#: settings.py:142
 msgid "French"
 msgstr ""
 
-#: settings.py:143
 msgid "English"
 msgstr ""
 
-#: templates/captcha.html:8 templates/captcha.html:10
 msgid "Play CAPTCHA as audio file"
 msgstr ""
 
-#: templates/captcha.html:15
 msgid "Refresh CAPTCHA"
 msgstr ""
 
-#: templates/home.html:45
 msgid ""
 "This form enables you to apply for a UCLouvain temporary account. Along with "
 "the account, you will receive credentials that may be used to access "
@@ -58,32 +49,22 @@ msgid ""
 "is limited to the following applications: ..."
 msgstr ""
 
-#: templates/home.html:70
 msgid ""
 "To determine whether you are a human visitor and to prevent automated spam "
 "submissions, please solve the following CAPTCHA."
 msgstr ""
 
-#: templates/home.html:72
 msgid "Write down the sequence of characters visible in the image above"
 msgstr ""
 
-#: templates/layout.html:113
 msgid "Your browser is out of date. This can lead to unknown behaviour."
 msgstr ""
 
-#: templates/layout.html:136
-msgid "This feature is in testing phase"
-msgstr ""
-
-#: templates/layout.html:158
 msgid "Documentation"
 msgstr ""
 
-#: templates/layout.html:160
 msgid "Website"
 msgstr ""
 
-#: templates/layout.html:162
 msgid "Source code"
 msgstr ""
