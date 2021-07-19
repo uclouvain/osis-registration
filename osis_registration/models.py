@@ -23,18 +23,81 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
+import uuid
 
 from django.db import models
 
+SUCCESS = 'SUCCESS'
+ERROR = 'ERROR'
 
 class UserAccountCreationRequest(models.Model):
 
-    # user data
+    # user data needed to create account
+    person_uuid =  models.UUIDField(null=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    birth_date = models.DateField(null=True)
     email = models.CharField(max_length=50)
 
-    requested_at = models.DateField()
-    retry = models.SmallIntegerField(default=0)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
     app_name = models.CharField(max_length=50)
+
+    success = models.BooleanField(default=False)
+
+
+class UserAccountDeletionRequest(models.Model):
+
+    # user data needed to delete account
+    person_uuid =  models.UUIDField(null=True)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app_name = models.CharField(max_length=50)
+
+    success = models.BooleanField(default=False)
+
+
+class UserAccountRenewalRequest(models.Model):
+
+    # user data needed to renew account
+    person_uuid =  models.UUIDField(null=True)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app_name = models.CharField(max_length=50)
+
+    success = models.BooleanField(default=False)
+
+
+class UserAccountRequestResult(models.Model):
+
+    person_uuid =  models.UUIDField(null=True)
+    request_type = models.CharField(
+        max_length=9,
+        choices=[
+            (UserAccountCreationRequest,'CREATION'),
+            (UserAccountDeletionRequest,'DELETION'),
+            (UserAccountRenewalRequest,'RENEWAL')
+        ]
+    )
+    status = models.CharField(
+        max_length=7,
+        choices=[
+            (SUCCESS, SUCCESS),
+            (ERROR, ERROR)
+        ]
+    )
