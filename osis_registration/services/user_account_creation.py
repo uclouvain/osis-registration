@@ -48,13 +48,13 @@ def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) 
         try:
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
-                data=json.dumps({
+                json={
                     "id": str(user_creation_request.person_uuid),
                     "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
                     "prenom": user_creation_request.first_name,
                     "nom": user_creation_request.last_name,
                     "email": user_creation_request.email
-                }),
+                },
                 url=settings.LDAP_ACCOUNT_CREATION_URL,
                 timeout=1,
             )
