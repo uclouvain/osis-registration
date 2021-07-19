@@ -1,0 +1,18 @@
+{% load i18n %}
+{% spaceless %}
+    {% if audio %}
+        <audio id="captcha-audio" src="{{ audio }}" type="audio/wav"></audio>
+    {% endif %}
+        <img src="{{ image }}" alt="captcha" class="captcha" />
+{% endspaceless %}
+<a style="width:306px;" title="{% trans "Play CAPTCHA as audio file" %}" class="btn btn-default" onclick="document.getElementById('captcha-audio').play()">
+    <i class="glyphicon glyphicon-volume-up"></i>
+    {% trans "Play CAPTCHA as audio file" %}
+</a>
+<br/>
+<a style="width:306px; margin-bottom: 20px;" class='btn btn-default js-captcha-refresh'>
+    <i class="glyphicon glyphicon-refresh"></i>
+    {% trans "Refresh CAPTCHA" %}
+</a>
+
+{% include "django/forms/widgets/multiwidget.html" %}

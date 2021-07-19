@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-19 15:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "Email"
+msgstr ""
+
+msgid "Date of birth"
+msgstr "Date de naissance"
+
+msgid "French"
+msgstr "Français"
+
+msgid "English"
+msgstr "Anglais"
+
+msgid "Play CAPTCHA as audio file"
+msgstr ""
+
+msgid "Refresh CAPTCHA"
+msgstr "Réinitialiser le CAPTCHA"
+
+msgid ""
+"This form enables you to apply for a UCLouvain temporary account. Along with "
+"the account, you will receive credentials that may be used to access "
+"applications and prepare an admission file. The scope of these credentials "
+"is limited to the following applications: ..."
+msgstr ""
+"Ce formulaire vous permet de demander un compte UCLouvain temporaire. Avec "
+"ce compte, vous recevrez des identifiants qui vous permettront d'accéder aux "
+"applications suivantes pour préparer votre dossier d'admission: ..."
+
+msgid ""
+"To determine whether you are a human visitor and to prevent automated spam "
+"submissions, please solve the following CAPTCHA."
+msgstr ""
+"Pour déterminer si vous êtes bien un visiteur humain et afin d'éliminer les "
+"soumissions automatisées, veuillez résoudre le CAPTCHA suivant."
+
+msgid "Write down the sequence of characters visible in the image above"
+msgstr "Écrivez ici la séquence de caractères visible dans l'image ci-dessus"
+
+msgid "Your browser is out of date. This can lead to unknown behaviour."
+msgstr ""
+"Votre navigateur n'est pas à jour. Certaines fonctionnalités peuvent ne pas "
+"fonctionner correctement."
+
+msgid "Documentation"
+msgstr "Documentation"
+
+msgid "Website"
+msgstr "Site web"
+
+msgid "Source code"
+msgstr "Code source"

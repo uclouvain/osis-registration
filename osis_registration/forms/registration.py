@@ -23,25 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from captcha import views
-from django.views.generic.edit import FormView
+import datetime
 
-from osis_registration.forms.registration import RegistrationForm
-from osis_registration.override_django_captcha import captcha_audio
-from django.utils.translation import LANGUAGE_SESSION_KEY, activate
+from django.utils.translation import gettext_lazy as _
 
+from django import forms
+from captcha.fields import CaptchaField, CaptchaTextInput
 
-class RegistrationFormView(FormView):
-    name = 'registration'
-    template_name = 'home.html'
-    form_class = RegistrationForm
+CURRENT_YEAR = datetime.date.today().year
 
-    def dispatch(self, request, *args, **kwargs):
-        # TODO: move this higher when multiple views avalaible
-        # ensure language is loaded from session if any
-        if self.request.session[LANGUAGE_SESSION_KEY]:
-            activate(self.request.session[LANGUAGE_SESSION_KEY])
-        return super(RegistrationFormView, self).dispatch(request, *args, **kwargs)  # Don't forget this
+class CustomCaptchaTextInput(CaptchaTextInput):
+    template_name = "captcha.html"
 
-# replace captcha audio with custom captcha audio generator using espeak
-views.captcha_audio = captcha_audio
+class RegistrationForm(forms.Form):
+    first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
+    last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
+    email = forms.CharField(label=_('Email'), max_length=100, required=True)
+    birth_date = forms.DateField(
+        initial=datetime.datetime.now(),
+        label=_('Date of birth'),
+        required=True,
+        widget=forms.SelectDateWidget(years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)),
+    )
+    captcha = CaptchaField(
+        widget=CustomCaptchaTextInput()
+    )
