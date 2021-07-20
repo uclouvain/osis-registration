@@ -23,7 +23,7 @@ def captcha_audio(request, key):
         else:
             text = ", ".join(list(text))
         path = str(os.path.join(tempfile.gettempdir(), "%s.wav" % key))
-        language = request.session[translation.LANGUAGE_SESSION_KEY]
+        language = translation.get_language()
         subprocess.call([settings.CAPTCHA_FLITE_PATH, "-v", language, text, "-s", "100", "-w", path])
 
         # Add arbitrary noise if sox is installed

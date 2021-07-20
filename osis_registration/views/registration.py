@@ -28,7 +28,6 @@ from django.views.generic.edit import FormView
 
 from osis_registration.forms.registration import RegistrationForm
 from osis_registration.override_django_captcha import captcha_audio
-from django.utils.translation import LANGUAGE_SESSION_KEY, activate
 
 
 class RegistrationFormView(FormView):
@@ -36,12 +35,6 @@ class RegistrationFormView(FormView):
     template_name = 'home.html'
     form_class = RegistrationForm
 
-    def dispatch(self, request, *args, **kwargs):
-        # TODO: move this higher when multiple views avalaible
-        # ensure language is loaded from session if any
-        if self.request.session[LANGUAGE_SESSION_KEY]:
-            activate(self.request.session[LANGUAGE_SESSION_KEY])
-        return super(RegistrationFormView, self).dispatch(request, *args, **kwargs)  # Don't forget this
 
 # replace captcha audio with custom captcha audio generator using espeak
 views.captcha_audio = captcha_audio
