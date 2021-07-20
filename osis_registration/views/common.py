@@ -95,5 +95,6 @@ def common_context_processor(request):
 
 def edit_language(request, lang):
     translation.activate(lang)
-    request.session[translation.LANGUAGE_SESSION_KEY] = lang
-    return redirect(request.META['HTTP_REFERER'])
+    response = redirect(request.META['HTTP_REFERER'])
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, translation.get_language())
+    return response

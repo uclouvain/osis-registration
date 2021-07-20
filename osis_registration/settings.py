@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -108,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'osis_registration/static'),)
+STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'osis_registration/static'))
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
 LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
@@ -146,6 +148,8 @@ LANGUAGE_CODE_FR = 'fr-be'
 LANGUAGE_CODE_EN = 'en'
 
 LANGUAGE_CODE = 'fr-be'
+
+LANGUAGE_COOKIE_NAME = "language"
 
 TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
 
