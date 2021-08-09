@@ -23,30 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from captcha import views
-from django.views.generic.edit import FormView
-from django.views.generic.base import TemplateView
+from django.contrib import admin
 
-from osis_registration.forms.registration import RegistrationForm
-from osis_registration.override_django_captcha import captcha_audio
-from osis_registration.services import mail
+from osis_registration.messaging import message_history, message_template
 
+admin.site.register(
+    message_history.MessageHistory,
+    message_history.MessageHistoryAdmin,
+)
 
-class RegistrationFormView(FormView):
-    name = 'registration'
-    template_name = 'home.html'
-    success_url = '/registration_success'
-    form_class = RegistrationForm
-
-    def form_valid(self, form):
-        mail.send_validation_mail(email=self.request.POST['email'])
-        return super().form_valid(form)
-
-# replace captcha audio with custom captcha audio generator using espeak
-views.captcha_audio = captcha_audio
-
-
-class RegistrationSuccessView(TemplateView):
-    name = 'registration_success'
-    template_name = 'registration_success.html'
-
+admin.site.register(
+    message_template.MessageTemplate,
+    message_template.MessageTemplateAdmin,
+)

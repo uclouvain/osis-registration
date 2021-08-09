@@ -23,9 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
-import uuid
 
 from django.db import models
 

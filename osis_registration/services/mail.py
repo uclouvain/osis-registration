@@ -23,30 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from captcha import views
-from django.views.generic.edit import FormView
-from django.views.generic.base import TemplateView
-
-from osis_registration.forms.registration import RegistrationForm
-from osis_registration.override_django_captcha import captcha_audio
-from osis_registration.services import mail
+from osis_registration.messaging import send_message, message_config
 
 
-class RegistrationFormView(FormView):
-    name = 'registration'
-    template_name = 'home.html'
-    success_url = '/registration_success'
-    form_class = RegistrationForm
+def send_email(template_references, receivers, data, connected_user=None):
+    message_content = message_config.create_message_content(
+        template_references['html'],
+        template_references['txt'],
+        [],
+        receivers,
+        data['template'],
+        data['subject'],
+        data.get('attachment')
+    )
+    send_message.send_messages(
+        message_content=message_content,
+        connected_user=connected_user
+    )
 
-    def form_valid(self, form):
-        mail.send_validation_mail(email=self.request.POST['email'])
-        return super().form_valid(form)
-
-# replace captcha audio with custom captcha audio generator using espeak
-views.captcha_audio = captcha_audio
-
-
-class RegistrationSuccessView(TemplateView):
-    name = 'registration_success'
-    template_name = 'registration_success.html'
-
+def send_validation_mail(email):
+    template_references = {
+        'html': 'osis_registration_mail_validation_html',
+        'txt': 'osis_registration_mail_validation_txt'
+    }
+    receivers = [message_config.create_receiver(receiver_person_id=0    , receiver_email=email, receiver_lang=None)]
+    data = {
+        'template': {'link': '<FILL WITH LINK>'},
+        'subject': {}
+    }
+    send_email(template_references, receivers, data)
