@@ -25,6 +25,7 @@
 ##############################################################################
 from captcha import views
 from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
 
 from osis_registration.forms.registration import RegistrationForm
 from osis_registration.override_django_captcha import captcha_audio
@@ -33,8 +34,14 @@ from osis_registration.override_django_captcha import captcha_audio
 class RegistrationFormView(FormView):
     name = 'registration'
     template_name = 'home.html'
+    success_url = '/registration_success'
     form_class = RegistrationForm
 
 
 # replace captcha audio with custom captcha audio generator using espeak
 views.captcha_audio = captcha_audio
+
+
+class RegistrationSuccessView(TemplateView):
+    name = 'registration_success'
+    template_name = 'registration_success.html'

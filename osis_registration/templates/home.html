@@ -34,21 +34,11 @@
         <h2>OSIS Registration</h2>
     </div>
 
-    <div class="alert alert-warning" role="alert" style="margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
-        <table>
-            <tr>
-                <td style="padding-right:12px;"><i class="glyphicon glyphicon-warning-sign" style="font-size:180%" aria-hidden="true"></i></td>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
-                                {% trans 'This form enables you to apply for a UCLouvain temporary account. Along with the account, you will receive credentials that may be used to access applications and prepare an admission file. The scope of these credentials is limited to the following applications: ...' %}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+    <div class="alert alert-warning panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
+        <div class="message">
+            {% trans 'This form enables you to apply for a UCLouvain temporary account. Along with the account, you will receive credentials that may be used to access applications and prepare an admission file. The scope of these credentials is limited to the following applications: ...' %}
+        </div>
     </div>
 
     <div class="panel panel-default" style="border-radius: 0;">

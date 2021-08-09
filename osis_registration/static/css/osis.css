@@ -705,3 +705,22 @@ label.required:after {
     content: " *";
     color: red;
 }
+
+.panel-top-alert{
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    display: grid;
+    grid-template-columns: 40px auto;
+}
+
+.panel-top-alert .icon {
+    font-size: 180%;
+    display: grid;
+    align-items: center;
+}
+
+.panel-top-alert .message {
+    display: grid;
+    align-items: center;
+}

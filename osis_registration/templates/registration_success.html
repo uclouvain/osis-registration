@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>OSIS Registration</h2>
+    </div>
+
+    <div class="alert alert-success panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+        <div class="message">{% trans 'Your registration request has been submitted' %}</div>
+    </div>
+
+    <div class="panel panel-default" style="border-radius: 0;">
+        <div class="panel-body">
+            <p style="font-weight: bold;">
+                <i class="glyphicon glyphicon-envelope"></i>
+                {% trans "Validate your email address" %}
+            </p>
+            {% trans "In order to complete the registration process, we sent you an email with a validation link." %}
+            <br/>
+            {% trans "Please check your mailbox and validate your account following the link." %}
+        </div>
+    </div>
+{% endblock %}
