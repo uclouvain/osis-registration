@@ -36,7 +36,9 @@ class UserAccountCreationRequest(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(null=True)
+
     email = models.CharField(max_length=50)
+    email_validated = models.BooleanField(default=False)
 
     requested_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
