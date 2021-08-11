@@ -50,36 +50,30 @@
     <hr>
 
     <div class="registration-step-label">
-        <span class="step-number step-number-warning">2</span>
-        <span class="step-label step-label-warning">
+        <span class="step-number step-number-success">2</span>
+        <span class="step-label step-label-success">
             <i class="glyphicon glyphicon-envelope"></i>
             {% trans "Validate your email address" %}
         </span>
     </div>
 
-    <div class="alert alert-warning panel-top-alert" role="alert">
-        <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
-        <div class="message">            {% trans "In order to complete the registration process, we sent you an email with a validation link." %}
-            <br/>
-            {% trans "Please check your mailbox and validate your account following the link." %}</div>
+    <div class="alert alert-success panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+        <div class="message">{% trans 'Your email has been validated' %}</div>
     </div>
 
     <hr>
 
-    <div class="greyed-out">
+    <div class="registration-step-label">
+        <span class="step-number step-number-warning">3</span>
+        <span class="step-label step-label-warning">
+            <i class="glyphicon glyphicon-lock"></i>
+            {% trans "Set your credentials" %}
+        </span>
+    </div>
 
-        <div class="registration-step-label">
-            <span class="step-number">3</span>
-            <span class="step-label">
-                <i class="glyphicon glyphicon-lock"></i>
-                {% trans "Set your credentials" %}
-            </span>
-        </div>
-
-        <div class="alert alert-info panel-top-alert" role="alert">
-            <div class="icon"><i class="glyphicon glyphicon-eye-close"></i></div>
-            <div class="message">{% trans "This step will be available as soon as the previous step is done" %}</div>
-        </div>
-
+    <div class="alert alert-warning panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
+        <div class="message">{% trans "A new email has been sent, please follow the link to set your credentials." %}</div>
     </div>
 {% endblock %}

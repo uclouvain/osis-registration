@@ -23,13 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import uuid
 from captcha import views
+from django.shortcuts import render
+from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
-from django.views.generic.base import TemplateView
 
 from osis_registration.forms.registration import RegistrationForm
+from osis_registration.models import UserAccountCreationRequest
 from osis_registration.override_django_captcha import captcha_audio
 from osis_registration.services import mail
+from osis_registration.services.token_generator import mail_validation_token_generator
 
 
 class RegistrationFormView(FormView):
@@ -39,7 +43,20 @@ class RegistrationFormView(FormView):
     form_class = RegistrationForm
 
     def form_valid(self, form):
-        mail.send_validation_mail(email=self.request.POST['email'])
+        birth_date = "{}-{}-{}".format(
+            self.request.POST['birth_date_year'],
+            self.request.POST['birth_date_month'],
+            self.request.POST['birth_date_day']
+        )
+        user_account_creation_request = UserAccountCreationRequest(
+            person_uuid=uuid.uuid4(),
+            first_name=self.request.POST['first_name'],
+            last_name=self.request.POST['last_name'],
+            birth_date=birth_date,
+            email=self.request.POST['email'],
+        )
+        user_account_creation_request.save()
+        mail.send_validation_mail(self.request, user_account_creation_request)
         return super().form_valid(form)
 
 # replace captcha audio with custom captcha audio generator using espeak
@@ -49,4 +66,19 @@ views.captcha_audio = captcha_audio
 class RegistrationSuccessView(TemplateView):
     name = 'registration_success'
     template_name = 'registration_success.html'
+
+class ValidateEmailView(View):
+    def get(self, request, email, token):
+        try:
+            account_creation_request = UserAccountCreationRequest.objects.filter(
+                email=email
+            ).order_by('updated_at').last()
+        except UserAccountCreationRequest.DoesNotExist:
+            account_creation_request = None
+
+        if account_creation_request and mail_validation_token_generator.check_token(account_creation_request, token):
+            account_creation_request.email_validated = True
+            account_creation_request.save()
+
+        return render(request, 'email_validated.html')
 

@@ -23,7 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.shortcuts import reverse
+
 from osis_registration.messaging import send_message, message_config
+from osis_registration.services.token_generator import mail_validation_token_generator
 
 
 def send_email(template_references, receivers, data, connected_user=None):
@@ -41,14 +44,25 @@ def send_email(template_references, receivers, data, connected_user=None):
         connected_user=connected_user
     )
 
-def send_validation_mail(email):
+def send_validation_mail(request, user_account_creation_request):
     template_references = {
         'html': 'osis_registration_mail_validation_html',
         'txt': 'osis_registration_mail_validation_txt'
     }
-    receivers = [message_config.create_receiver(receiver_person_id=0    , receiver_email=email, receiver_lang=None)]
+    # TODO: change receiver_person_id
+    receivers = [
+        message_config.create_receiver(
+            receiver_person_id=0,
+            receiver_email=user_account_creation_request.email,
+            receiver_lang=None
+        )
+    ]
+    token = mail_validation_token_generator.make_token(user_account_creation_request)
     data = {
-        'template': {'link': '<FILL WITH LINK>'},
+        'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
+            'email': user_account_creation_request.email,
+            'token': token
+        }))},
         'subject': {}
     }
     send_email(template_references, receivers, data)

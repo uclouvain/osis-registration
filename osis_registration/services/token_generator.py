@@ -23,30 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
-from django import forms
-from captcha.fields import CaptchaField, CaptchaTextInput
+from osis_registration.models import UserAccountCreationRequest
 
-CURRENT_YEAR = datetime.date.today().year
 
-class CustomCaptchaTextInput(CaptchaTextInput):
-    template_name = "captcha.html"
+class MailValidationTokenGenerator(PasswordResetTokenGenerator):
 
-class RegistrationForm(forms.Form):
-    first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
-    last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
-    email = forms.CharField(label=_('Email'), max_length=100, required=True)
-    birth_date = forms.DateField(
-        initial=datetime.datetime.now(),
-        label=_('Date of birth'),
-        required=True,
-        widget=forms.SelectDateWidget(
-            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)
-        ),
-    )
-    captcha = CaptchaField(
-        widget=CustomCaptchaTextInput()
-    )
+    def _make_hash_value(self, user_account_creation_request: 'UserAccountCreationRequest', timestamp):
+        """
+        Hash the user account creation request's primary key, email, updated_at timestamp and email_validated
+        boolean field to produce a token that is invalidated when it's used (email_validated set to True)
+        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
+        """
+        uacr = user_account_creation_request
+        return f'{uacr.pk}{uacr.email}{uacr.updated_at}{uacr.email_validated}'
+
+mail_validation_token_generator = MailValidationTokenGenerator()
