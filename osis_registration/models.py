@@ -23,13 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+import uuid as uuid
 from django.db import models
 
 SUCCESS = 'SUCCESS'
 ERROR = 'ERROR'
 
 class UserAccountCreationRequest(models.Model):
+
+    uuid = models.UUIDField(default=uuid.uuid4)
 
     # user data needed to create account
     person_uuid =  models.UUIDField(null=True)
@@ -52,6 +54,8 @@ class UserAccountCreationRequest(models.Model):
 
 class UserAccountDeletionRequest(models.Model):
 
+    uuid = models.UUIDField(default=uuid.uuid4)
+
     # user data needed to delete account
     person_uuid =  models.UUIDField(null=True)
     email = models.CharField(max_length=50)
@@ -68,6 +72,8 @@ class UserAccountDeletionRequest(models.Model):
 
 class UserAccountRenewalRequest(models.Model):
 
+    uuid = models.UUIDField(default=uuid.uuid4)
+
     # user data needed to renew account
     person_uuid =  models.UUIDField(null=True)
     email = models.CharField(max_length=50)
@@ -83,6 +89,8 @@ class UserAccountRenewalRequest(models.Model):
 
 
 class UserAccountRequestResult(models.Model):
+
+    uuid = models.UUIDField(default=uuid.uuid4)
 
     person_uuid =  models.UUIDField(null=True)
     request_type = models.CharField(

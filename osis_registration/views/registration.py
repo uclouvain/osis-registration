@@ -68,11 +68,9 @@ class RegistrationSuccessView(TemplateView):
     template_name = 'registration_success.html'
 
 class ValidateEmailView(View):
-    def get(self, request, email, token):
+    def get(self, request, uacr_uuid, token):
         try:
-            account_creation_request = UserAccountCreationRequest.objects.filter(
-                email=email
-            ).order_by('updated_at').last()
+            account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
         except UserAccountCreationRequest.DoesNotExist:
             account_creation_request = None
 

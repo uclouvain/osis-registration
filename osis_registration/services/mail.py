@@ -60,7 +60,7 @@ def send_validation_mail(request, user_account_creation_request):
     token = mail_validation_token_generator.make_token(user_account_creation_request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
-            'email': user_account_creation_request.email,
+            'uacr_uuid': user_account_creation_request.uuid,
             'token': token
         }))},
         'subject': {}

@@ -248,7 +248,6 @@ def send_messages(message_content, force_sending_outside_production=False, conne
 
 def _build_and_send_message(connected_user, message_content, receivers, html_message_templates, txt_message_templates,
                             lang_code):
-    html_table_data, txt_table_data = __make_tables_template_data(message_content.get('tables'), lang_code)
     html_message_template, txt_message_template = _get_template_by_language_or_default(
         lang_code,
         html_message_templates,
@@ -262,9 +261,8 @@ def _build_and_send_message(connected_user, message_content, receivers, html_mes
         subject = html_message_template.subject
 
     html_data = message_content.get('template_base_data').copy()
-    html_data.update(html_table_data)
     txt_data = message_content.get('template_base_data').copy()
-    txt_data.update(txt_table_data)
+
     html_data['signature'] = render_to_string('messaging/html_email_signature.html', {
         'logo_mail_signature_url': settings.LOGO_EMAIL_SIGNATURE_URL,
         'logo_osis_url': settings.LOGO_OSIS_URL, })

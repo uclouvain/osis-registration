@@ -17,5 +17,5 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('lang/edit/<lang>/', edit_language, name='lang_edit'),
     path('registration_success/', RegistrationSuccessView.as_view(), name=RegistrationSuccessView.name),
-    path('validate_email/<email>/<token>', ValidateEmailView.as_view(), name='validate_email'),
+    path('validate_email/<uacr_uuid>/<token>', ValidateEmailView.as_view(), name='validate_email'),
 ]
