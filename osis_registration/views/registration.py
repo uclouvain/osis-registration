@@ -63,9 +63,9 @@ class RegistrationFormView(FormView):
 views.captcha_audio = captcha_audio
 
 
-class RegistrationSuccessView(TemplateView):
-    name = 'registration_success'
-    template_name = 'registration_success.html'
+class UserAccountCreationRequestedView(TemplateView):
+    name = 'user_account_creation_requested'
+    template_name = 'registration_status/user_account_creation_requested.html'
 
 class ValidateEmailView(View):
     def get(self, request, uacr_uuid, token):
@@ -78,5 +78,5 @@ class ValidateEmailView(View):
             account_creation_request.email_validated = True
             account_creation_request.save()
 
-        return render(request, 'email_validated.html')
+        return render(request, 'registration_status/email_validated.html')
 
