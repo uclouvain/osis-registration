@@ -764,9 +764,24 @@ label.required:after {
     border: 1px solid #8a6d3b;
 }
 
+.step-number-info{
+    background-color: #337ab7;
+    border: 1px solid #337ab7;
+}
+
+.step-number-danger{
+    background-color: #a94442;
+    border: 1px solid #a94442;
+}
+
 .step-label-success{
     border: 1px solid #3c763d;
     color: #3c763d;
+}
+
+.step-label-info{
+    border: 1px solid #337ab7;
+    color: #337ab7;
 }
 
 .step-label-warning{
@@ -774,7 +789,26 @@ label.required:after {
     color: #8a6d3b;
 }
 
+.step-label-danger{
+    border: 1px solid #a94442;
+    color: #a94442;
+}
+
 .greyed-out{
     filter: grayscale(100%);
     opacity: 0.3;
+}
+
+.loader {
+    border: 5px solid #337ab7; /* Blue */
+    border-bottom: 5px solid transparent;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

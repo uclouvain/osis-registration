@@ -31,7 +31,7 @@
 
 {% block content %}
     <div class="page-header">
-        <h2>OSIS Registration</h2>
+        <h2>{% trans 'User account creation request form' %}</h2>
     </div>
 
     <div class="alert alert-warning panel-top-alert" role="alert">
@@ -61,6 +61,17 @@
                     </div>
                     {% bootstrap_field form.captcha show_label=False placeholder=_("Write down the sequence of characters visible in the image above") %}
                 </div>
+
+                <hr/>
+
+                <div class="form-group">
+                <label class="required">{% trans "Data processing agreement" %}</label>
+                <div class="alert alert-info">
+                    <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                    {% trans "In order to continue, you have to acknowledge and accept" %}
+                    <a href="https://uclouvain.be/fr/uclouvain-et-vie-privee.html">{% trans "the UCLouvain policy on personal data protection" %}</a>
+                </div>
+
 
                 <hr/>
 

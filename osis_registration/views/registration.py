@@ -29,17 +29,18 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 
+from osis_registration import settings
 from osis_registration.forms.registration import RegistrationForm
 from osis_registration.models import UserAccountCreationRequest
 from osis_registration.override_django_captcha import captcha_audio
 from osis_registration.services import mail
 from osis_registration.services.token_generator import mail_validation_token_generator
-
+from django.http import JsonResponse
 
 class RegistrationFormView(FormView):
     name = 'registration'
     template_name = 'home.html'
-    success_url = '/registration_success'
+    success_url = '/user_account_creation_requested'
     form_class = RegistrationForm
 
     def form_valid(self, form):
@@ -67,7 +68,23 @@ class UserAccountCreationRequestedView(TemplateView):
     name = 'user_account_creation_requested'
     template_name = 'registration_status/user_account_creation_requested.html'
 
+class UserAccountCreationCheckView(View):
+    name = 'user_account_creation_check'
+
+    def get(self, request, uacr_uuid):
+        try:
+            account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
+        except UserAccountCreationRequest.DoesNotExist:
+            account_creation_request = None
+
+        return JsonResponse({
+            "success": account_creation_request.success,
+            "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
+        })
+
 class ValidateEmailView(View):
+    name = 'validate_email'
+
     def get(self, request, uacr_uuid, token):
         try:
             account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
@@ -78,5 +95,9 @@ class ValidateEmailView(View):
             account_creation_request.email_validated = True
             account_creation_request.save()
 
-        return render(request, 'registration_status/email_validated.html')
+        return render(request, 'registration_status/email_validated.html', context={
+            'uacr_uuid': uacr_uuid,
+            'uacr_email': account_creation_request.email,
+            'account_configuration_url': settings.LDAP_ACCOUNT_CONFIGURATION_URL
+        })
 

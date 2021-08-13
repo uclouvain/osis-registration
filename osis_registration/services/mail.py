@@ -52,7 +52,7 @@ def send_validation_mail(request, user_account_creation_request):
     # TODO: change receiver_person_id
     receivers = [
         message_config.create_receiver(
-            receiver_person_id=0,
+            receiver_person_id=user_account_creation_request.id,
             receiver_email=user_account_creation_request.email,
             receiver_lang=None
         )
