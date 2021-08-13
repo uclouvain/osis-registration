@@ -24,7 +24,7 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
@@ -33,16 +33,17 @@ msgstr "Date de naissance"
 msgid ""
 "This is a test email sent from OSIS, only sent to {new_dest_address}. "
 "Planned receivers were : {receivers_addresses}."
-msgstr ""
+msgstr "Ceci est un email de test envoyé par OSIS, uniquement envoyé à {new_dest_address}. "
+"Les destinataires initaux étaient: {receivers_addresses}."
 
 msgid "No email has been sent because a technical error occured."
-msgstr ""
+msgstr "Aucun email n'a été envoyé suite à une erreur technique."
 
 #, python-format
 msgid ""
 "No messages were sent : the message template %(html_template_ref)s does not "
 "exist."
-msgstr ""
+msgstr "Aucun message envoyé : le template de message %(html_template_ref)s n'existe pas."
 
 msgid "French"
 msgstr "Français"
@@ -56,8 +57,8 @@ msgstr "Écouter la version audio"
 msgid "Refresh CAPTCHA"
 msgstr "Réinitialiser le CAPTCHA"
 
-msgid "User account creation request form"
-msgstr ""
+msgid "UCLouvain user account creation request"
+msgstr "Demande de création de compte UCLouvain"
 
 msgid ""
 "This form enables you to apply for a UCLouvain temporary account. Along with "

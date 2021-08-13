@@ -37,7 +37,7 @@ html {
 body {
     position: relative;
     margin: 0;
-    padding-bottom: 6rem;
+    padding-bottom: 9rem;
     min-height: 100%;
     padding-top: 70px;
 }
@@ -685,9 +685,17 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
 
 .navbar-brand {
     margin: 5px 0 5px;
+    margin-left: 0 !important;
     padding: 0;
     height: 50px;
 }
+
+@media screen and (max-width: 765px){
+    .navbar-brand {
+        margin-left: 15px !important;
+    }
+}
+
 .navbar-brand>img {
     padding: 0;
     height: 100%;
@@ -812,3 +820,4 @@ label.required:after {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
