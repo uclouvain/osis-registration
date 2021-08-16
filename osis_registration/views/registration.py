@@ -60,6 +60,11 @@ class RegistrationFormView(FormView):
         mail.send_validation_mail(self.request, user_account_creation_request)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context.update({'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL})
+        return context
+
 # replace captcha audio with custom captcha audio generator using espeak
 views.captcha_audio = captcha_audio
 

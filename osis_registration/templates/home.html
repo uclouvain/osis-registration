@@ -65,17 +65,31 @@
                 <hr/>
 
                 <div class="form-group">
-                <label class="required">{% trans "Data processing agreement" %}</label>
-                <div class="alert alert-info">
-                    <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
-                    {% trans "In order to continue, you have to acknowledge and accept" %}
-                    <a href="https://uclouvain.be/fr/uclouvain-et-vie-privee.html">{% trans "the UCLouvain policy on personal data protection" %}</a>
+                    <label class="required">{% trans "Data processing agreement" %}</label>
+                    <div class="alert alert-info">
+                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                        {% trans "In order to continue, you have to acknowledge and accept" %}
+                        <a target="_blank" href="{{ data_protection_policy_url }}">{% trans "the UCLouvain policy on personal data protection" %}</a>
+                    </div>
+                    <div class="col-xs-9 col-md-3 input-group" style="text-align: left;">
+                        <label for="accept" class="col-xs-6">
+                            <input type="radio" id="accept" name="agreement" value="accept" required
+                                   {% if request.POST.agreement == "accept" %} checked {% endif %}
+                            >
+                            {% trans 'Accept' %}
+                        </label>
+                        <label for="reject" class="col-xs-6">
+                            <input type="radio" id="reject" name="agreement" value="reject" required
+                                   {% if request.POST.agreement == "reject" %} checked {% endif %}
+                            >
+                            {% trans 'Reject' %}
+                        </label>
+                    </div>
                 </div>
-
 
                 <hr/>
 
-                <input class="btn btn-primary" type="submit">
+                <input class="btn btn-primary" id="btn-submit" type="submit">
             </form>
         </div>
     </div>
@@ -99,5 +113,27 @@
             audio.src = json.audio_url;
         });
     });
+
+
+    // data policy consent (accept required to submit form)
+    form.addEventListener('submit', (e) => {
+        const acceptOption = form.querySelector('#accept');
+        const rejectOption = form.querySelector('#reject');
+
+        if(rejectOption.checked && !acceptOption.checked){
+            rejectOption.setCustomValidity("{% trans "Agreement is required to proceed with registration" %}");
+            rejectOption.reportValidity();
+            e.preventDefault();
+        }
+
+        // somehow reportValidity prevent to submit form after, we need to listen click on btn-submit
+        form.querySelector('#btn-submit').addEventListener('click', (e) => {
+            if(acceptOption.checked){
+                rejectOption.setCustomValidity("");
+                form.submit();
+            }
+        });
+    });
+
 </script>
 {% endblock %}
