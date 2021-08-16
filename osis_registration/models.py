@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import uuid as uuid
+import uuid as uuid_module
 from django.db import models
 
 SUCCESS = 'SUCCESS'
@@ -31,10 +31,10 @@ ERROR = 'ERROR'
 
 class UserAccountCreationRequest(models.Model):
 
-    uuid = models.UUIDField(default=uuid.uuid4)
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
     # user data needed to create account
-    person_uuid =  models.UUIDField(null=True)
+    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(null=True)
@@ -54,10 +54,10 @@ class UserAccountCreationRequest(models.Model):
 
 class UserAccountDeletionRequest(models.Model):
 
-    uuid = models.UUIDField(default=uuid.uuid4)
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
     # user data needed to delete account
-    person_uuid =  models.UUIDField(null=True)
+    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
     email = models.CharField(max_length=50)
 
     requested_at = models.DateTimeField(auto_now_add=True)
@@ -72,10 +72,10 @@ class UserAccountDeletionRequest(models.Model):
 
 class UserAccountRenewalRequest(models.Model):
 
-    uuid = models.UUIDField(default=uuid.uuid4)
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
     # user data needed to renew account
-    person_uuid =  models.UUIDField(null=True)
+    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
     email = models.CharField(max_length=50)
 
     requested_at = models.DateTimeField(auto_now_add=True)
@@ -90,7 +90,7 @@ class UserAccountRenewalRequest(models.Model):
 
 class UserAccountRequestResult(models.Model):
 
-    uuid = models.UUIDField(default=uuid.uuid4)
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
     person_uuid =  models.UUIDField(null=True)
     request_type = models.CharField(
