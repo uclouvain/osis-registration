@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-13 10:46+0200\n"
+"POT-Creation-Date: 2021-08-16 15:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Refresh CAPTCHA"
 msgstr ""
 
-msgid "User account creation request form"
+msgid "UCLouvain user account creation request"
 msgstr ""
 
 msgid ""
@@ -82,6 +82,15 @@ msgid "In order to continue, you have to acknowledge and accept"
 msgstr ""
 
 msgid "the UCLouvain policy on personal data protection"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Reject"
+msgstr ""
+
+msgid "Agreement is required to proceed with registration"
 msgstr ""
 
 msgid "Your browser is out of date. This can lead to unknown behaviour."
@@ -140,7 +149,8 @@ msgid "the UCLouvain account page"
 msgstr ""
 
 msgid ""
-"This will be the last step to accomplish before you may log into the portal."
+"This will be the last step to accomplish before you may effectively log into "
+"the portal."
 msgstr ""
 
 msgid ""
