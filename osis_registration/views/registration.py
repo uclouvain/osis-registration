@@ -72,20 +72,7 @@ views.captcha_audio = captcha_audio
 class UserAccountCreationRequestedView(TemplateView):
     name = 'user_account_creation_requested'
     template_name = 'registration_status/user_account_creation_requested.html'
-
-class UserAccountCreationCheckView(View):
-    name = 'user_account_creation_check'
-
-    def get(self, request, uacr_uuid):
-        try:
-            account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
-        except UserAccountCreationRequest.DoesNotExist:
-            account_creation_request = None
-
-        return JsonResponse({
-            "success": account_creation_request.success,
-            "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
-        })
+    
 
 class ValidateEmailView(View):
     name = 'validate_email'
