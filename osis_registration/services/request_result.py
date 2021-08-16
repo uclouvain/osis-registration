@@ -25,10 +25,10 @@
 ##############################################################################
 from typing import List
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR
+from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
 
 
-def store(requests: List[UserAccountRequestResult]):
+def store(requests: List[UserAccountCreationRequest]):
     UserAccountRequestResult.objects.bulk_create(
         [
             UserAccountRequestResult(
