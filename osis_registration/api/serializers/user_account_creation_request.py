@@ -23,14 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
+from rest_framework import serializers
 
-from osis_registration.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
+from osis_registration.models import UserAccountCreationRequest
 
 
-class CreateAccount(generics.CreateAPIView):
-    """
-       Create account request
-    """
-    name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer
+class UserAccountCreationRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserAccountCreationRequest
+        fields = (
+            'uuid',
+            'person_uuid',
+            'first_name',
+            'last_name',
+            'birth_date',
+            'email',
+            'app_name'
+        )
