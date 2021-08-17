@@ -1,4 +1,4 @@
-##############################################################################
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,19 +22,13 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from typing import List
-
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+############################################################################
+from django.core.management.commands import makemessages
 
 
-def store(requests: List[UserAccountCreationRequest]):
-    UserAccountRequestResult.objects.bulk_create(
-        [
-            UserAccountRequestResult(
-                person_uuid=request.person_uuid,
-                request_type=type(request),
-                status=SUCCESS if request.success else ERROR
-            ) for request in requests
-        ]
-    )
+class Command(makemessages.Command):
+    xgettext_options = makemessages.Command.xgettext_options + ['--sort-output', '--no-location']
+
+    def handle(self, *args, **options):
+        options['ignore_patterns'] = ['static/jsi18n/*']
+        super().handle(*args, **options)

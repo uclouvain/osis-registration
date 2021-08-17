@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-19 15:18+0200\n"
+"POT-Creation-Date: 2021-08-16 15:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,10 +24,29 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
+
+#, python-brace-format
+msgid ""
+"This is a test email sent from OSIS, only sent to {new_dest_address}. "
+"Planned receivers were : {receivers_addresses}."
+msgstr ""
+"Ceci est un email de test envoyé par OSIS, uniquement envoyé à "
+"{new_dest_address}. Les destinataires initaux étaient: {receivers_addresses}."
+
+msgid "No email has been sent because a technical error occured."
+msgstr "Aucun email n'a été envoyé suite à une erreur technique."
+
+#, python-format
+msgid ""
+"No messages were sent : the message template %(html_template_ref)s does not "
+"exist."
+msgstr ""
+"Aucun message envoyé : le template de message %(html_template_ref)s n'existe "
+"pas."
 
 msgid "French"
 msgstr "Français"
@@ -36,10 +55,13 @@ msgid "English"
 msgstr "Anglais"
 
 msgid "Play CAPTCHA as audio file"
-msgstr ""
+msgstr "Écouter la version audio"
 
 msgid "Refresh CAPTCHA"
 msgstr "Réinitialiser le CAPTCHA"
+
+msgid "UCLouvain user account creation request"
+msgstr "Demande de création de compte UCLouvain"
 
 msgid ""
 "This form enables you to apply for a UCLouvain temporary account. Along with "
@@ -61,6 +83,26 @@ msgstr ""
 msgid "Write down the sequence of characters visible in the image above"
 msgstr "Écrivez ici la séquence de caractères visible dans l'image ci-dessus"
 
+msgid "Data processing agreement"
+msgstr "Accord de traitement des données"
+
+msgid "In order to continue, you have to acknowledge and accept"
+msgstr "Afin de continuer votre inscription, vous devez lire et accepter"
+
+msgid "the UCLouvain policy on personal data protection"
+msgstr ""
+"la politique de l'UCLouvain sur la protection des données à caractère "
+"personnel"
+
+msgid "Accept"
+msgstr "Accepter"
+
+msgid "Reject"
+msgstr "Refuser"
+
+msgid "Agreement is required to proceed with registration"
+msgstr "L'accord est nécessaire pour continuer l'inscription"
+
 msgid "Your browser is out of date. This can lead to unknown behaviour."
 msgstr ""
 "Votre navigateur n'est pas à jour. Certaines fonctionnalités peuvent ne pas "
@@ -74,3 +116,72 @@ msgstr "Site web"
 
 msgid "Source code"
 msgstr "Code source"
+
+msgid "Submit registration form"
+msgstr "Envoyer le formulaire d'inscription"
+
+msgid "Your registration request has been submitted"
+msgstr "Votre requête d'inscription a été envoyée"
+
+msgid "Validate your email address"
+msgstr "Validez votre adresse email"
+
+msgid "Your email has been validated"
+msgstr "Votre adresse email a été validée"
+
+msgid "User account creation"
+msgstr "Création de compte utilisateur"
+
+msgid "Your user account is being created and will be available shortly..."
+msgstr ""
+"Votre compte utilisateur est en cours de création et sera bientôt "
+"disponible..."
+
+msgid "Your user account has been successfully created"
+msgstr "Votre compte utilisateur a été créé avec succès"
+
+msgid ""
+"Something went wrong during user account creation process. Please contact "
+"administration."
+msgstr ""
+"Une erreur s'est produite pendant le processus de création de compte. "
+"Veuillez contacter l'administration."
+
+msgid "Set your credentials"
+msgstr "Configurer l'authentification"
+
+msgid "This step will be available as soon as the previous step is done"
+msgstr ""
+"Cette étape sera disponible dès que l'étape précédente aura été réalisée"
+
+msgid ""
+"Your account has been created and you may now proceed with the setting of "
+"your credentials."
+msgstr ""
+"Votre compte utilisateur a été créé et vous pouvez maintenant configurer vos "
+"informations d'authentification."
+
+msgid "In order to set your credentials, please visit "
+msgstr "Afin de fournir ces informations, veuillez vous rendre sur "
+
+msgid "the UCLouvain account page"
+msgstr "la page de gestion de votre compte UCLouvain"
+
+msgid ""
+"This will be the last step to accomplish before you may effectively log into "
+"the portal."
+msgstr ""
+"Ceci sera la dernière étape à accomplir avant de pouvoir effectivement vous "
+"connecter sur le portail."
+
+msgid ""
+"In order to complete the registration process, we sent you an email with a "
+"validation link."
+msgstr ""
+"Afin de compléter le processus d'inscription, nous vous avons envoyé un "
+"email avec un lien de validation."
+
+msgid "Please check your mailbox and validate your account following the link."
+msgstr ""
+"Veuillez vérifier votre boîte email et valider votre compte en suivant le "
+"lien."

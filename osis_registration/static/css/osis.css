@@ -37,7 +37,7 @@ html {
 body {
     position: relative;
     margin: 0;
-    padding-bottom: 6rem;
+    padding-bottom: 9rem;
     min-height: 100%;
     padding-top: 70px;
 }
@@ -685,9 +685,17 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
 
 .navbar-brand {
     margin: 5px 0 5px;
+    margin-left: 0 !important;
     padding: 0;
     height: 50px;
 }
+
+@media screen and (max-width: 765px){
+    .navbar-brand {
+        margin-left: 15px !important;
+    }
+}
+
 .navbar-brand>img {
     padding: 0;
     height: 100%;
@@ -705,3 +713,111 @@ label.required:after {
     content: " *";
     color: red;
 }
+
+.panel-top-alert{
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    display: grid;
+    grid-template-columns: 40px auto;
+}
+
+.panel-top-alert .icon {
+    font-size: 180%;
+    display: grid;
+    align-items: center;
+}
+
+.panel-top-alert .message {
+    display: grid;
+    align-items: center;
+}
+
+.registration-step-label{
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.step-number{
+    display: inline-block;
+    border: 1px solid #337ab7;
+    background-color: #337ab7;
+    border-radius: 5px 0px 0px 5px;
+    text-align: center;
+    padding: 5px 10px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-right: -4px;
+}
+
+.step-label{
+    display: inline-block;
+    border: 1px solid #337ab7;
+    background-color: white;
+    border-radius: 0px 5px 5px 0px;
+    text-align: center;
+    padding: 5px 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.step-number-success{
+    background-color: #3c763d;
+    border: 1px solid #3c763d;
+}
+
+.step-number-warning{
+    background-color: #8a6d3b;
+    border: 1px solid #8a6d3b;
+}
+
+.step-number-info{
+    background-color: #337ab7;
+    border: 1px solid #337ab7;
+}
+
+.step-number-danger{
+    background-color: #a94442;
+    border: 1px solid #a94442;
+}
+
+.step-label-success{
+    border: 1px solid #3c763d;
+    color: #3c763d;
+}
+
+.step-label-info{
+    border: 1px solid #337ab7;
+    color: #337ab7;
+}
+
+.step-label-warning{
+    border: 1px solid #8a6d3b;
+    color: #8a6d3b;
+}
+
+.step-label-danger{
+    border: 1px solid #a94442;
+    color: #a94442;
+}
+
+.greyed-out{
+    filter: grayscale(100%);
+    opacity: 0.3;
+}
+
+.loader {
+    border: 5px solid #337ab7; /* Blue */
+    border-bottom: 5px solid transparent;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

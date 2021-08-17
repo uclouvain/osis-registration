@@ -43,7 +43,9 @@ class RegistrationForm(forms.Form):
         initial=datetime.datetime.now(),
         label=_('Date of birth'),
         required=True,
-        widget=forms.SelectDateWidget(years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)),
+        widget=forms.SelectDateWidget(
+            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)
+        ),
     )
     captcha = CaptchaField(
         widget=CustomCaptchaTextInput()

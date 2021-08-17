@@ -23,18 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
+from django.contrib import admin
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+from osis_registration.messaging import message_history, message_template
 
+admin.site.register(
+    message_history.MessageHistory,
+    message_history.MessageHistoryAdmin,
+)
 
-def store(requests: List[UserAccountCreationRequest]):
-    UserAccountRequestResult.objects.bulk_create(
-        [
-            UserAccountRequestResult(
-                person_uuid=request.person_uuid,
-                request_type=type(request),
-                status=SUCCESS if request.success else ERROR
-            ) for request in requests
-        ]
-    )
+admin.site.register(
+    message_template.MessageTemplate,
+    message_template.MessageTemplateAdmin,
+)

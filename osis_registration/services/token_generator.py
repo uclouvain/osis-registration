@@ -23,18 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from osis_registration.models import UserAccountCreationRequest
 
 
-def store(requests: List[UserAccountCreationRequest]):
-    UserAccountRequestResult.objects.bulk_create(
-        [
-            UserAccountRequestResult(
-                person_uuid=request.person_uuid,
-                request_type=type(request),
-                status=SUCCESS if request.success else ERROR
-            ) for request in requests
-        ]
-    )
+class MailValidationTokenGenerator(PasswordResetTokenGenerator):
+
+    def _make_hash_value(self, user_account_creation_request: 'UserAccountCreationRequest', timestamp):
+        """
+        Hash the user account creation request's primary key, email, updated_at timestamp and email_validated
+        boolean field to produce a token that is invalidated when it's used (email_validated set to True)
+        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
+        """
+        uacr = user_account_creation_request
+        return f'{uacr.pk}{uacr.email}{uacr.updated_at}{uacr.email_validated}'
+
+mail_validation_token_generator = MailValidationTokenGenerator()

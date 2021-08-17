@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>OSIS Registration</h2>
+    </div>
+
+    <div class="registration-step-label">
+        <span class="step-number step-number-success">1</span>
+        <span class="step-label step-label-success">
+            <i class="glyphicon glyphicon-send"></i>
+            {% trans "Submit registration form" %}
+        </span>
+    </div>
+
+    <div class="alert alert-success panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+        <div class="message">{% trans 'Your registration request has been submitted' %}</div>
+    </div>
+
+    <hr>
+
+    <div class="registration-step-label">
+        <span class="step-number step-number-success">2</span>
+        <span class="step-label step-label-success">
+            <i class="glyphicon glyphicon-envelope"></i>
+            {% trans "Validate your email address" %}
+        </span>
+    </div>
+
+    <div class="alert alert-success panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+        <div class="message">{% trans 'Your email has been validated' %}</div>
+    </div>
+
+    <hr>
+
+    <div id="ongoing-account-creation">
+        <div class="registration-step-label">
+            <span class="step-number step-number-info">3</span>
+            <span class="step-label step-label-info">
+                <i class="glyphicon glyphicon-transfer"></i>
+                {% trans "User account creation" %}
+            </span>
+        </div>
+
+        <div class="alert alert-info panel-top-alert" role="alert">
+            <div class="icon"><i class="loader"></i></div>
+            <div class="message">
+                {% trans "Your user account is being created and will be available shortly..." %}
+            </div>
+        </div>
+    </div>
+
+    <div id="success-account-creation" style="display: none;">
+        <div class="registration-step-label">
+            <span class="step-number step-number-success">3</span>
+            <span class="step-label step-label-success">
+                <i class="glyphicon glyphicon-transfer"></i>
+                {% trans "User account creation" %}
+            </span>
+        </div>
+
+        <div class="alert alert-success panel-top-alert" role="alert">
+            <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+            <div class="message">
+                {% trans "Your user account has been successfully created" %}
+            </div>
+        </div>
+    </div>
+
+    <div id="failed-account-creation" style="display: none;">
+        <div class="registration-step-label">
+            <span class="step-number step-number-danger">3</span>
+            <span class="step-label step-label-danger">
+                <i class="glyphicon glyphicon-transfer"></i>
+                {% trans "User account creation" %}
+            </span>
+        </div>
+
+        <div class="alert alert-danger panel-top-alert" role="alert">
+            <div class="icon"><i class="glyphicon glyphicon-remove"></i></div>
+            <div class="message">
+                {% trans "Something went wrong during user account creation process. Please contact administration." %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="credential-step" class="greyed-out">
+
+        <div class="registration-step-label">
+            <span class="step-number step-number-warning">4</span>
+            <span class="step-label step-label-warning">
+                <i class="glyphicon glyphicon-lock"></i>
+                {% trans "Set your credentials" %}
+            </span>
+        </div>
+
+        <div class="alert alert-info panel-top-alert disabled-alert" role="alert">
+            <div class="icon"><i class="glyphicon glyphicon-eye-close"></i></div>
+            <div class="message">
+                {% trans "This step will be available as soon as the previous step is done" %}
+            </div>
+        </div>
+
+        <div class="alert alert-warning panel-top-alert enabled-alert" role="alert" style="display:none;">
+            <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
+            <div class="message">
+                <!-- use span into grid box to make the link appearing inline -->
+                <span>
+                    {% trans "Your account has been created and you may now proceed with the setting of your credentials." %}
+                    {% trans "In order to set your credentials, please visit " %}
+                    <a target="_blank" href="{{ account_configuration_url }}?email={{ uacr_email }}">{% trans "the UCLouvain account page" %}.</a>
+                    {% trans "This will be the last step to accomplish before you may effectively log into the portal." %}
+                </span>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+    const ongoingAccountCreation = document.getElementById('ongoing-account-creation');
+    const successAccountCreation = document.getElementById('success-account-creation');
+    const failedAccountCreation = document.getElementById('failed-account-creation');
+
+    const credentialStep = document.getElementById('credential-step');
+    const disabledAlerts = document.getElementsByClassName('disabled-alert');
+    const enabledAlerts = document.getElementsByClassName('enabled-alert');
+
+    const checkUserAccountCreation = function (interval) {
+        fetch('/ajax/user_account_creation_check/{{ uacr_uuid }}/', {}).then(
+            res => res.json()).then(
+            json => {
+                if(json.success){
+                    ongoingAccountCreation.style.display = "none";
+                    successAccountCreation.style.display = "block";
+                    Array.from(disabledAlerts).forEach(el => el.style.display = "none");
+                    Array.from(enabledAlerts).forEach(el => el.style.display = "grid");
+                    credentialStep.classList.remove('greyed-out');
+                    if(interval) clearInterval(interval);
+                } else if(!json.ongoing){
+                    ongoingAccountCreation.style.display = "none";
+                    failedAccountCreation.style.display = "block";
+                    if(interval) clearInterval(interval);
+                }
+            }
+        );
+    };
+
+    //call first fetch before interval
+    checkUserAccountCreation();
+    const interval = setInterval(() => checkUserAccountCreation(interval), 3000);
+    </script>
+{% endblock %}

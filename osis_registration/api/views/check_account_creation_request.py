@@ -23,18 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
+from rest_framework import generics
+from rest_framework.response import Response
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+from osis_registration import settings
+from osis_registration.models import UserAccountCreationRequest
 
 
-def store(requests: List[UserAccountCreationRequest]):
-    UserAccountRequestResult.objects.bulk_create(
-        [
-            UserAccountRequestResult(
-                person_uuid=request.person_uuid,
-                request_type=type(request),
-                status=SUCCESS if request.success else ERROR
-            ) for request in requests
-        ]
-    )
+class UserAccountCreationCheck(generics.RetrieveAPIView):
+    name = 'user_account_creation_check'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            account_creation_request = UserAccountCreationRequest.objects.get(uuid=kwargs['uacr_uuid'])
+        except UserAccountCreationRequest.DoesNotExist:
+            account_creation_request = None
+
+        return Response(
+            data={
+                "success": account_creation_request.success,
+                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
+            },
+            content_type='application/json'
+        )

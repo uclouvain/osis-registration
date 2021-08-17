@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>OSIS Registration</h2>
+    </div>
+
+    <div class="registration-step-label">
+        <span class="step-number step-number-success">1</span>
+        <span class="step-label step-label-success">
+            <i class="glyphicon glyphicon-send"></i>
+            {% trans "Submit registration form" %}
+        </span>
+    </div>
+
+    <div class="alert alert-success panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-ok"></i></div>
+        <div class="message">{% trans 'Your registration request has been submitted' %}</div>
+    </div>
+
+    <hr>
+
+    <div class="registration-step-label">
+        <span class="step-number step-number-warning">2</span>
+        <span class="step-label step-label-warning">
+            <i class="glyphicon glyphicon-envelope"></i>
+            {% trans "Validate your email address" %}
+        </span>
+    </div>
+
+    <div class="alert alert-warning panel-top-alert" role="alert">
+        <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
+        <div class="message">            {% trans "In order to complete the registration process, we sent you an email with a validation link." %}
+            <br/>
+            {% trans "Please check your mailbox and validate your account following the link." %}</div>
+    </div>
+
+    <hr>
+
+    <div class="greyed-out">
+
+        <div class="registration-step-label">
+            <span class="step-number">3</span>
+            <span class="step-label">
+                <i class="glyphicon glyphicon-lock"></i>
+                {% trans "Set your credentials" %}
+            </span>
+        </div>
+
+        <div class="alert alert-info panel-top-alert" role="alert">
+            <div class="icon"><i class="glyphicon glyphicon-eye-close"></i></div>
+            <div class="message">{% trans "This step will be available as soon as the previous step is done" %}</div>
+        </div>
+
+    </div>
+{% endblock %}

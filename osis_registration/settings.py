@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'ckeditor',
     'statici18n',
     'rest_framework',
     'osis_registration',
@@ -113,6 +114,7 @@ STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'osis_regi
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
 LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
+DATA_PROTECTION_POLICY_URL = os.environ.get('DATA_PROTECTION_POLICY_URL', '')
 
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
 
@@ -157,3 +159,29 @@ USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
 USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
 USE_TZ = os.environ.get('USE_TZ', 'False').lower() == 'true'
 
+SEND_MAIL_LOGGER = os.environ.get('SEND_MAIL_LOGGER', 'send_mail')
+
+# Email Settings
+# By default Email are saved in the folder defined by EMAIL_FILE_PATH
+# If you want ti use the smtp backend,
+# you have to define EMAIL_BACKEND, EMAIL_HOST and EMAIL_PORT in your .env if the default values doesn't match.
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'osis@localhost.be')
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
+LOGO_EMAIL_SIGNATURE_URL = os.environ.get('LOGO_EMAIL_SIGNATURE_URL', '')
+EMAIL_PRODUCTION_SENDING = os.environ.get('EMAIL_PRODUCTION_SENDING', 'False').lower() == 'true'
+COMMON_EMAIL_RECEIVER = os.environ.get('COMMON_EMAIL_RECEIVER', 'osis@localhost.org')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.filebased.EmailBackend')
+EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "messaging/sent_mails"))
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
+SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
+INTERNAL_EMAIL_SUFFIX = os.environ.get('INTERNAL_EMAIL_SUFFIX', 'osis.org')
+MAIL_SENDER_CLASSES = os.environ.get(
+    'MAIL_SENDER_CLASSES',
+    'osis_registration.messaging.mail_sender_classes.MessageHistorySender'
+).split()
+
+LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
+
+# set token validity to 24 hours
+PASSWORD_RESET_TIMEOUT = 86400
