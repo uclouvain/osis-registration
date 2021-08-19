@@ -25,7 +25,7 @@
 ##############################################################################
 from rest_framework import serializers
 
-from osis_registration.models import UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
 
 class UserAccountCreationRequestSerializer(serializers.ModelSerializer):

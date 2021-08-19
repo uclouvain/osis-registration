@@ -31,7 +31,7 @@ from django.views.generic.edit import FormView
 
 from osis_registration import settings
 from osis_registration.forms.registration import RegistrationForm
-from osis_registration.models import UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 from osis_registration.override_django_captcha import captcha_audio
 from osis_registration.services import mail
 from osis_registration.services.token_generator import mail_validation_token_generator

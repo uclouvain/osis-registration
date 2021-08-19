@@ -23,26 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
-from rest_framework.response import Response
 
-from osis_registration import settings
+import uuid as uuid_module
+from django.db import models
+
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from osis_registration.models.user_account_deletion_request import UserAccountDeletionRequest
+from osis_registration.models.user_account_renewal_request import UserAccountRenewalRequest
 
+SUCCESS = 'SUCCESS'
+ERROR = 'ERROR'
 
-class UserAccountCreationCheck(generics.RetrieveAPIView):
-    name = 'user_account_creation_check'
+class UserAccountRequestResult(models.Model):
 
-    def get(self, request, *args, **kwargs):
-        try:
-            account_creation_request = UserAccountCreationRequest.objects.get(uuid=kwargs['uacr_uuid'])
-        except UserAccountCreationRequest.DoesNotExist:
-            account_creation_request = None
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
-        return Response(
-            data={
-                "success": account_creation_request.success,
-                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
-            },
-            content_type='application/json'
-        )
+    person_uuid =  models.UUIDField(null=True)
+    request_type = models.CharField(
+        max_length=9,
+        choices=[
+            (UserAccountCreationRequest,'CREATION'),
+            (UserAccountDeletionRequest,'DELETION'),
+            (UserAccountRenewalRequest,'RENEWAL')
+        ]
+    )
+    status = models.CharField(
+        max_length=7,
+        choices=[
+            (SUCCESS, SUCCESS),
+            (ERROR, ERROR)
+        ]
+    )

@@ -23,26 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
-from rest_framework.response import Response
 
-from osis_registration import settings
-from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+import uuid as uuid_module
+from django.db import models
+
+from osis_registration.models.polling_subscriber import PollingSubscriber
 
 
-class UserAccountCreationCheck(generics.RetrieveAPIView):
-    name = 'user_account_creation_check'
+class UserAccountDeletionRequest(models.Model):
 
-    def get(self, request, *args, **kwargs):
-        try:
-            account_creation_request = UserAccountCreationRequest.objects.get(uuid=kwargs['uacr_uuid'])
-        except UserAccountCreationRequest.DoesNotExist:
-            account_creation_request = None
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
-        return Response(
-            data={
-                "success": account_creation_request.success,
-                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
-            },
-            content_type='application/json'
-        )
+    # user data needed to delete account
+    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app = models.ForeignKey(PollingSubscriber, on_delete=models.CASCADE)
+
+    success = models.BooleanField(default=False)

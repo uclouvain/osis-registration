@@ -2,6 +2,9 @@
 
 from django.db import migrations, models
 import osis_registration.models
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from osis_registration.models.user_account_deletion_request import UserAccountDeletionRequest
+from osis_registration.models.user_account_renewal_request import UserAccountRenewalRequest
 
 
 class Migration(migrations.Migration):
@@ -16,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('person_uuid', models.UUIDField(null=True)),
-                ('request_type', models.CharField(choices=[(osis_registration.models.UserAccountCreationRequest, 'CREATION'), (osis_registration.models.UserAccountDeletionRequest, 'DELETION'), (osis_registration.models.UserAccountRenewalRequest, 'RENEWAL')], max_length=9)),
+                ('request_type', models.CharField(choices=[(UserAccountCreationRequest, 'CREATION'), (UserAccountDeletionRequest, 'DELETION'), (UserAccountRenewalRequest, 'RENEWAL')], max_length=9)),
                 ('status', models.CharField(choices=[('SUCCESS', 'SUCCESS'), ('ERROR', 'SUCCESS')], max_length=7)),
             ],
         ),

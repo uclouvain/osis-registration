@@ -23,11 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 import uuid as uuid_module
 from django.db import models
 
-SUCCESS = 'SUCCESS'
-ERROR = 'ERROR'
+from osis_registration.models.polling_subscriber import PollingSubscriber
+
 
 class UserAccountCreationRequest(models.Model):
 
@@ -47,64 +48,6 @@ class UserAccountCreationRequest(models.Model):
 
     attempt = models.SmallIntegerField(default=0)
     error_payload = models.JSONField(default={})
-    app_name = models.CharField(max_length=50)
+    app = models.ForeignKey(PollingSubscriber, on_delete=models.CASCADE)
 
     success = models.BooleanField(default=False)
-
-
-class UserAccountDeletionRequest(models.Model):
-
-    uuid = models.UUIDField(default=uuid_module.uuid4)
-
-    # user data needed to delete account
-    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
-    email = models.CharField(max_length=50)
-
-    requested_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    attempt = models.SmallIntegerField(default=0)
-    error_payload = models.JSONField(default={})
-    app_name = models.CharField(max_length=50)
-
-    success = models.BooleanField(default=False)
-
-
-class UserAccountRenewalRequest(models.Model):
-
-    uuid = models.UUIDField(default=uuid_module.uuid4)
-
-    # user data needed to renew account
-    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
-    email = models.CharField(max_length=50)
-
-    requested_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    attempt = models.SmallIntegerField(default=0)
-    error_payload = models.JSONField(default={})
-    app_name = models.CharField(max_length=50)
-
-    success = models.BooleanField(default=False)
-
-
-class UserAccountRequestResult(models.Model):
-
-    uuid = models.UUIDField(default=uuid_module.uuid4)
-
-    person_uuid =  models.UUIDField(null=True)
-    request_type = models.CharField(
-        max_length=9,
-        choices=[
-            (UserAccountCreationRequest,'CREATION'),
-            (UserAccountDeletionRequest,'DELETION'),
-            (UserAccountRenewalRequest,'RENEWAL')
-        ]
-    )
-    status = models.CharField(
-        max_length=7,
-        choices=[
-            (SUCCESS, SUCCESS),
-            (ERROR, ERROR)
-        ]
-    )
