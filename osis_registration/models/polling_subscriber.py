@@ -23,28 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin, auth
 
-from osis_registration.messaging import message_history, message_template
-from osis_registration.models.polling_subscriber import PollingSubscriber, PollingSubscriberAdmin
-from osis_registration.models.user import OsisRegistrationUserAdmin
+import uuid
 
-admin.site.register(
-    message_history.MessageHistory,
-    message_history.MessageHistoryAdmin,
-)
+from django.contrib import admin
+from django.db import models
 
-admin.site.register(
-    message_template.MessageTemplate,
-    message_template.MessageTemplateAdmin,
-)
+from django.contrib.auth.models import User
 
-admin.site.register(
-    PollingSubscriber,
-    PollingSubscriberAdmin,
-)
+class PollingSubscriberAdmin(admin.ModelAdmin):
+    fields = ('app_name',)
+    list_display = ('app_name', 'uuid')
 
-# replace user admin with custom admin
-User = auth.get_user_model()
-admin.site.unregister(User)
-admin.site.register(User, OsisRegistrationUserAdmin)
+class PollingSubscriber(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    app_name = models.OneToOneField(User, on_delete=models.CASCADE)

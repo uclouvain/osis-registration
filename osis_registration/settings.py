@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'captcha',
-    'bootstrap3'
+    'bootstrap3',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -105,6 +106,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
 
 # Static files (CSS, JavaScript, Images)
 

@@ -23,28 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin, auth
 
-from osis_registration.messaging import message_history, message_template
-from osis_registration.models.polling_subscriber import PollingSubscriber, PollingSubscriberAdmin
-from osis_registration.models.user import OsisRegistrationUserAdmin
+import secrets
 
-admin.site.register(
-    message_history.MessageHistory,
-    message_history.MessageHistoryAdmin,
-)
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
 
-admin.site.register(
-    message_template.MessageTemplate,
-    message_template.MessageTemplateAdmin,
-)
+class OsisRegistrationUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        self.base_fields['password1'].required = False
+        self.base_fields['password2'].required = False
+        super().__init__(*args, **kwargs)
 
-admin.site.register(
-    PollingSubscriber,
-    PollingSubscriberAdmin,
-)
+    def clean(self):
+        password = secrets.token_hex()
+        self.cleaned_data['password1'] = password
+        self.cleaned_data['password2'] = password
+        return super().clean()
 
-# replace user admin with custom admin
-User = auth.get_user_model()
-admin.site.unregister(User)
-admin.site.register(User, OsisRegistrationUserAdmin)
+class OsisRegistrationUserAdmin(UserAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('username',)
+        }),
+    )
+    add_fieldsets = (
+        (None, {
+            'fields': ('username',)
+        }),
+    )
+    form = OsisRegistrationUserCreationForm
+    add_form = OsisRegistrationUserCreationForm
