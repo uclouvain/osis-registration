@@ -27,10 +27,12 @@ from django.urls import path
 
 from osis_registration.api.views.create_account import CreateAccount
 from osis_registration.api.views.delete_account import DeleteAccount
+from osis_registration.api.views.poll_request_results import PollRequestResults
 from osis_registration.api.views.renew_account import RenewAccount
 
 urlpatterns = [
     path('create_account/', CreateAccount.as_view(), name=CreateAccount.name),
     path('delete_account/', DeleteAccount.as_view(), name=DeleteAccount.name),
     path('renew_account/', RenewAccount.as_view(), name=RenewAccount.name),
+    path('poll/', PollRequestResults.as_view(), name=PollRequestResults.name),
 ]

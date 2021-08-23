@@ -23,25 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from rest_framework import generics
 
-import uuid
+from osis_registration.api.serializers.user_account_request_result import UserAccountRequestResultSerializer
+from osis_registration.models import UserAccountRequestResult
+from osis_registration.models.polling_subscriber import PollingSubscriber
 
-from django.contrib import admin
-from django.db import models
-
-from django.contrib.auth.models import User
-
-from osis_registration.models.user import get_osis_registration_user
+from django.utils.timezone import now
 
 
-class PollingSubscriberAdmin(admin.ModelAdmin):
-    fields = ('app_name',)
-    list_display = ('app_name', 'uuid')
+class PollRequestResults(generics.ListAPIView):
+    """
+       List last updated request results for a given app
+    """
+    name = 'poll-request-results'
+    serializer_class = UserAccountRequestResultSerializer
 
-class PollingSubscriber(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    app_name = models.OneToOneField(User, on_delete=models.CASCADE)
-    last_poll_requested = models.DateTimeField(auto_now_add=True)
-
-def get_osis_registration_subscriber():
-    return PollingSubscriber.objects.get(app_name=get_osis_registration_user())
+    def get_queryset(self):
+        subscriber = PollingSubscriber.objects.get(app_name=self.request.user)
+        qs = UserAccountRequestResult.objects.filter(updated_at__gte=subscriber.last_poll_requested, app=subscriber)
+        subscriber.last_poll_requested = now()
+        subscriber.save()
+        return qs

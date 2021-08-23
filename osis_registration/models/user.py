@@ -28,6 +28,8 @@ import secrets
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 
 class OsisRegistrationUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -54,3 +56,6 @@ class OsisRegistrationUserAdmin(UserAdmin):
     )
     form = OsisRegistrationUserCreationForm
     add_form = OsisRegistrationUserCreationForm
+
+def get_osis_registration_user():
+    return User.objects.get(username='osis_registration')

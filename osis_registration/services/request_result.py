@@ -35,7 +35,8 @@ def store(requests: List[UserAccountCreationRequest]):
             UserAccountRequestResult(
                 person_uuid=request.person_uuid,
                 request_type=type(request).__name__,
-                status=SUCCESS if request.success else ERROR
+                status=SUCCESS if request.success else ERROR,
+                app=request.app
             ) for request in requests
         ]
     )

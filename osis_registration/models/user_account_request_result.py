@@ -27,6 +27,7 @@
 import uuid as uuid_module
 from django.db import models
 
+from osis_registration.models.polling_subscriber import PollingSubscriber
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 from osis_registration.models.user_account_deletion_request import UserAccountDeletionRequest
 from osis_registration.models.user_account_renewal_request import UserAccountRenewalRequest
@@ -54,3 +55,5 @@ class UserAccountRequestResult(models.Model):
             (ERROR, ERROR)
         ]
     )
+    app = models.ForeignKey(PollingSubscriber, on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -29,9 +29,12 @@ from rest_framework.response import Response
 from osis_registration import settings
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
+from rest_framework.authentication import SessionAuthentication
+
 
 class UserAccountCreationCheck(generics.RetrieveAPIView):
     name = 'user_account_creation_check'
+    authentication_classes = [SessionAuthentication]
 
     def get(self, request, *args, **kwargs):
         try:

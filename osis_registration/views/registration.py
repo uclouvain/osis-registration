@@ -31,11 +31,12 @@ from django.views.generic.edit import FormView
 
 from osis_registration import settings
 from osis_registration.forms.registration import RegistrationForm
+from osis_registration.models.polling_subscriber import get_osis_registration_subscriber
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 from osis_registration.override_django_captcha import captcha_audio
 from osis_registration.services import mail
 from osis_registration.services.token_generator import mail_validation_token_generator
-from django.http import JsonResponse
+
 
 class RegistrationFormView(FormView):
     name = 'registration'
@@ -55,6 +56,7 @@ class RegistrationFormView(FormView):
             last_name=self.request.POST['last_name'],
             birth_date=birth_date,
             email=self.request.POST['email'],
+            app=get_osis_registration_subscriber(),
         )
         user_account_creation_request.save()
         mail.send_validation_mail(self.request, user_account_creation_request)
