@@ -20,7 +20,7 @@ servers:
     description: Production server
 
 paths:
-  /masters:
+  /create_account:
     post:
       description: Create new user account creation request
       requestBody:
