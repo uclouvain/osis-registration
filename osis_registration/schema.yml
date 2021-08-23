@@ -67,10 +67,6 @@ components:
           email:
             type: string
             example: "john.doe@mail.xyz"
-          app_name:
-            type: string
-            nullable: true
-            example: "internship"
     Uuid:
       type: string
       format: uuid

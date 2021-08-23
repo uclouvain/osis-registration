@@ -25,6 +25,7 @@
 ##############################################################################
 from rest_framework import serializers
 
+from osis_registration.models.polling_subscriber import PollingSubscriber
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
 
@@ -39,5 +40,8 @@ class UserAccountCreationRequestSerializer(serializers.ModelSerializer):
             'last_name',
             'birth_date',
             'email',
-            'app_name'
         )
+
+    def create(self, validated_data):
+        validated_data['app'] = PollingSubscriber.objects.get(app_name=self.context['request'].user)
+        return super(UserAccountCreationRequestSerializer, self).create(validated_data)
