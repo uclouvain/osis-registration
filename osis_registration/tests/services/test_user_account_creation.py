@@ -24,21 +24,25 @@
 #
 ##############################################################################
 from unittest import mock
+from unittest.mock import patch
 
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from osis_registration import settings
 from osis_registration.services.user_account_creation import create_ldap_user_account
 from osis_registration.tests.factories.user_account_creation_request import UserAccountCreationRequestFactory
 
-@override_settings(DEBUG=False)
+
 class UserAccountCreationServiceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
         cls.pending_request = UserAccountCreationRequestFactory()
 
-    @mock.patch('requests.api.post')
+    @patch('osis_registration.settings.DEBUG', False)
+    @patch('osis_registration.settings.LDAP_ACCOUNT_CREATION_URL', 'fake_ldap_url')
+    @mock.patch('osis_registration.services.user_account_creation.requests.post')
     def test_service_should_call_endpoint_to_attempt_user_account_creation(self, mock_post):
         create_ldap_user_account(self.pending_request)
-        self.assertTrue(mock_post.assert_called_with(url=settings.LDAP_ACCOUNT_CREATION_URL))
+        _, kwargs = mock_post.call_args
+        self.assertEqual(kwargs['url'], settings.LDAP_ACCOUNT_CREATION_URL)

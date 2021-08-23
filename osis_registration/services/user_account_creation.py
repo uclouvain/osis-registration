@@ -29,7 +29,7 @@ import requests as requests
 from requests.exceptions import Timeout
 
 from osis_registration import settings
-from osis_registration.models import UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
 SUCCESS = "success"
 ERROR = "error"

@@ -40,7 +40,7 @@ class UserAccountRequestResult(models.Model):
 
     person_uuid =  models.UUIDField(null=True)
     request_type = models.CharField(
-        max_length=9,
+        max_length=50,
         choices=[
             (UserAccountCreationRequest,'CREATION'),
             (UserAccountDeletionRequest,'DELETION'),
