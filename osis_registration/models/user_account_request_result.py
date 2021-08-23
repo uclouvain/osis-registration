@@ -23,41 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
 
-import requests as requests
-from requests.exceptions import Timeout
+import uuid as uuid_module
+from django.db import models
 
-from osis_registration import settings
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from osis_registration.models.user_account_deletion_request import UserAccountDeletionRequest
+from osis_registration.models.user_account_renewal_request import UserAccountRenewalRequest
 
-SUCCESS = "success"
-ERROR = "error"
+SUCCESS = 'SUCCESS'
+ERROR = 'ERROR'
 
+class UserAccountRequestResult(models.Model):
 
-def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) -> dict:
-    # mock endpoint in debug
-    if settings.DEBUG:
-        random_success_status = random.choice([True, False])
-        if random_success_status:
-            response = {"status": SUCCESS, "message": "User created entry in db"}
-        else:
-            response = {"status": ERROR, "message": "Missing data"}
-    else:
-        try:
-            response = requests.post(
-                headers={'Content-Type': 'application/json'},
-                json={
-                    "id": str(user_creation_request.person_uuid),
-                    "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
-                    "prenom": user_creation_request.first_name,
-                    "nom": user_creation_request.last_name,
-                    "email": user_creation_request.email
-                },
-                url=settings.LDAP_ACCOUNT_CREATION_URL,
-                timeout=1,
-            )
-        except Timeout:
-            response = {"status": ERROR, "message": "Request timed out"}
+    uuid = models.UUIDField(default=uuid_module.uuid4)
 
-    return response
+    person_uuid =  models.UUIDField(null=True)
+    request_type = models.CharField(
+        max_length=50,
+        choices=[
+            (UserAccountCreationRequest,'CREATION'),
+            (UserAccountDeletionRequest,'DELETION'),
+            (UserAccountRenewalRequest,'RENEWAL')
+        ]
+    )
+    status = models.CharField(
+        max_length=7,
+        choices=[
+            (SUCCESS, SUCCESS),
+            (ERROR, ERROR)
+        ]
+    )

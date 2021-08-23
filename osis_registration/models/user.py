@@ -23,14 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
 
-from osis_registration.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
+import secrets
 
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
 
-class CreateAccount(generics.CreateAPIView):
-    """
-       Create account request
-    """
-    name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer
+class OsisRegistrationUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        self.base_fields['password1'].required = False
+        self.base_fields['password2'].required = False
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        password = secrets.token_hex()
+        self.cleaned_data['password1'] = password
+        self.cleaned_data['password2'] = password
+        return super().clean()
+
+class OsisRegistrationUserAdmin(UserAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('username',)
+        }),
+    )
+    add_fieldsets = (
+        (None, {
+            'fields': ('username',)
+        }),
+    )
+    form = OsisRegistrationUserCreationForm
+    add_form = OsisRegistrationUserCreationForm

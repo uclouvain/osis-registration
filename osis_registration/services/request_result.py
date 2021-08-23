@@ -25,7 +25,8 @@
 ##############################################################################
 from typing import List
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from osis_registration.models.user_account_request_result import SUCCESS, ERROR, UserAccountRequestResult
 
 
 def store(requests: List[UserAccountCreationRequest]):
@@ -33,7 +34,7 @@ def store(requests: List[UserAccountCreationRequest]):
         [
             UserAccountRequestResult(
                 person_uuid=request.person_uuid,
-                request_type=type(request),
+                request_type=type(request).__name__,
                 status=SUCCESS if request.success else ERROR
             ) for request in requests
         ]

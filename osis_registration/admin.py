@@ -23,9 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
+from django.contrib import admin, auth
 
 from osis_registration.messaging import message_history, message_template
+from osis_registration.models.polling_subscriber import PollingSubscriber, PollingSubscriberAdmin
+from osis_registration.models.user import OsisRegistrationUserAdmin
 
 admin.site.register(
     message_history.MessageHistory,
@@ -36,3 +38,13 @@ admin.site.register(
     message_template.MessageTemplate,
     message_template.MessageTemplateAdmin,
 )
+
+admin.site.register(
+    PollingSubscriber,
+    PollingSubscriberAdmin,
+)
+
+# replace user admin with custom admin
+User = auth.get_user_model()
+admin.site.unregister(User)
+admin.site.register(User, OsisRegistrationUserAdmin)

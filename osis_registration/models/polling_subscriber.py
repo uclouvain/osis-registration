@@ -23,14 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
 
-from osis_registration.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
+import uuid
 
+from django.contrib import admin
+from django.db import models
 
-class CreateAccount(generics.CreateAPIView):
-    """
-       Create account request
-    """
-    name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer
+from django.contrib.auth.models import User
+
+class PollingSubscriberAdmin(admin.ModelAdmin):
+    fields = ('app_name',)
+    list_display = ('app_name', 'uuid')
+
+class PollingSubscriber(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    app_name = models.OneToOneField(User, on_delete=models.CASCADE)

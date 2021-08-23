@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,14 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
 
-from osis_registration.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
+import factory
+
+def generate_email(user):
+    return '{0.username}@temp.com'.format(user).lower()
 
 
-class CreateAccount(generics.CreateAPIView):
-    """
-       Create account request
-    """
-    name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = 'auth.User'
+        django_get_or_create = ('username',)
+
+    username = factory.Sequence(lambda n: 'app_{}'.format(n))
+    email = factory.LazyAttribute(generate_email)
+    password = factory.PostGenerationMethodCall('set_password', 'password123')
+
+    is_active = True
+    is_staff = False
+    is_superuser = False

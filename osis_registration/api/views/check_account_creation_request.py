@@ -27,7 +27,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from osis_registration import settings
-from osis_registration.models import UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
 
 class UserAccountCreationCheck(generics.RetrieveAPIView):

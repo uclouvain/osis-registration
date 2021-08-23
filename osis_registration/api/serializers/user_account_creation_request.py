@@ -23,41 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
+from rest_framework import serializers
 
-import requests as requests
-from requests.exceptions import Timeout
-
-from osis_registration import settings
+from osis_registration.models.polling_subscriber import PollingSubscriber
 from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 
-SUCCESS = "success"
-ERROR = "error"
 
+class UserAccountCreationRequestSerializer(serializers.ModelSerializer):
 
-def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) -> dict:
-    # mock endpoint in debug
-    if settings.DEBUG:
-        random_success_status = random.choice([True, False])
-        if random_success_status:
-            response = {"status": SUCCESS, "message": "User created entry in db"}
-        else:
-            response = {"status": ERROR, "message": "Missing data"}
-    else:
-        try:
-            response = requests.post(
-                headers={'Content-Type': 'application/json'},
-                json={
-                    "id": str(user_creation_request.person_uuid),
-                    "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
-                    "prenom": user_creation_request.first_name,
-                    "nom": user_creation_request.last_name,
-                    "email": user_creation_request.email
-                },
-                url=settings.LDAP_ACCOUNT_CREATION_URL,
-                timeout=1,
-            )
-        except Timeout:
-            response = {"status": ERROR, "message": "Request timed out"}
+    class Meta:
+        model = UserAccountCreationRequest
+        fields = (
+            'uuid',
+            'person_uuid',
+            'first_name',
+            'last_name',
+            'birth_date',
+            'email',
+        )
 
-    return response
+    def create(self, validated_data):
+        validated_data['app'] = PollingSubscriber.objects.get(app_name=self.context['request'].user)
+        return super(UserAccountCreationRequestSerializer, self).create(validated_data)

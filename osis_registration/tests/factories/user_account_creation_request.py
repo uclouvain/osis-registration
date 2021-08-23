@@ -1,5 +1,10 @@
+import datetime
 
 import factory.fuzzy
+
+from osis_registration.tests.factories.polling_subscriber import PollingSubscriberFactory
+
+now = datetime.datetime.now()
 
 class UserAccountCreationRequestFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -9,7 +14,12 @@ class UserAccountCreationRequestFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     email = factory.Faker('email')
 
+    birth_date = factory.fuzzy.FuzzyDate(
+        datetime.datetime(now.year-80, 1, 1),
+        datetime.datetime(now.year-18, 1, 1)
+    )
+
     attempt = 0
     success = False
-    app_name = factory.Faker('word')
+    app = factory.SubFactory(PollingSubscriberFactory)
 

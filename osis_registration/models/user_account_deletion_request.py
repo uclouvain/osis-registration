@@ -23,14 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
 
-from osis_registration.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
+import uuid as uuid_module
+from django.db import models
+
+from osis_registration.models.polling_subscriber import PollingSubscriber
 
 
-class CreateAccount(generics.CreateAPIView):
-    """
-       Create account request
-    """
-    name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer
+class UserAccountDeletionRequest(models.Model):
+
+    uuid = models.UUIDField(default=uuid_module.uuid4)
+
+    # user data needed to delete account
+    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
+    email = models.CharField(max_length=50)
+
+    requested_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    attempt = models.SmallIntegerField(default=0)
+    error_payload = models.JSONField(default={})
+    app = models.ForeignKey(PollingSubscriber, on_delete=models.CASCADE)
+
+    success = models.BooleanField(default=False)
