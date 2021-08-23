@@ -25,7 +25,8 @@
 ##############################################################################
 from typing import List
 
-from osis_registration.models import UserAccountRequestResult, SUCCESS, ERROR, UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from osis_registration.models.user_account_request_result import SUCCESS, ERROR, UserAccountRequestResult
 
 
 def store(requests: List[UserAccountCreationRequest]):

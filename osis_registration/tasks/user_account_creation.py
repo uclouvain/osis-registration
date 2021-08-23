@@ -27,7 +27,7 @@ import logging
 
 from osis_registration import settings
 from osis_registration.celery import app as celery_app
-from osis_registration.models import UserAccountCreationRequest
+from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
 from osis_registration.services import request_result
 from osis_registration.services.user_account_creation import create_ldap_user_account, SUCCESS
 
