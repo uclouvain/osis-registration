@@ -29,14 +29,15 @@ from osis_registration.models.user_account_creation_request import UserAccountCr
 from osis_registration.models.user_account_request_result import SUCCESS, ERROR, UserAccountRequestResult
 
 
-def store(requests: List[UserAccountCreationRequest]):
+def publish(requests: List[UserAccountCreationRequest]):
     UserAccountRequestResult.objects.bulk_create(
         [
             UserAccountRequestResult(
                 person_uuid=request.person_uuid,
                 request_type=type(request).__name__,
                 status=SUCCESS if request.success else ERROR,
-                app=request.app
+                app=request.app,
+                email=request.email
             ) for request in requests
         ]
     )

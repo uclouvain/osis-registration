@@ -35,6 +35,7 @@ class UserAccountRequestResultSerializer(serializers.ModelSerializer):
         fields = (
             'uuid',
             'person_uuid',
+            'email',
             'request_type',
             'status',
             'app',

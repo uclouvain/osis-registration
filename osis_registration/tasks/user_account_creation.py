@@ -78,6 +78,6 @@ def run() -> dict:
     if too_many_attempts_requests:
         raise TooManyCreationRequestAttemptsException()
 
-    request_result.store(resulted_requests)
+    request_result.publish(resulted_requests)
 
     return {}

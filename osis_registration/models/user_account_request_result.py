@@ -40,6 +40,8 @@ class UserAccountRequestResult(models.Model):
     uuid = models.UUIDField(default=uuid_module.uuid4)
 
     person_uuid =  models.UUIDField(null=True)
+    email = models.CharField(max_length=50)
+
     request_type = models.CharField(
         max_length=50,
         choices=[
