@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
-from rest_framework.response import Response
+from unittest import mock
 
-from osis_registration import settings
-from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from django.test.testcases import TestCase
 
-from rest_framework.authentication import SessionAuthentication
+from osis_registration.models.user import OsisRegistrationUserCreationForm
 
 
-class UserAccountCreationCheck(generics.RetrieveAPIView):
-    name = 'user_account_creation_check'
-    authentication_classes = [SessionAuthentication]
+class OsisRegistrationUserCreationAdminForm(TestCase):
 
-    def get(self, request, *args, **kwargs):
-        account_creation_request = UserAccountCreationRequest.objects.get(uuid=kwargs['uacr_uuid'])
-        return Response(
-            data={
-                "success": account_creation_request.success,
-                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
-            },
-            content_type='application/json'
-        )
+    def test_should_require_user_creation_form_in_admin_with_username_only(self):
+        form = OsisRegistrationUserCreationForm()
+        self.assertTrue(form.base_fields['username'].required)
+        self.assertFalse(form.base_fields['password1'].required)
+        self.assertFalse(form.base_fields['password2'].required)
+
+    @mock.patch('secrets.token_hex', return_value='generated_password')
+    def test_should_generate_password_on_form_submit(self, mock_token_hex):
+        form = OsisRegistrationUserCreationForm(data={'username': 'test'})
+        form.is_valid()
+        self.assertEqual(form.cleaned_data['password1'], 'generated_password')
+        self.assertEqual(form.cleaned_data['password2'], 'generated_password')

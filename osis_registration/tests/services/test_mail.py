@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
-from rest_framework.response import Response
+from unittest import mock
 
-from osis_registration import settings
-from osis_registration.models.user_account_creation_request import UserAccountCreationRequest
+from django.test import TestCase, RequestFactory
 
-from rest_framework.authentication import SessionAuthentication
+from osis_registration.services.mail import send_validation_mail
+from osis_registration.tests.factories.user_account_creation_request import UserAccountCreationRequestFactory
 
 
-class UserAccountCreationCheck(generics.RetrieveAPIView):
-    name = 'user_account_creation_check'
-    authentication_classes = [SessionAuthentication]
+class MailTestCase(TestCase):
 
-    def get(self, request, *args, **kwargs):
-        account_creation_request = UserAccountCreationRequest.objects.get(uuid=kwargs['uacr_uuid'])
-        return Response(
-            data={
-                "success": account_creation_request.success,
-                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
-            },
-            content_type='application/json'
-        )
+    @mock.patch('osis_registration.messaging.send_message.send_messages')
+    def test_should_send_validation_mail(self, mock_send_msg):
+        request = RequestFactory().get('/')
+        uacr = UserAccountCreationRequestFactory()
+        send_validation_mail(request, uacr)
+        self.assertTrue(mock_send_msg.called)
+
+        _, kwargs = mock_send_msg.call_args
+        self.assertTrue(uacr.email in str(kwargs['message_content']['receivers']))
