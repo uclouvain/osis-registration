@@ -35,7 +35,7 @@ class UserAccountCreationTaskTestCase(TestCase):
     def setUpTestData(cls):
         cls.pending_requests = [UserAccountCreationRequestFactory() for _ in range(2)]
         cls.exceeding_retry_requests = [UserAccountCreationRequestFactory(
-            attempt=settings.REQUEST_ATTEMPT_LIMIT+1) for _ in range(2)
+            attempt=int(settings.REQUEST_ATTEMPT_LIMIT)+1) for _ in range(2)
         ]
         cls.processed_requests = [UserAccountCreationRequestFactory(success=True, attempt=1) for _ in range(2)]
 
@@ -49,7 +49,7 @@ class UserAccountCreationTaskTestCase(TestCase):
         tasks.user_account_creation.run()
         for request in self.exceeding_retry_requests:
             request.refresh_from_db()
-            self.assertEqual(request.attempt, settings.REQUEST_ATTEMPT_LIMIT+1)
+            self.assertEqual(request.attempt, int(settings.REQUEST_ATTEMPT_LIMIT)+1)
 
     def test_task_should_not_attempt_to_create_user_account_for_processed_requests(self):
         tasks.user_account_creation.run()

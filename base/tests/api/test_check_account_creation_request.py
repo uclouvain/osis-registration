@@ -49,7 +49,7 @@ class UserAccountCreationCheckTestCase(TestCase):
         self.assertFalse(json_response['success'])
 
     def test_should_retrieve_account_creation_request_status_ongoing_when_attempts_less_than_limit(self):
-        uacr = UserAccountCreationRequestFactory(attempt=settings.REQUEST_ATTEMPT_LIMIT-1)
+        uacr = UserAccountCreationRequestFactory(attempt=int(settings.REQUEST_ATTEMPT_LIMIT)-1)
         url = reverse(UserAccountCreationCheck.name, kwargs={'uacr_uuid': uacr.uuid})
         json_response = self.client.get(url).json()
         self.assertTrue(json_response['ongoing'])

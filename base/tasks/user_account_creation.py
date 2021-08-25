@@ -69,7 +69,7 @@ def run() -> dict:
             user_creation_request.attempt += 1
             user_creation_request.save()
 
-            if user_creation_request.attempt > settings.REQUEST_ATTEMPT_LIMIT:
+            if user_creation_request.attempt > int(settings.REQUEST_ATTEMPT_LIMIT):
                 too_many_attempts_requests.append(user_creation_request)
                 resulted_requests.append(user_creation_request)
 

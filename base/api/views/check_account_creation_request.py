@@ -41,7 +41,7 @@ class UserAccountCreationCheck(generics.RetrieveAPIView):
         return Response(
             data={
                 "success": account_creation_request.success,
-                "ongoing": account_creation_request.attempt <= settings.REQUEST_ATTEMPT_LIMIT
+                "ongoing": account_creation_request.attempt <= int(settings.REQUEST_ATTEMPT_LIMIT)
             },
             content_type='application/json'
         )
