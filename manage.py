@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'osis_registration.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'base.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -19,7 +19,7 @@ def main():
 
 
 if __name__ == '__main__':
-    project_folder = os.path.expanduser('osis_registration')
+    project_folder = os.path.expanduser('base')
     load_dotenv(os.path.join(project_folder, '.env'))
 
     main()
