@@ -9,3 +9,8 @@ django-celery-beat==2.2.1
 django-celery-results==2.2.0
 factory-boy==3.2.0
 django-ckeditor==5.7.1
+pycodestyle==2.4.0
+pylint==2.4.4
+diff-cover==3.0.1
+tblib==1.7.0
+django-simple-captcha==0.5.14
