@@ -33,7 +33,7 @@ from base.tests.factories.user_account_creation_request import UserAccountCreati
 
 class MailTestCase(TestCase):
 
-    @mock.patch('osis_registration.messaging.send_message.send_messages')
+    @mock.patch('base.messaging.send_message.send_messages')
     def test_should_send_validation_mail(self, mock_send_msg):
         request = RequestFactory().get('/')
         uacr = UserAccountCreationRequestFactory()

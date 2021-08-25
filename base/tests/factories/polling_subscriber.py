@@ -8,7 +8,7 @@ now = datetime.datetime.now()
 
 class PollingSubscriberFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'osis_registration.PollingSubscriber'
+        model = 'base.PollingSubscriber'
 
     app_name = factory.SubFactory(UserFactory)
     last_poll_requested = now

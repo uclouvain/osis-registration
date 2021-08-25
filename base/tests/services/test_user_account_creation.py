@@ -41,7 +41,7 @@ class UserAccountCreationServiceTestCase(TestCase):
 
     @patch('base.settings.DEBUG', False)
     @patch('base.settings.LDAP_ACCOUNT_CREATION_URL', 'fake_ldap_url')
-    @mock.patch('osis_registration.services.user_account_creation.requests.post')
+    @mock.patch('base.services.user_account_creation.requests.post')
     def test_service_should_call_endpoint_to_attempt_user_account_creation(self, mock_post):
         create_ldap_user_account(self.pending_request)
         _, kwargs = mock_post.call_args

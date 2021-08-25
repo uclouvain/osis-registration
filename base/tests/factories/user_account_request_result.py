@@ -8,7 +8,7 @@ now = datetime.datetime.now()
 
 class UserAccountRequestResultFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'osis_registration.UserAccountRequestResult'
+        model = 'base.UserAccountRequestResult'
 
     email = factory.Faker('email')
     request_type = 'CREATION'
