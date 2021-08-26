@@ -57,5 +57,6 @@ class OsisRegistrationUserAdmin(UserAdmin):
     form = OsisRegistrationUserCreationForm
     add_form = OsisRegistrationUserCreationForm
 
+
 def get_osis_registration_user():
     return User.objects.get(username='osis_registration')
