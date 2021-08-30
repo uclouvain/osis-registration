@@ -31,31 +31,31 @@ from base import settings
 
 
 def page_not_found(request, exception, **kwargs):
-    response = render(request, 'page_not_found.html', {})
+    response = render(request, 'status_page/page_not_found.html', {})
     response.status_code = 404
     return response
 
 
 def method_not_allowed(request, **kwargs):
-    response = render(request, 'method_not_allowed.html', {})
+    response = render(request, 'status_page/method_not_allowed.html', {})
     response.status_code = 405
     return response
 
 
 def access_denied(request, exception, **kwargs):
-    response = render(request, 'access_denied.html', {'exception': exception})
+    response = render(request, 'status_page/access_denied.html', {'exception': exception})
     response.status_code = 403
     return response
 
 
 def server_error(request, **kwargs):
-    response = render(request, 'server_error.html', {})
+    response = render(request, 'status_page/server_error.html', {})
     response.status_code = 500
     return response
 
 
 def noscript(request):
-    return render(request, 'noscript.html', {})
+    return render(request, 'status_page/noscript.html', {})
 
 
 def display_error_messages(request, messages_to_display, extra_tags=None):

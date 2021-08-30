@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-16 15:14+0200\n"
+"POT-Creation-Date: 2021-08-30 09:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,4 +159,33 @@ msgid ""
 msgstr ""
 
 msgid "Please check your mailbox and validate your account following the link."
+msgstr ""
+
+msgid "Access refused"
+msgstr ""
+
+msgid "Go back Home"
+msgstr ""
+
+msgid "Method not allowed"
+msgstr ""
+
+msgid ""
+"JavaScript is disabled on your browser, but OSIS does not work without "
+"JavaScript."
+msgstr ""
+
+msgid "please_enable_javascript"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "The page you are looking for was not found."
+msgstr ""
+
+msgid "A server error occured."
 msgstr ""

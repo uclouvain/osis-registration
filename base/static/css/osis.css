@@ -821,3 +821,33 @@ label.required:after {
   100% { transform: rotate(360deg); }
 }
 
+.status-page-container{
+    height: 60vh;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-code{
+    font-weight: bold;
+    font-size: 70px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.status-label{
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.status-description{
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.back-home {
+    margin-top: 30px;
+}

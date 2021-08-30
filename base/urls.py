@@ -24,3 +24,8 @@ urlpatterns = [
     path('ajax/user_account_creation_check/<uacr_uuid>/', UserAccountCreationCheck.as_view(), name=UserAccountCreationCheck.name),
     path('api/v1/', include(url_v1.urlpatterns)),
 ]
+
+handler404 = 'base.views.common.page_not_found'
+handler403 = 'base.views.common.access_denied'
+handler405 = 'base.views.common.method_not_allowed'
+handler500 = 'base.views.common.server_error'
