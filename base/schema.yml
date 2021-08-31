@@ -28,14 +28,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserAcountCreationRequest'
+              $ref: '#/components/schemas/UserAccountCreationRequest'
       responses:
         201:
           description: Successfully created an user account creation request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserAcountCreationRequest'
+                $ref: '#/components/schemas/UserAccountCreationRequest'
       tags:
         - osis-registration
 
