@@ -2,15 +2,70 @@
 OSIS Registration is a django application to handle external account management. It provides a publish-subscribe mecanism to enable applications (subscribers) to request user account creation. OSIS Registration enable subscribers to poll an API endpoint in order for them to catch up on the last requested results.
 
 ## Getting started
-...
-
-Run the server with:
-
+Clone the repository
 ```
-python manage.py runserver
+git clone git@github.com:uclouvain/osis-registration.git
 ```
 
-...
+Create the database (assuming you already have postgresql installed)
+```
+createdb osis_registration_local
+createuser osis -P //provide password of your choice
+psql -d osis_registration_local
+  =# grant connect on database osis_registration_local to osis;
+  =# revoke connect on database osis_registration_local from public;
+  =# alter user osis createdb;
+  =# \q
+```
+
+Enter the repository
+```
+cd osis_registration
+```
+
+Make sure you have some python tools needed for creating your virtual environment
+```
+sudo apt-get install build-essential python3-venv libjpeg-dev libpng-dev gettext
+```
+
+Create and activate venv
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install required dependencies
+```
+pip install -r requirements.txt
+```
+
+Create a `.env` file based on `.env.example`:
+
+```
+cp .env.example .env
+```
+
+Create the data structre in db:
+```
+python3 manage.py migrate
+```
+
+Create the superuser (will later be used to access /admin page):
+```
+python3 manage.py createsuperuser
+```
+
+Compile translation files
+```
+python3 manage.py compilemessages
+```
+
+Run the server
+```
+python3 manage.py runserver
+```
+
+That's all folks !
 
 ## API
 OSIS Registration provides subscribers with a RESTful API enabling apps to request user account creation and poll the requests results. The subscribers are registered as Django users and are identified by a token.
