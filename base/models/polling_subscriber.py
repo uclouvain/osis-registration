@@ -43,6 +43,9 @@ class PollingSubscriber(models.Model):
     app_name = models.OneToOneField(User, on_delete=models.CASCADE)
     last_poll_requested = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.app_name.username
+
 
 def get_osis_registration_subscriber():
     return PollingSubscriber.objects.get(app_name=get_osis_registration_user())

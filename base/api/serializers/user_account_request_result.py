@@ -30,6 +30,8 @@ from base.models import UserAccountRequestResult
 
 class UserAccountRequestResultSerializer(serializers.ModelSerializer):
 
+    app = serializers.StringRelatedField()
+
     class Meta:
         model = UserAccountRequestResult
         fields = (

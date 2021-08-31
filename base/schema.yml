@@ -30,12 +30,26 @@ paths:
             schema:
               $ref: '#/components/schemas/UserAcountCreationRequest'
       responses:
-        200:
+        201:
           description: Successfully created an user account creation request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserAcountCreationRequest'
+      tags:
+        - osis-registration
+
+paths:
+  /poll:
+    get:
+      description: List last updated request results for a given subscriber
+      responses:
+        200:
+          description: Successfully retrieved user account request results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountRequestResult'
       tags:
         - osis-registration
 
@@ -67,6 +81,34 @@ components:
           email:
             type: string
             example: "john.doe@mail.xyz"
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
+
+    UserAccountRequestResult:
+      type: object
+      properties:
+          uuid:
+            $ref: '#/components/schemas/Uuid'
+          person_uuid:
+            $ref: '#/components/schemas/Uuid'
+          email:
+            type: string
+            example: "john.doe@mail.xyz"
+          request_type:
+            type: string
+            example: "CREATION"
+          status:
+            type: string
+            example: "SUCCESS"
+          app:
+            type: string
+            example: "internship"
+          updated_at:
+            type: string
+            example: "2021-08-31T09:51:14.622461"
+
     Uuid:
       type: string
       format: uuid
