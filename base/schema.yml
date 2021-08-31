@@ -39,7 +39,6 @@ paths:
       tags:
         - osis-registration
 
-paths:
   /poll:
     get:
       description: List last updated request results for a given subscriber
@@ -50,6 +49,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserAccountRequestResult'
+      tags:
+        - osis-registration
+
+  /acknowledge:
+    put:
+      description: Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                last_poll_requested:
+                  type: string
+                  example: 2021-08-31T09:51:14.622461
+      responses:
+        200:
+          description: Successfully acknowledge subscriber's last poll
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollingSubscriber'
       tags:
         - osis-registration
 
@@ -106,6 +128,18 @@ components:
             type: string
             example: "internship"
           updated_at:
+            type: string
+            example: "2021-08-31T09:51:14.622461"
+
+    PollingSubscriber:
+      type: object
+      properties:
+          uuid:
+            $ref: '#/components/schemas/Uuid'
+          app_name:
+            type: string
+            example: "internship"
+          last_poll_requested:
             type: string
             example: "2021-08-31T09:51:14.622461"
 

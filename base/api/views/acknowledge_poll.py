@@ -23,18 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path
+from rest_framework import generics
+from rest_framework.response import Response
 
-from base.api.views.acknowledge_poll import AcknowledgePoll
-from base.api.views.create_account import CreateAccount
-from base.api.views.delete_account import DeleteAccount
-from base.api.views.poll_request_results import PollRequestResults
-from base.api.views.renew_account import RenewAccount
+from base.api.serializers.polling_subscriber import PollingSubscriberSerializer
+from base.models.polling_subscriber import PollingSubscriber
 
-urlpatterns = [
-    path('create_account/', CreateAccount.as_view(), name=CreateAccount.name),
-    path('delete_account/', DeleteAccount.as_view(), name=DeleteAccount.name),
-    path('renew_account/', RenewAccount.as_view(), name=RenewAccount.name),
-    path('poll/', PollRequestResults.as_view(), name=PollRequestResults.name),
-    path('acknowledge/', AcknowledgePoll.as_view(), name=AcknowledgePoll.name),
-]
+
+class AcknowledgePoll(generics.UpdateAPIView):
+    """
+       Acknowledge last poll request has been treated successfully by a subscriber
+    """
+    name = 'acknowledge-poll'
+    serializer_class = PollingSubscriberSerializer
+
+    def update(self, *args, **kwargs):
+        subscriber = PollingSubscriber.objects.get(app_name=self.request.user)
+        subscriber.last_poll_requested = self.request.data['last_poll_requested']
+        subscriber.save()
+
+        serializer = self.get_serializer(subscriber)
+        return Response(serializer.data)

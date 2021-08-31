@@ -42,6 +42,4 @@ class PollRequestResults(generics.ListAPIView):
     def get_queryset(self):
         subscriber = PollingSubscriber.objects.get(app_name=self.request.user)
         qs = UserAccountRequestResult.objects.filter(updated_at__gte=subscriber.last_poll_requested, app=subscriber)
-        subscriber.last_poll_requested = now()
-        subscriber.save()
         return qs
