@@ -29,26 +29,20 @@ from unittest import mock
 from django.shortcuts import reverse
 from django.test import TestCase
 
-from base.api.serializers.user_account_request_result import UserAccountRequestResultSerializer
-from base.api.views.poll_request_results import PollRequestResults
-from base.models import UserAccountRequestResult
+from base.api.serializers.polling_subscriber import PollingSubscriberSerializer
+from base.api.views.acknowledge_poll import AcknowledgePoll
 from base.tests.factories.polling_subscriber import PollingSubscriberFactory
 from base.tests.factories.user import UserFactory
-from base.tests.factories.user_account_request_result import UserAccountRequestResultFactory
 
+from dateutil import parser
 
-class PollRequestResultsTestCase(TestCase):
+class AcknowledgePollTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = UserFactory()
-        subscriber = PollingSubscriberFactory(
+        cls.subscriber = PollingSubscriberFactory(
             app_name=cls.user,
         )
-
-        old_request_result = UserAccountRequestResultFactory(app=subscriber)
-        _fake_update_time_in_past(old_request_result)
-
-        cls.new_request_result = UserAccountRequestResultFactory(app=subscriber)
 
     def setUp(self) -> None:
         self.token_auth_patcher = mock.patch(
@@ -58,12 +52,15 @@ class PollRequestResultsTestCase(TestCase):
         self.mocked_get_training = self.token_auth_patcher.start()
         self.addCleanup(self.token_auth_patcher.stop)
 
-    def test_should_retrieve_new_results_since_last_poll(self):
-        url = reverse(PollRequestResults.name)
-        response = self.client.get(url)
-        self.assertEqual(response.json(), [UserAccountRequestResultSerializer(self.new_request_result).data])
-
-def _fake_update_time_in_past(request_result):
-    UserAccountRequestResult.objects.filter(pk=request_result.pk).update(
-        updated_at=datetime.datetime.now() - datetime.timedelta(minutes=5)
-    )
+    def test_should_update_subscriber_last_poll_requested(self):
+        url = reverse(AcknowledgePoll.name)
+        response = self.client.put(
+            url,
+            data={'last_poll_requested': datetime.datetime.now()},
+            content_type='application/json'
+        )
+        self.subscriber.refresh_from_db()
+        self.assertEqual(
+            parser.parse(response.json()['last_poll_requested']),
+            parser.parse(PollingSubscriberSerializer(self.subscriber).data['last_poll_requested'])
+        )
