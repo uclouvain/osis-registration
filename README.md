@@ -20,7 +20,7 @@ psql -d osis_registration_local
 
 Enter the repository
 ```
-cd osis_registration
+cd osis-registration
 ```
 
 Make sure you have some python tools needed for creating your virtual environment
