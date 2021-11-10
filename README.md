@@ -65,6 +65,8 @@ Run the server
 python3 manage.py runserver
 ```
 
+To enable 'audio captcha', please refer to the 'Espeak and Sox' section below.
+
 That's all folks !
 
 ## API
@@ -134,8 +136,11 @@ Update subscriber's last poll request to acknowledge poll has been sucessfully r
 ```
 ------
 
-## Espeak
-For the sake of accessibility, an audio captcha file is read by synthetic voice. In order to generate this file, espeak has to be installed with english and french voices through the following commands:
+## Espeak and Sox
+For the sake of accessibility, an audio captcha file is read by synthetic voice. 
+
+### Espeak
+In order to generate this file, espeak has to be installed with english and french voices through the following commands:
 ```
 apt-get install espeak
 ```
@@ -149,3 +154,10 @@ The output should include this line:
 ```
 If it is the case, then you are good to go. Otherwise, you will need to install voices.
 http://espeak.sourceforge.net/languages.html
+
+### Sox
+Sox adds some noise to the generated audio to complexify the process of computerized captcha solving.
+You may install Sox with the following commands:
+```
+apt-get install sox
+```
