@@ -157,7 +157,7 @@ http://espeak.sourceforge.net/languages.html
 
 ### Sox
 Sox adds some noise to the generated audio to complexify the process of computerized captcha solving.
-You may install Sox with the following commands:
+You may install Sox with the following command:
 ```
 apt-get install sox
 ```
