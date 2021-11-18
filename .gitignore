@@ -3,8 +3,8 @@ venv
 .env
 *.pycosis_registration/static/admin
 __pycache__/
-osis_registration/static/admin/css
-osis_registration/static/admin/fonts
-osis_registration/static/admin/img
-osis_registration/static/admin/js
+base/static/admin/css
+base/static/admin/fonts
+base/static/admin/img
+base/static/admin/js
 .idea
