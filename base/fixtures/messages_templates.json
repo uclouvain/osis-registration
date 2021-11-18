@@ -1,0 +1,22 @@
+[
+{
+  "model": "base.messagetemplate",
+  "fields": {
+    "reference": "osis_registration_mail_validation_html",
+    "subject": "OSIS-REGISTRATION - Validation email",
+    "template": "<p>Validation email via ce lien: <a href='{{link}}'>{{link}}</a></p>",
+    "format": "HTML",
+    "language": "fr-be"
+  }
+},
+{
+  "model": "base.messagetemplate",
+  "fields": {
+    "reference": "osis_registration_mail_validation_txt",
+    "subject": "OSIS-REGISTRATION - Validation email",
+    "template": "Validation email via ce lien: {{link}}",
+    "format": "PLAIN",
+    "language": "fr-be"
+  }
+}
+]

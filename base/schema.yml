@@ -1,0 +1,153 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: OSIS-registration API
+  description: 'This API delivers data for the OSIS-registration project.'
+  contact:
+    name: 'UCLouvain - OSIS'
+    url: https://github.com/uclouvain/osis-registration
+
+servers:
+  - url: https://{environment}.osis-registration.uclouvain.be/api/v1/
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev # Development server
+          - qa # Staging server
+          - test # Test server
+  - url: https://osis-registration.uclouvain.be/api/v1/
+    description: Production server
+
+paths:
+  /create_account:
+    post:
+      description: Create new user account creation request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccountCreationRequest'
+      responses:
+        201:
+          description: Successfully created an user account creation request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountCreationRequest'
+      tags:
+        - osis-registration
+
+  /poll:
+    get:
+      description: List last updated request results for a given subscriber
+      responses:
+        200:
+          description: Successfully retrieved user account request results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccountRequestResult'
+      tags:
+        - osis-registration
+
+  /acknowledge:
+    put:
+      description: Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                last_poll_requested:
+                  type: string
+                  example: 2021-08-31T09:51:14.622461
+      responses:
+        200:
+          description: Successfully acknowledge subscriber's last poll
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollingSubscriber'
+      tags:
+        - osis-registration
+
+components:
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Enter your token in the format **Token &lt;token>**
+
+  schemas:
+    UserAccountCreationRequest:
+      type: object
+      properties:
+          uuid:
+            $ref: '#/components/schemas/Uuid'
+          person_uuid:
+            $ref: '#/components/schemas/Uuid'
+          first_name:
+            type: string
+            example: "John"
+          last_name:
+            type: string
+            example: "Doe"
+          birth_date:
+            type: string
+            example: "1989-01-01"
+          email:
+            type: string
+            example: "john.doe@mail.xyz"
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
+
+    UserAccountRequestResult:
+      type: object
+      properties:
+          uuid:
+            $ref: '#/components/schemas/Uuid'
+          person_uuid:
+            $ref: '#/components/schemas/Uuid'
+          email:
+            type: string
+            example: "john.doe@mail.xyz"
+          request_type:
+            type: string
+            example: "CREATION"
+          status:
+            type: string
+            example: "SUCCESS"
+          app:
+            type: string
+            example: "internship"
+          updated_at:
+            type: string
+            example: "2021-08-31T09:51:14.622461"
+
+    PollingSubscriber:
+      type: object
+      properties:
+          uuid:
+            $ref: '#/components/schemas/Uuid'
+          app_name:
+            type: string
+            example: "internship"
+          last_poll_requested:
+            type: string
+            example: "2021-08-31T09:51:14.622461"
+
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
+
+
+security:
+  - Token: []
