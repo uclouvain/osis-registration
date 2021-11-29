@@ -82,7 +82,7 @@ An authorization header with the registered app token must be provided with the 
 
 #### Create
 
-`POST /create_account`
+`POST /create_account/`
 
 Create new user account creation request
 
