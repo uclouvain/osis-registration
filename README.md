@@ -102,7 +102,7 @@ Create new user account creation request
 
 #### Poll
 
-`GET /poll`
+`GET /poll/`
 
 List last updated request results for a given subscriber
 
@@ -123,7 +123,7 @@ List last updated request results for a given subscriber
 
 #### Acknowledge
 
-`PUT /acknowledge`
+`PUT /acknowledge/`
 
 Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
 
