@@ -25,9 +25,15 @@
 ##############################################################################
 
 import uuid as uuid_module
+
+from django.contrib import admin
 from django.db import models
 
 from base.models.polling_subscriber import PollingSubscriber
+
+
+class UserAccountCreationRequestAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'email_validated', 'requested_at', 'attempt', 'success', 'app')
 
 
 class UserAccountCreationRequest(models.Model):
@@ -35,7 +41,7 @@ class UserAccountCreationRequest(models.Model):
     uuid = models.UUIDField(default=uuid_module.uuid4)
 
     # user data needed to create account
-    person_uuid =  models.UUIDField(default=uuid_module.uuid4)
+    person_uuid = models.UUIDField(default=uuid_module.uuid4)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField(null=True)
