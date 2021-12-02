@@ -34,6 +34,7 @@ from base.models.polling_subscriber import PollingSubscriber
 
 class UserAccountCreationRequestAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'email_validated', 'requested_at', 'attempt', 'success', 'app')
+    list_filter = ('success', 'app', 'email_validated')
 
 
 class UserAccountCreationRequest(models.Model):
