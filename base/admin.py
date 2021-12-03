@@ -28,6 +28,7 @@ from django.contrib import admin, auth
 from base.messaging import message_history, message_template
 from base.models.polling_subscriber import PollingSubscriber, PollingSubscriberAdmin
 from base.models.user import OsisRegistrationUserAdmin
+from base.models.user_account_creation_request import UserAccountCreationRequest, UserAccountCreationRequestAdmin
 
 admin.site.register(
     message_history.MessageHistory,
@@ -42,6 +43,11 @@ admin.site.register(
 admin.site.register(
     PollingSubscriber,
     PollingSubscriberAdmin,
+)
+
+admin.site.register(
+    UserAccountCreationRequest,
+    UserAccountCreationRequestAdmin
 )
 
 # replace user admin with custom admin

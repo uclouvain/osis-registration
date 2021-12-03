@@ -75,9 +75,9 @@ def run() -> dict:
 
             logger.info('Error - user not created : {}'.format(user_creation_request.email))
 
+    request_result.publish(resulted_requests)
+
     if too_many_attempts_requests:
         raise TooManyCreationRequestAttemptsException()
-
-    request_result.publish(resulted_requests)
 
     return {}

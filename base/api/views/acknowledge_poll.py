@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils.translation import gettext
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -36,8 +37,12 @@ class AcknowledgePoll(generics.UpdateAPIView):
     """
     name = 'acknowledge-poll'
     serializer_class = PollingSubscriberSerializer
+    required_parameter = 'last_poll_requested'
 
     def update(self, *args, **kwargs):
+        if not self.request.data.get(self.required_parameter):
+            return Response({self.required_parameter: gettext('This field is required.')})
+
         subscriber = PollingSubscriber.objects.get(app_name=self.request.user)
         subscriber.last_poll_requested = self.request.data['last_poll_requested']
         subscriber.save()
