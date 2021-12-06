@@ -56,8 +56,8 @@ def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) 
                 },
                 url=settings.LDAP_ACCOUNT_CREATION_URL,
                 timeout=1,
-            )
+            ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-    return response.json()
+    return response
