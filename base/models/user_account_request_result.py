@@ -37,9 +37,11 @@ from base.models.user_account_renewal_request import UserAccountRenewalRequest
 SUCCESS = 'SUCCESS'
 ERROR = 'ERROR'
 
+
 class UserAccountRequestResultAdmin(admin.ModelAdmin):
     list_display = ('person_uuid', 'email', 'request_type', 'status', 'app', 'updated_at')
     list_filter = ('app', 'request_type', 'status')
+
 
 class UserAccountRequestResult(models.Model):
 
