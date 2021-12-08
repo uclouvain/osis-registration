@@ -59,5 +59,6 @@ def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) 
             ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
-
+        except Exception:
+            response = {"status": ERROR, "message": "Unknown error"}
     return response
