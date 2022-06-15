@@ -20,8 +20,7 @@ def main():
 
 
 if __name__ == '__main__':
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    dotenv.read_dotenv(os.path.join(BASE_DIR, '.env'))
+    dotenv.read_dotenv()
 
     if 'test' in sys.argv:
         os.environ.setdefault('TESTING', 'True')
