@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'base.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get("DATABASE_NAME", 'osis_registration_local'),
         'USER': os.environ.get("POSTGRES_USER", 'osis'),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
