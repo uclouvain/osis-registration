@@ -27,12 +27,11 @@
 from celery.schedules import crontab
 
 from base.celery import app as celery_app
-
 from . import user_account_creation
 
 celery_app.conf.beat_schedule.update({
     'Create users': {
         'task': 'base.tasks.user_account_creation.run',
-        'schedule': crontab(minute=5)
+        'schedule': crontab()
     },
 })
