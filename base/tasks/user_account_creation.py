@@ -33,6 +33,7 @@ from base.services.user_account_creation import create_ldap_user_account, SUCCES
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
+
 class TooManyCreationRequestAttemptsException(Exception):
     pass
 
@@ -48,7 +49,8 @@ def run() -> dict:
 
     pending_creation_requests = UserAccountCreationRequest.objects.filter(
         success=False,
-        attempt__lte=settings.REQUEST_ATTEMPT_LIMIT
+        attempt__lte=settings.REQUEST_ATTEMPT_LIMIT,
+        email_validated=True
     )
 
     for user_creation_request in pending_creation_requests:

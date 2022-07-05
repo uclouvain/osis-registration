@@ -25,6 +25,8 @@
 ##############################################################################
 
 import uuid as uuid_module
+
+from django.contrib import admin
 from django.db import models
 
 from base.models.polling_subscriber import PollingSubscriber
@@ -35,11 +37,17 @@ from base.models.user_account_renewal_request import UserAccountRenewalRequest
 SUCCESS = 'SUCCESS'
 ERROR = 'ERROR'
 
+
+class UserAccountRequestResultAdmin(admin.ModelAdmin):
+    list_display = ('person_uuid', 'email', 'request_type', 'status', 'app', 'updated_at')
+    list_filter = ('app', 'request_type', 'status')
+
+
 class UserAccountRequestResult(models.Model):
 
     uuid = models.UUIDField(default=uuid_module.uuid4)
 
-    person_uuid =  models.UUIDField(null=True)
+    person_uuid = models.UUIDField(null=True)
     email = models.CharField(max_length=50)
 
     request_type = models.CharField(
