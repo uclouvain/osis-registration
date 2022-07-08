@@ -93,8 +93,13 @@ def common_context_processor(request):
     }
     return context
 
+
 def edit_language(request, lang):
     translation.activate(lang)
     response = redirect(request.META['HTTP_REFERER'])
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, translation.get_language())
     return response
+
+
+def test_captcha_challenge():
+    return ('NTMALS', 'NTMALS')

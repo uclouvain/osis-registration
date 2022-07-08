@@ -24,21 +24,41 @@
 #
 ##############################################################################
 import datetime
+import re
+from types import SimpleNamespace
 
+from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
+    CommonPasswordValidator, NumericPasswordValidator
 from django.utils.translation import gettext_lazy as _
 
 from django import forms
 from captcha.fields import CaptchaField, CaptchaTextInput
 
+from base.admin import User
+
 CURRENT_YEAR = datetime.date.today().year
+
 
 class CustomCaptchaTextInput(CaptchaTextInput):
     template_name = "captcha.html"
 
+
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
     last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
-    email = forms.CharField(label=_('Email'), max_length=100, required=True)
+    email = forms.EmailField(label=_('Email'), max_length=100, required=True)
+
+    password = forms.CharField(
+        label=_('Password'),
+        max_length=100,
+        required=True,
+        widget=forms.PasswordInput(),
+        validators=[
+            MinimumLengthValidator().validate,
+            NumericPasswordValidator().validate
+        ]
+    )
+
     birth_date = forms.DateField(
         initial=datetime.datetime.now(),
         label=_('Date of birth'),
@@ -48,5 +68,18 @@ class RegistrationForm(forms.Form):
         ),
     )
     captcha = CaptchaField(
-        widget=CustomCaptchaTextInput()
+        widget=CustomCaptchaTextInput(),
     )
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+
+        user_info = User(
+            first_name=self.cleaned_data['first_name'],
+            last_name=self.cleaned_data['last_name'],
+            email=self.cleaned_data['email'],
+        )
+
+        UserAttributeSimilarityValidator().validate(password=password, user=user_info)
+
+        return password

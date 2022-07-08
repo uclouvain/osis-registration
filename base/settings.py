@@ -149,6 +149,9 @@ CAPTCHA_IMAGE_SIZE = (300, 80)
 CAPTCHA_LENGTH = 6
 CAPTCHA_FOREGROUND_COLOR = '#163c69'
 
+CAPTCHA_CHALLENGE_FUNCT = 'base.views.common.test_captcha_challenge'
+
+
 CAPTCHA_FLITE_PATH = '/usr/bin/espeak'
 CAPTCHA_SOX_PATH = '/usr/bin/sox'
 
@@ -199,3 +202,5 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
 # set token validity to 24 hours
 PASSWORD_RESET_TIMEOUT = 86400
+
+FERNET_SECRET_KEY = os.environ.get('FERNET_SECRET_KEY', '')

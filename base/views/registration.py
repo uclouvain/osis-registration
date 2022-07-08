@@ -24,7 +24,10 @@
 #
 ##############################################################################
 import uuid
+
+import cryptography
 from captcha import views
+from cryptography.fernet import Fernet
 from django.shortcuts import render
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
@@ -56,6 +59,7 @@ class RegistrationFormView(FormView):
             last_name=self.request.POST['last_name'],
             birth_date=birth_date,
             email=self.request.POST['email'],
+            password=Fernet(str.encode(settings.FERNET_SECRET_KEY)).encrypt(str.encode(self.request.POST['password'])),
             app=get_osis_registration_subscriber(),
         )
         user_account_creation_request.save()

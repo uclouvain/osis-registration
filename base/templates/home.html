@@ -46,11 +46,25 @@
             <form id="form" method="post">
                 {% csrf_token %}
 
-                {% bootstrap_field form.first_name label_class="required" %}
-                {% bootstrap_field form.last_name label_class="required" %}
-                {% bootstrap_field form.birth_date label_class="required" %}
-                {% bootstrap_field form.email label_class="required" %}
-
+                <div class="row">
+                    <div class="col-md-6 col-divider-left">
+                        <div class="title bg-info text-info border-info">
+                            <i class="glyphicon glyphicon-user"></i>
+                            {% trans 'Identification' %}
+                        </div>
+                        {% bootstrap_field form.first_name label_class="required" %}
+                        {% bootstrap_field form.last_name label_class="required" %}
+                        {% bootstrap_field form.birth_date label_class="required" %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="title bg-info text-info border-info">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            {% trans 'Authentication information' %}
+                        </div>
+                        {% bootstrap_field form.email label_class="required" %}
+                        {% bootstrap_field form.password label_class="required" addon_after='<a href="#" id="togglePasswordBtn"><i class="glyphicon glyphicon-eye-close"></i></a>'%}
+                    </div>
+                </div>
                 <hr/>
 
                 <div class="form-group">
@@ -90,6 +104,7 @@
                 <hr/>
 
                 <input class="btn btn-primary" id="btn-submit" type="submit">
+
             </form>
         </div>
     </div>
@@ -133,6 +148,19 @@
                 form.submit();
             }
         });
+    });
+
+    document.querySelector("#togglePasswordBtn").addEventListener('click', (e) => {
+        const passwordInput = document.querySelector('input#id_password');
+        if(e.target.classList.contains('glyphicon-eye-open')) {
+            e.target.classList.remove('glyphicon-eye-open');
+            e.target.classList.add('glyphicon-eye-close');
+            passwordInput.setAttribute('type', 'password')
+        } else {
+            e.target.classList.remove('glyphicon-eye-close');
+            e.target.classList.add('glyphicon-eye-open');
+            passwordInput.setAttribute('type', 'text')
+        }
     });
 
 </script>
