@@ -28,7 +28,8 @@ from dataclasses import dataclass
 from types import SimpleNamespace
 
 from captcha import views
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
@@ -36,12 +37,13 @@ from requests import Response
 
 from base import settings
 from base.forms.registration import RegistrationForm
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.polling_subscriber import get_osis_registration_subscriber, PollingSubscriber
 from base.models.user_account_request import UserAccountRequest
 from base.override_django_captcha import captcha_audio
 from base.services import mail
 from base.services.token_generator import mail_validation_token_generator
+from base.services.user_account_activation import activate_ldap_user_account
 from base.services.user_account_creation import create_ldap_user_account
 
 
@@ -58,8 +60,9 @@ class UserAccountCreationRequest:
 class RegistrationFormView(FormView):
     name = 'registration'
     template_name = 'home.html'
-    success_url = '/user_account_creation_requested'
     form_class = RegistrationForm
+
+    user_account_request = None
 
     def form_valid(self, form):
         birth_date = "{}-{}-{}".format(
@@ -68,13 +71,13 @@ class RegistrationFormView(FormView):
             self.request.POST['birth_date_day']
         )
 
-        request = UserAccountRequest(
+        self.user_account_request = UserAccountRequest(
             email=self.request.POST['email'],
             type=UserAccountRequestType.CREATION.value
         )
 
         user_account_creation_request = UserAccountCreationRequest(
-            request=request,
+            request=self.user_account_request,
             first_name=self.request.POST['first_name'],
             last_name=self.request.POST['last_name'],
             birth_date=datetime.strptime(birth_date, '%Y-%m-%d'),
@@ -85,7 +88,7 @@ class RegistrationFormView(FormView):
         user_account_creation_response = create_ldap_user_account(user_account_creation_request)
 
         if user_account_creation_response.status_code == 200:
-            request.save()
+            self.user_account_request.save()
 
         mail.send_validation_mail(self.request, user_account_creation_request)
 
@@ -96,13 +99,23 @@ class RegistrationFormView(FormView):
         context.update({'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL})
         return context
 
+    def get_success_url(self):
+        return reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': self.user_account_request.uuid})
+
+
 # replace captcha audio with custom captcha audio generator using espeak
 views.captcha_audio = captcha_audio
 
 
-class UserAccountCreationRequestedView(TemplateView):
-    name = 'user_account_creation_requested'
-    template_name = 'registration_status/user_account_creation_requested.html'
+class UserAccountCreationStatusView(TemplateView):
+    name = 'user_account_status'
+    template_name = 'registration_status/user_account_status.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'account_request': UserAccountRequest.objects.get(uuid=kwargs['uacr_uuid']),
+            'login_redirection_url': settings.OSIS_PORTAL_URL
+        }
     
 
 class ValidateEmailView(View):
@@ -110,17 +123,20 @@ class ValidateEmailView(View):
 
     def get(self, request, uacr_uuid, token):
         try:
-            account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
+            account_creation_request = UserAccountRequest.objects.get(uuid=uacr_uuid)
         except UserAccountCreationRequest.DoesNotExist:
             account_creation_request = None
 
-        if account_creation_request and mail_validation_token_generator.check_token(account_creation_request, token):
+        if account_creation_request \
+                and not account_creation_request.email_validated \
+                and mail_validation_token_generator.check_token(account_creation_request, token) \
+                and account_creation_request.status == UserAccountRequestStatus.PENDING.value:
             account_creation_request.email_validated = True
+            response = activate_ldap_user_account(account_creation_request)
+            if response:
+                account_creation_request.status = UserAccountRequestStatus.SUCCESS.value
+            else:
+                account_creation_request.status = UserAccountRequestStatus.ERROR.value
             account_creation_request.save()
 
-        return render(request, 'registration_status/email_validated.html', context={
-            'uacr_uuid': uacr_uuid,
-            'uacr_email': account_creation_request.email,
-            'account_configuration_url': settings.LDAP_ACCOUNT_CONFIGURATION_URL
-        })
-
+        return redirect(reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': uacr_uuid}))

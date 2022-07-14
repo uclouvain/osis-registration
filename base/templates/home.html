@@ -62,7 +62,7 @@
                             {% trans 'Authentication information' %}
                         </div>
                         {% bootstrap_field form.email label_class="required" %}
-                        {% bootstrap_field form.password label_class="required" addon_after='<a href="#" id="togglePasswordBtn"><i class="glyphicon glyphicon-eye-close"></i></a>'%}
+                        {% bootstrap_field form.password label_class="required" addon_after='<span id="togglePasswordBtn"><i class="glyphicon glyphicon-eye-close"></i></span>'%}
                     </div>
                 </div>
                 <hr/>
@@ -150,15 +150,16 @@
         });
     });
 
-    document.querySelector("#togglePasswordBtn").addEventListener('click', (e) => {
+    document.querySelector("input#id_password + .input-group-addon").addEventListener('click', (e) => {
         const passwordInput = document.querySelector('input#id_password');
-        if(e.target.classList.contains('glyphicon-eye-open')) {
-            e.target.classList.remove('glyphicon-eye-open');
-            e.target.classList.add('glyphicon-eye-close');
+        const togglePasswordIcon = document.querySelector('#togglePasswordBtn i');
+        if(togglePasswordIcon.classList.contains('glyphicon-eye-open')) {
+            togglePasswordIcon.classList.remove('glyphicon-eye-open');
+            togglePasswordIcon.classList.add('glyphicon-eye-close');
             passwordInput.setAttribute('type', 'password')
         } else {
-            e.target.classList.remove('glyphicon-eye-close');
-            e.target.classList.add('glyphicon-eye-open');
+            togglePasswordIcon.classList.remove('glyphicon-eye-close');
+            togglePasswordIcon.classList.add('glyphicon-eye-open');
             passwordInput.setAttribute('type', 'text')
         }
     });

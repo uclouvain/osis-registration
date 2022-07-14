@@ -23,20 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from datetime import date, timedelta
+from typing import Union
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.datetime_safe import datetime
+import requests as requests
+from requests import Response
+from requests.exceptions import Timeout
+
+from base import settings
+
+ERROR = "error"
 
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
-
-mail_validation_token_generator = MailValidationTokenGenerator()
+def activate_ldap_user_account(user_activation_request) -> Union[Response, dict]:
+    try:
+        response = requests.post(
+            headers={'Content-Type': 'application/json'},
+            json={
+                "id": str(user_activation_request.uuid),
+                "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d')
+            },
+            url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
+            timeout=60,
+        )
+    except Timeout:
+        response = {"status": ERROR, "message": "Request timed out"}
+    return response

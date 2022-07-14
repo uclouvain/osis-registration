@@ -720,7 +720,7 @@ label.required:after {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     display: grid;
-    grid-template-columns: 40px auto;
+    grid-template-columns: 40px auto auto;
 }
 
 .panel-top-alert .icon {
@@ -872,4 +872,8 @@ label.required:after {
 
 .border-info{
     border-color: #bce8f1;
+}
+
+#id_password + .input-group-addon {
+    cursor: pointer;
 }

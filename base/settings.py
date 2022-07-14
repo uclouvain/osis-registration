@@ -127,7 +127,13 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'base/static'),)
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
+LDAP_ACCOUNT_MODIFICATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
+
 LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
+LDAP_ACCOUNT_VALIDITY_DAYS = os.environ.get('LDAP_ACCOUNT_VALIDITY_DAYS', 120)
+
+OSIS_PORTAL_URL = os.environ.get('OSIS_PORTAL_URL', '')
+
 DATA_PROTECTION_POLICY_URL = os.environ.get('DATA_PROTECTION_POLICY_URL', '')
 
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
@@ -202,5 +208,3 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
 # set token validity to 24 hours
 PASSWORD_RESET_TIMEOUT = 86400
-
-FERNET_SECRET_KEY = os.environ.get('FERNET_SECRET_KEY', '')

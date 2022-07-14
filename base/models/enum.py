@@ -9,3 +9,13 @@ class UserAccountRequestType(Enum):
     @classmethod
     def choices(cls):
         return tuple((x.name, x.value) for x in cls)
+
+
+class UserAccountRequestStatus(Enum):
+    SUCCESS = "SUCCESS"
+    ERROR = "ERROR"
+    PENDING = "PENDING"
+
+    @classmethod
+    def choices(cls):
+        return tuple((x.name, x.value) for x in cls)

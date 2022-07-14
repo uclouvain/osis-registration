@@ -29,16 +29,25 @@ import uuid
 from django.contrib import admin
 from django.db import models
 
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 
 
 class UserAccountRequestAdmin(admin.ModelAdmin):
-    fields = ('email', 'type')
-    list_display = ('uuid', 'email', 'type')
+    fields = ('email', 'email_validated', 'type', 'status')
+    list_display = ('uuid', 'email', 'email_validated', 'type', 'status')
 
 
 class UserAccountRequest(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField()
+    email_validated = models.BooleanField(default=False)
     type = models.CharField(choices=UserAccountRequestType.choices(), max_length=50)
 
+    status = models.CharField(
+        choices=UserAccountRequestStatus.choices(),
+        default=UserAccountRequestStatus.PENDING.value,
+        max_length=50
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
