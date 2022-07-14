@@ -24,20 +24,20 @@
 #
 ##############################################################################
 import random
+from datetime import date
 
 import requests as requests
 from requests.exceptions import Timeout
 
 from base import settings
-from base.models.user_account_creation_request import UserAccountCreationRequest
 
 SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) -> dict:
+def create_ldap_user_account(user_creation_request) -> dict:
     # mock endpoint in debug
-    if settings.DEBUG:
+    if not settings.DEBUG:
         random_success_status = random.choice([True, False])
         if random_success_status:
             response = {"status": SUCCESS, "message": "User created entry in db"}
@@ -48,16 +48,19 @@ def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) 
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
                 json={
-                    "id": str(user_creation_request.person_uuid),
+                    "id": str(user_creation_request.request.uuid),
                     "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
                     "prenom": user_creation_request.first_name,
                     "nom": user_creation_request.last_name,
-                    "email": user_creation_request.email
+                    "email": user_creation_request.request.email,
+                    "password": user_creation_request.password,
+                    "validite": date.today().strftime('%Y%m%d')
                 },
                 url=settings.LDAP_ACCOUNT_CREATION_URL,
-                timeout=1,
+                timeout=60,
             )
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
+    print(response)
     return response

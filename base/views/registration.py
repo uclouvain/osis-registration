@@ -24,21 +24,34 @@
 #
 ##############################################################################
 import uuid
+from dataclasses import dataclass
+from types import SimpleNamespace
 
-import cryptography
 from captcha import views
-from cryptography.fernet import Fernet
 from django.shortcuts import render
+from django.utils.datetime_safe import date, datetime
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
 
 from base import settings
 from base.forms.registration import RegistrationForm
-from base.models.polling_subscriber import get_osis_registration_subscriber
-from base.models.user_account_creation_request import UserAccountCreationRequest
+from base.models.enum import UserAccountRequestType
+from base.models.polling_subscriber import get_osis_registration_subscriber, PollingSubscriber
+from base.models.user_account_request import UserAccountRequest
 from base.override_django_captcha import captcha_audio
 from base.services import mail
 from base.services.token_generator import mail_validation_token_generator
+from base.services.user_account_creation import create_ldap_user_account
+
+
+@dataclass
+class UserAccountCreationRequest:
+    request: 'UserAccountRequest'
+    first_name: str
+    last_name: str
+    birth_date: 'datetime'
+    password: str
+    app: 'PollingSubscriber'
 
 
 class RegistrationFormView(FormView):
@@ -53,17 +66,25 @@ class RegistrationFormView(FormView):
             self.request.POST['birth_date_month'],
             self.request.POST['birth_date_day']
         )
+
+        request = UserAccountRequest(
+            email=self.request.POST['email'],
+            type=UserAccountRequestType.CREATION
+        )
+
         user_account_creation_request = UserAccountCreationRequest(
-            person_uuid=uuid.uuid4(),
+            request=request,
             first_name=self.request.POST['first_name'],
             last_name=self.request.POST['last_name'],
-            birth_date=birth_date,
-            email=self.request.POST['email'],
-            password=Fernet(str.encode(settings.FERNET_SECRET_KEY)).encrypt(str.encode(self.request.POST['password'])),
+            birth_date=datetime.strptime(birth_date, '%Y-%m-%d'),
+            password=self.request.POST['password'],
             app=get_osis_registration_subscriber(),
         )
-        user_account_creation_request.save()
+
+        user_account_creation_response = create_ldap_user_account(user_account_creation_request)
+
         mail.send_validation_mail(self.request, user_account_creation_request)
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

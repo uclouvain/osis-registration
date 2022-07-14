@@ -25,12 +25,9 @@
 ##############################################################################
 from rest_framework import generics
 
-from base.api.serializers.user_account_creation_request import UserAccountCreationRequestSerializer
-
 
 class CreateAccount(generics.CreateAPIView):
     """
        Create account request
     """
     name = 'create-account'
-    serializer_class = UserAccountCreationRequestSerializer

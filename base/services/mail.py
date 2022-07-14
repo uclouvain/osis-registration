@@ -52,15 +52,14 @@ def send_validation_mail(request, user_account_creation_request):
     # TODO: change receiver_person_id
     receivers = [
         message_config.create_receiver(
-            receiver_person_id=user_account_creation_request.id,
-            receiver_email=user_account_creation_request.email,
+            receiver_email=user_account_creation_request.request.email,
             receiver_lang=None
         )
     ]
     token = mail_validation_token_generator.make_token(user_account_creation_request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
-            'uacr_uuid': user_account_creation_request.uuid,
+            'uacr_uuid': user_account_creation_request.request.uuid,
             'token': token
         }))},
         'subject': {}

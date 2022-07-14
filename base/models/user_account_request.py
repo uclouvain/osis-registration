@@ -24,38 +24,21 @@
 #
 ##############################################################################
 
-import uuid as uuid_module
+import uuid
+
+from django.contrib import admin
 from django.db import models
 
-from base.models.polling_subscriber import PollingSubscriber
-from base.models.user_account_creation_request import UserAccountCreationRequest
-from base.models.user_account_deletion_request import UserAccountDeletionRequest
-from base.models.user_account_renewal_request import UserAccountRenewalRequest
+from base.models.enum import UserAccountRequestType
 
-SUCCESS = 'SUCCESS'
-ERROR = 'ERROR'
 
-class UserAccountRequestResult(models.Model):
+class UserAccountRequestAdmin(admin.ModelAdmin):
+    fields = ('email', 'type')
+    list_display = ('uuid', 'email', 'type')
 
-    uuid = models.UUIDField(default=uuid_module.uuid4)
 
-    person_uuid =  models.UUIDField(null=True)
-    email = models.CharField(max_length=50)
+class UserAccountRequest(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+    type = models.CharField(choices=UserAccountRequestType.choices(), max_length=50)
 
-    request_type = models.CharField(
-        max_length=50,
-        choices=[
-            (UserAccountCreationRequest,'CREATION'),
-            (UserAccountDeletionRequest,'DELETION'),
-            (UserAccountRenewalRequest,'RENEWAL')
-        ]
-    )
-    status = models.CharField(
-        max_length=7,
-        choices=[
-            (SUCCESS, SUCCESS),
-            (ERROR, ERROR)
-        ]
-    )
-    app = models.ForeignKey(PollingSubscriber, on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(auto_now=True)
