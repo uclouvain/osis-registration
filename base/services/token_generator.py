@@ -30,12 +30,13 @@ from django.utils.datetime_safe import datetime
 
 class MailValidationTokenGenerator(PasswordResetTokenGenerator):
 
-    def _make_hash_value(self, user_account_creation_request, timestamp):
+    def _make_hash_value(self, user_account_request, timestamp):
         """
         Hash the user account creation request's key, email, timestamp to produce a token
         Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
         """
-        uacr = user_account_creation_request
-        return f'{uacr.request.uuid}{uacr.request.email}{datetime.now()}'
+        uar = user_account_request
+        email_validated = False
+        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
 
 mail_validation_token_generator = MailValidationTokenGenerator()

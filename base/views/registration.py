@@ -110,13 +110,12 @@ class ValidateEmailView(View):
 
     def get(self, request, uacr_uuid, token):
         try:
-            account_creation_request = UserAccountCreationRequest.objects.get(uuid=uacr_uuid)
+            account_creation_request = UserAccountRequest.objects.get(uuid=uacr_uuid)
         except UserAccountCreationRequest.DoesNotExist:
             account_creation_request = None
 
         if account_creation_request and mail_validation_token_generator.check_token(account_creation_request, token):
-            account_creation_request.email_validated = True
-            account_creation_request.save()
+            print('call modifyUser service')
 
         return render(request, 'registration_status/email_validated.html', context={
             'uacr_uuid': uacr_uuid,
