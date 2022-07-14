@@ -32,6 +32,7 @@ from django.shortcuts import render
 from django.utils.datetime_safe import date, datetime
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import FormView
+from requests import Response
 
 from base import settings
 from base.forms.registration import RegistrationForm
@@ -69,7 +70,7 @@ class RegistrationFormView(FormView):
 
         request = UserAccountRequest(
             email=self.request.POST['email'],
-            type=UserAccountRequestType.CREATION
+            type=UserAccountRequestType.CREATION.value
         )
 
         user_account_creation_request = UserAccountCreationRequest(
@@ -82,6 +83,9 @@ class RegistrationFormView(FormView):
         )
 
         user_account_creation_response = create_ldap_user_account(user_account_creation_request)
+
+        if user_account_creation_response.status_code == 200:
+            request.save()
 
         mail.send_validation_mail(self.request, user_account_creation_request)
 

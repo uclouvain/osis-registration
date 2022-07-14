@@ -24,9 +24,11 @@
 #
 ##############################################################################
 import random
-from datetime import date
+from datetime import date, timedelta
+from typing import Union
 
 import requests as requests
+from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
@@ -35,7 +37,7 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request) -> dict:
+def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
     # mock endpoint in debug
     if not settings.DEBUG:
         random_success_status = random.choice([True, False])
@@ -54,7 +56,7 @@ def create_ldap_user_account(user_creation_request) -> dict:
                     "nom": user_creation_request.last_name,
                     "email": user_creation_request.request.email,
                     "password": user_creation_request.password,
-                    "validite": date.today().strftime('%Y%m%d')
+                    "validite": (date.today() - timedelta(days=1)).strftime('%Y%m%d')
                 },
                 url=settings.LDAP_ACCOUNT_CREATION_URL,
                 timeout=60,

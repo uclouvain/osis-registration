@@ -8,4 +8,4 @@ class UserAccountRequestType(Enum):
 
     @classmethod
     def choices(cls):
-        return [(e, e.value) for e in cls]
+        return tuple((x.name, x.value) for x in cls)
