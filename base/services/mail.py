@@ -44,6 +44,7 @@ def send_email(template_references, receivers, data, connected_user=None):
         connected_user=connected_user
     )
 
+
 def send_validation_mail(request, user_account_creation_request):
     template_references = {
         'html': 'osis_registration_mail_validation_html',

@@ -64,5 +64,4 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-    print(response)
     return response

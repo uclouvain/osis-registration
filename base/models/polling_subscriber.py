@@ -38,6 +38,7 @@ class PollingSubscriberAdmin(admin.ModelAdmin):
     fields = ('app_name',)
     list_display = ('app_name', 'uuid')
 
+
 class PollingSubscriber(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     app_name = models.OneToOneField(User, on_delete=models.CASCADE)

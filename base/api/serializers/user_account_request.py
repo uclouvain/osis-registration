@@ -23,21 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
+from rest_framework import serializers
 
-from base.models.user_account_creation_request import UserAccountCreationRequest
-from base.models.user_account_request_result import SUCCESS, ERROR, UserAccountRequestResult
+from base.models.polling_subscriber import PollingSubscriber
+from base.models.user_account_request import UserAccountRequest
 
 
-def publish(requests: List[UserAccountCreationRequest]):
-    UserAccountRequestResult.objects.bulk_create(
-        [
-            UserAccountRequestResult(
-                person_uuid=request.person_uuid,
-                request_type=type(request).__name__,
-                status=SUCCESS if request.success else ERROR,
-                app=request.app,
-                email=request.email
-            ) for request in requests
-        ]
-    )
+class UserAccountRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccountRequest
+        fields = (
+            'uuid',
+            'email',
+            'email_validated',
+            'type',
+            'status',
+        )

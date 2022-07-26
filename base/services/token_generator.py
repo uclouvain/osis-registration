@@ -39,4 +39,5 @@ class MailValidationTokenGenerator(PasswordResetTokenGenerator):
         email_validated = False
         return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
 
+
 mail_validation_token_generator = MailValidationTokenGenerator()
