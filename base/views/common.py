@@ -58,30 +58,6 @@ def noscript(request):
     return render(request, 'status_page/noscript.html', {})
 
 
-def display_error_messages(request, messages_to_display, extra_tags=None):
-    display_messages(request, messages_to_display, messages.ERROR, extra_tags=extra_tags)
-
-
-def display_success_messages(request, messages_to_display, extra_tags=None):
-    display_messages(request, messages_to_display, messages.SUCCESS, extra_tags=extra_tags)
-
-
-def display_info_messages(request, messages_to_display, extra_tags=None):
-    display_messages(request, messages_to_display, messages.INFO, extra_tags=extra_tags)
-
-
-def display_warning_messages(request, messages_to_display, extra_tags=None):
-    display_messages(request, messages_to_display, messages.WARNING, extra_tags=extra_tags)
-
-
-def display_messages(request, messages_to_display, level, extra_tags=None):
-    if not isinstance(messages_to_display, (tuple, list)):
-        messages_to_display = [messages_to_display]
-
-    for msg in messages_to_display:
-        messages.add_message(request, level, str(msg), extra_tags=extra_tags)
-
-
 def common_context_processor(request):
     if hasattr(settings, 'ENVIRONMENT'):
         env = settings.ENVIRONMENT

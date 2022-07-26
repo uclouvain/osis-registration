@@ -18,6 +18,7 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'LOCAL')
 
 # Application definition
 

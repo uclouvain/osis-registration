@@ -28,6 +28,7 @@ from dataclasses import dataclass
 from types import SimpleNamespace
 
 from captcha import views
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
@@ -46,6 +47,7 @@ from base.services.token_generator import mail_validation_token_generator
 from base.services.user_account_activation import activate_ldap_user_account
 from base.services.user_account_creation import create_ldap_user_account
 
+from django.utils.translation import gettext_lazy as _
 
 @dataclass
 class UserAccountCreationRequest:
@@ -89,8 +91,14 @@ class RegistrationFormView(FormView):
 
         if user_account_creation_response.status_code == 200:
             self.user_account_request.save()
-
-        mail.send_validation_mail(self.request, user_account_creation_request)
+            mail.send_validation_mail(self.request, user_account_creation_request)
+        else:
+            messages.add_message(
+                self.request,
+                message=_("An error occured while sending the creation request. Please try again later."),
+                level=messages.ERROR
+            )
+            return super().form_invalid(form)
 
         return super().form_valid(form)
 
