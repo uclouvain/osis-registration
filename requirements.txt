@@ -12,4 +12,3 @@ diff-cover==3.0.1
 tblib==1.7.0
 django-simple-captcha==0.5.14
 django-bootstrap3==21.1
-cryptography==37.0.4
