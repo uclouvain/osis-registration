@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,19 +24,18 @@
 #
 ##############################################################################
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.views.generic import TemplateView
+
+from base import settings
+from base.models.user_account_request import UserAccountRequest
 
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
+class UserAccountCreationStatusView(TemplateView):
+    name = 'user_account_status'
+    template_name = 'registration_status/user_account_status.html'
 
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
-
-
-mail_validation_token_generator = MailValidationTokenGenerator()
+    def get_context_data(self, **kwargs):
+        return {
+            'account_request': UserAccountRequest.objects.get(uuid=kwargs['uacr_uuid']),
+            'login_redirection_url': settings.OSIS_PORTAL_URL
+        }

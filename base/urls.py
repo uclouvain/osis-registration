@@ -8,8 +8,9 @@ from django.urls import path, include
 from base.api import url_v1
 from base.views import common
 from base.views.common import edit_language
-from base.views.registration import RegistrationFormView, UserAccountCreationStatusView, \
-    ValidateEmailView
+from base.views.registration import RegistrationFormView
+from base.views.user_account_creation_status import UserAccountCreationStatusView
+from base.views.validate_email import ValidateEmailView
 
 urlpatterns = [
     path('', RegistrationFormView.as_view(), name=RegistrationFormView.name),

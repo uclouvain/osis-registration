@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -24,19 +24,21 @@
 #
 ##############################################################################
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.test import TestCase
+from django.urls import reverse
+
+from base.tests.factories.user_account_request import UserAccountRequestFactory
 
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
+class UserAccountStatusViewTestCase(TestCase):
 
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+    @classmethod
+    def setUpTestData(cls):
+        cls.user_account_request = UserAccountRequestFactory()
+        cls.url = reverse('user_account_status', kwargs={'uacr_uuid': cls.user_account_request.uuid})
 
+    def test_access_view(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration_status/user_account_status.html')
 
-mail_validation_token_generator = MailValidationTokenGenerator()

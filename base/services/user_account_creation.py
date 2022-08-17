@@ -32,6 +32,7 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.services.service_exceptions import CreateUserAccountErrorException
 
 SUCCESS = "success"
 ERROR = "error"
@@ -39,7 +40,7 @@ ERROR = "error"
 
 def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
     # mock endpoint in debug
-    if not settings.DEBUG:
+    if settings.DEBUG:
         random_success_status = random.choice([True, False])
         if random_success_status:
             response = {"status": SUCCESS, "message": "User created entry in db"}
@@ -63,5 +64,8 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
             )
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
+
+        if 'status' in response and response['status'] == ERROR:
+            raise CreateUserAccountErrorException(detailed_msg=response['message'])
 
     return response

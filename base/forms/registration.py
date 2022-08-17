@@ -24,15 +24,12 @@
 #
 ##############################################################################
 import datetime
-import re
-from types import SimpleNamespace
 
-from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
-    CommonPasswordValidator, NumericPasswordValidator
-from django.utils.translation import gettext_lazy as _
-
-from django import forms
 from captcha.fields import CaptchaField, CaptchaTextInput
+from django import forms
+from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
+    NumericPasswordValidator
+from django.utils.translation import gettext_lazy as _
 
 from base.admin import User
 

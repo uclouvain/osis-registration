@@ -6,7 +6,6 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -128,7 +127,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'base/static'),)
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
-LDAP_ACCOUNT_MODIFICATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
+LDAP_ACCOUNT_MODIFICATION_URL = os.environ.get('LDAP_ACCOUNT_MODIFICATION_URL', '')
+LDAP_ACCOUNT_DESCRIBE_EMAIL_URL = os.environ.get('LDAP_ACCOUNT_DESCRIBE_EMAIL_URL', '')
 LDAP_ACCOUNT_VALIDITY_DAYS = os.environ.get('LDAP_ACCOUNT_VALIDITY_DAYS', 120)
 
 OSIS_PORTAL_URL = os.environ.get('OSIS_PORTAL_URL', '')

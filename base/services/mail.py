@@ -50,9 +50,10 @@ def send_validation_mail(request, user_account_creation_request):
         'html': 'osis_registration_mail_validation_html',
         'txt': 'osis_registration_mail_validation_txt'
     }
-    # TODO: change receiver_person_id
+
     receivers = [
         message_config.create_receiver(
+            receiver_id=user_account_creation_request.request.uuid,
             receiver_email=user_account_creation_request.request.email,
             receiver_lang=None
         )
