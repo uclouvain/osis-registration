@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils import translation
 
@@ -75,7 +74,3 @@ def edit_language(request, lang):
     response = redirect(request.META['HTTP_REFERER'])
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, translation.get_language())
     return response
-
-
-def test_captcha_challenge():
-    return ('NTMALS', 'NTMALS')

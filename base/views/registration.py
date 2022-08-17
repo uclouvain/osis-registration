@@ -83,7 +83,7 @@ class RegistrationFormView(FormView):
 
         user_account_creation_response = create_ldap_user_account(user_account_creation_request)
 
-        if user_account_creation_response.status_code == 200:
+        if 'status' in user_account_creation_response and user_account_creation_response['status'] == 'success':
             self.user_account_request.save()
             mail.send_validation_mail(self.request, user_account_creation_request)
         else:

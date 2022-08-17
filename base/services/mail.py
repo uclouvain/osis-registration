@@ -53,7 +53,6 @@ def send_validation_mail(request, user_account_creation_request):
 
     receivers = [
         message_config.create_receiver(
-            receiver_id=user_account_creation_request.request.uuid,
             receiver_email=user_account_creation_request.request.email,
             receiver_lang=None
         )

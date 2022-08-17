@@ -141,7 +141,6 @@ CAPTCHA_FONT_SIZE = 50
 CAPTCHA_IMAGE_SIZE = (300, 80)
 CAPTCHA_LENGTH = 6
 CAPTCHA_FOREGROUND_COLOR = '#163c69'
-CAPTCHA_CHALLENGE_FUNCT = 'base.views.common.test_captcha_challenge'
 
 CAPTCHA_FLITE_PATH = '/usr/bin/espeak'
 CAPTCHA_SOX_PATH = '/usr/bin/sox'
