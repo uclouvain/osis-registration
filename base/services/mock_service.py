@@ -23,38 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import date, timedelta
-from typing import Union
+import random
 
-import requests as requests
-from requests import Response
-from requests.exceptions import Timeout
-
-from base import settings
-from base.services.mock_service import mock_ldap_service
-from base.services.service_exceptions import RenewUserAccountValidityErrorException
-
+SUCCESS = "success"
 ERROR = "error"
 
 
-def renew_ldap_user_account_validity(account_id, validity_days) -> Union[Response, dict]:
-    if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service()
+def mock_ldap_service():
+    random_success_status = random.choice([True, False])
+    if random_success_status:
+        response = {"status": SUCCESS, "message": "Request has been successfully processed"}
     else:
-        try:
-            response = requests.post(
-                headers={'Content-Type': 'application/json'},
-                json={
-                    "id": account_id,
-                    "validite": (date.today() + timedelta(days=int(validity_days))).strftime('%Y%m%d')
-                },
-                url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
-                timeout=60,
-            )
-        except Timeout:
-            response = {"status": ERROR, "message": "Request timed out"}
-
-        if 'status' in response and response['status'] == ERROR:
-            raise RenewUserAccountValidityErrorException(detailed_msg=response['message'])
-
+        response = {"status": ERROR, "message": "An error occured"}
     return response

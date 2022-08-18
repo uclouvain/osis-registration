@@ -15,6 +15,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
+# MOCK LDAP SERVICE CALLS
+MOCK_LDAP_CALLS = os.environ.get('MOCK_LDAP_CALLS', 'True').lower() == 'true'
+
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'LOCAL')

@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
 from datetime import date, timedelta
 from typing import Union
 
@@ -32,6 +31,7 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.services.mock_service import mock_ldap_service
 from base.services.service_exceptions import CreateUserAccountErrorException
 
 SUCCESS = "success"
@@ -39,13 +39,8 @@ ERROR = "error"
 
 
 def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
-    # mock endpoint in debug
-    if settings.DEBUG:
-        random_success_status = random.choice([True, False])
-        if random_success_status:
-            response = {"status": SUCCESS, "message": "User created entry in db"}
-        else:
-            response = {"status": ERROR, "message": "Missing data"}
+    if settings.MOCK_LDAP_CALLS:
+        response = mock_ldap_service()
     else:
         try:
             response = requests.post(
