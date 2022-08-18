@@ -6,7 +6,6 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,6 +17,7 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'LOCAL')
 
 # Application definition
 
@@ -127,22 +127,15 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'base/static'),)
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
-LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
+LDAP_ACCOUNT_MODIFICATION_URL = os.environ.get('LDAP_ACCOUNT_MODIFICATION_URL', '')
+LDAP_ACCOUNT_DESCRIBE_EMAIL_URL = os.environ.get('LDAP_ACCOUNT_DESCRIBE_EMAIL_URL', '')
+LDAP_ACCOUNT_VALIDITY_DAYS = os.environ.get('LDAP_ACCOUNT_VALIDITY_DAYS', 120)
+
+OSIS_PORTAL_URL = os.environ.get('OSIS_PORTAL_URL', '')
+
 DATA_PROTECTION_POLICY_URL = os.environ.get('DATA_PROTECTION_POLICY_URL', '')
 
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
-
-# Celery settings
-CELERY_BROKER_URL = "amqp://{user}:{password}@{host}:{port}".format(
-    user=os.environ.get('RABBITMQ_USER', 'guest'),
-    password=os.environ.get('RABBITMQ_PASSWORD', 'guest'),
-    host=os.environ.get('RABBITMQ_HOST', 'localhost'),
-    port=os.environ.get('RABBITMQ_PORT', '5672')
-)
-CELERY_CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'django-db')
-
-REQUEST_ATTEMPT_LIMIT = os.environ.get('REQUEST_ATTEMPT_LIMIT', 3)
 
 CAPTCHA_FONT_SIZE = 50
 CAPTCHA_IMAGE_SIZE = (300, 80)
@@ -189,7 +182,6 @@ EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "mess
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
-INTERNAL_EMAIL_SUFFIX = os.environ.get('INTERNAL_EMAIL_SUFFIX', 'osis.org')
 MAIL_SENDER_CLASSES = os.environ.get(
     'MAIL_SENDER_CLASSES',
     'base.messaging.mail_sender_classes.MessageHistorySender'

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,19 +24,20 @@
 #
 ##############################################################################
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+class OsisRegistrationServiceException(Exception):
+    msg = "An error occured while using the service: {}"
+
+    def __init__(self, detailed_msg):
+        self.msg = self.msg.format(detailed_msg)
 
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+class RetrieveUserAccountInformationErrorException(OsisRegistrationServiceException):
+    msg = "An error occured while retrieving user account information: {}"
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+class CreateUserAccountErrorException(OsisRegistrationServiceException):
+    msg = "An error occured while creating user account: {}"
+
+
+class RenewUserAccountValidityErrorException(OsisRegistrationServiceException):
+    msg = "An error occured while renewing user account validity: {}"

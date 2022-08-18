@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,20 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from unittest import mock
+from unittest.mock import patch
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.test import TestCase
 
-
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+from base import settings
+from base.services.user_account_activation import activate_ldap_user_account
+from base.tests.factories.user_account_request import UserAccountRequestFactory
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+class ActivateUserAccountServiceTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.pending_request = UserAccountRequestFactory()
+
+    @patch('base.settings.DEBUG', False)
+    @patch('base.settings.LDAP_ACCOUNT_MODIFICATION_URL', 'fake_ldap_url')
+    @mock.patch('base.services.user_account_creation.requests.post')
+    def test_service_should_call_endpoint_to_attempt_user_account_activation(self, mock_post):
+        activate_ldap_user_account(self.pending_request)
+        _, kwargs = mock_post.call_args
+        self.assertEqual(kwargs['url'], settings.LDAP_ACCOUNT_MODIFICATION_URL)

@@ -24,19 +24,30 @@
 #
 ##############################################################################
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import uuid
+
+from django.contrib import admin
+from django.db import models
+
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+class UserAccountRequestAdmin(admin.ModelAdmin):
+    fields = ('email', 'email_validated', 'type', 'status')
+    list_display = ('uuid', 'email', 'email_validated', 'type', 'status')
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+class UserAccountRequest(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+    email_validated = models.BooleanField(default=False)
+    type = models.CharField(choices=UserAccountRequestType.choices(), max_length=50)
+
+    status = models.CharField(
+        choices=UserAccountRequestStatus.choices(),
+        default=UserAccountRequestStatus.PENDING.value,
+        max_length=50
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -44,23 +44,23 @@ def send_email(template_references, receivers, data, connected_user=None):
         connected_user=connected_user
     )
 
+
 def send_validation_mail(request, user_account_creation_request):
     template_references = {
         'html': 'osis_registration_mail_validation_html',
         'txt': 'osis_registration_mail_validation_txt'
     }
-    # TODO: change receiver_person_id
+
     receivers = [
         message_config.create_receiver(
-            receiver_person_id=user_account_creation_request.id,
-            receiver_email=user_account_creation_request.email,
+            receiver_email=user_account_creation_request.request.email,
             receiver_lang=None
         )
     ]
-    token = mail_validation_token_generator.make_token(user_account_creation_request)
+    token = mail_validation_token_generator.make_token(user_account_creation_request.request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
-            'uacr_uuid': user_account_creation_request.uuid,
+            'uacr_uuid': user_account_creation_request.request.uuid,
             'token': token
         }))},
         'subject': {}

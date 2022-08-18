@@ -703,7 +703,8 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
 }
 
 img.captcha{
-    border: 3px dashed #163c69;
+    padding: 2px;
+    border: 1px solid #163c69;
     display: block;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -719,7 +720,7 @@ label.required:after {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     display: grid;
-    grid-template-columns: 40px auto;
+    grid-template-columns: 40px auto auto;
 }
 
 .panel-top-alert .icon {
@@ -850,4 +851,29 @@ label.required:after {
 
 .back-home {
     margin-top: 30px;
+}
+
+@media(min-width: 992px) {
+    .col-divider-right {
+        border-left: 1px solid #eee;
+    }
+
+    .col-divider-left {
+        border-right: 1px solid #eee;
+    }
+}
+
+.title{
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+.border-info{
+    border-color: #bce8f1;
+}
+
+#id_password + .input-group-addon {
+    cursor: pointer;
 }

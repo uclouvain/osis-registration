@@ -23,20 +23,52 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django import template
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-
-
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+register = template.Library()
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+@register.simple_tag(takes_context=True)
+def as_messages_info(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'info' in m.tags:
+            return True
+    return False
+
+
+@register.simple_tag(takes_context=True)
+def as_messages_warning(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'warning' in m.tags:
+            return True
+    return False
+
+
+@register.simple_tag(takes_context=True)
+def as_messages_error(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'error' in m.tags:
+            return True
+    return False
+
+
+@register.simple_tag(takes_context=True)
+def as_messages_success(context):
+    request = context['request']
+    msgs = messages.get_messages(request)
+
+    for m in msgs:
+        if 'success' in m.tags:
+            return True
+    return False

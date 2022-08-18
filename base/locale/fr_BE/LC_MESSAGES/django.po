@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-10 15:04+0100\n"
+"POT-Creation-Date: 2022-07-20 15:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "This field is required."
+msgstr "Ce champ est requis."
 
 msgid "First name"
 msgstr "Prénom"
@@ -25,6 +28,9 @@ msgstr "Nom"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Password"
+msgstr "Mot de passe"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
@@ -72,6 +78,12 @@ msgstr ""
 "Ce formulaire vous permet de demander un compte UCLouvain temporaire. Avec "
 "ce compte, vous recevrez des identifiants qui vous permettront d'accéder aux "
 "applications suivantes pour préparer votre dossier d'admission: ..."
+
+msgid "Identification"
+msgstr "Identification"
+
+msgid "Authentication information"
+msgstr "Informations d'authentification"
 
 msgid ""
 "To determine whether you are a human visitor and to prevent automated spam "
@@ -185,6 +197,14 @@ msgid "Please check your mailbox and validate your account following the link."
 msgstr ""
 "Veuillez vérifier votre boîte email et valider votre compte en suivant le "
 "lien."
+
+msgid ""
+"Your user account has been successfully created. You may now log in to "
+"continue your operations."
+msgstr "Votre compte utilisateur a été créé avec succès. Vous pouvez à présent vous connecter afin de poursuivre vos opérations."
+
+msgid "Log in"
+msgstr ""
 
 msgid "Access refused"
 msgstr "Accès refusé"

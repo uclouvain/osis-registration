@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,20 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import Union
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import requests as requests
+from requests import Response
+from requests.exceptions import Timeout
 
+from base import settings
+from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
 
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+ERROR = "error"
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+def get_ldap_user_account_information(email) -> Union[Response, dict]:
+    try:
+        response = requests.get(
+            headers={'Content-Type': 'application/json'},
+            url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
+            timeout=60,
+        )
+        response = response.json()
+    except Timeout:
+        response = {"status": ERROR, "message": "Request timed out"}
+
+    if 'status' in response and response['status'] == ERROR:
+        raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
+
+    return response

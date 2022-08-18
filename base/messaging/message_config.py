@@ -80,16 +80,14 @@ def create_message_content(
     }
 
 
-def create_receiver(receiver_person_id, receiver_email, receiver_lang):
+def create_receiver(receiver_email, receiver_lang):
     """
     Create a receiver dict used by the sending message function.
-    :param receiver_person_id: The id of the receiver (usually person.id)
     :param receiver_email: The eail of the receiver.
     :param receiver_lang: The language of the receiver
     :return: The dict representing the receiver of a message
     """
     return {
-        'receiver_person_id': receiver_person_id,
         'receiver_email': receiver_email,
         'receiver_lang': receiver_lang or DEFAULT_LANG
     }

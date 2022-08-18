@@ -23,20 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from rest_framework import serializers
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-
-
-class MailValidationTokenGenerator(PasswordResetTokenGenerator):
-
-    def _make_hash_value(self, user_account_request, timestamp):
-        """
-        Hash the user account creation request's key, email, timestamp to produce a token
-        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
-        """
-        uar = user_account_request
-        email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+from base.models.polling_subscriber import PollingSubscriber
+from base.models.user_account_request import UserAccountRequest
 
 
-mail_validation_token_generator = MailValidationTokenGenerator()
+class UserAccountRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccountRequest
+        fields = (
+            'uuid',
+            'email',
+            'email_validated',
+            'type',
+            'status',
+        )
