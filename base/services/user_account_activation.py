@@ -31,21 +31,25 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.services.mock_service import mock_ldap_service
 
 ERROR = "error"
 
 
 def activate_ldap_user_account(user_activation_request) -> Union[Response, dict]:
-    try:
-        response = requests.post(
-            headers={'Content-Type': 'application/json'},
-            json={
-                "id": str(user_activation_request.uuid),
-                "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d')
-            },
-            url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
-            timeout=60,
-        )
-    except Timeout:
-        response = {"status": ERROR, "message": "Request timed out"}
+    if settings.MOCK_LDAP_CALLS:
+        response = mock_ldap_service()
+    else:
+        try:
+            response = requests.post(
+                headers={'Content-Type': 'application/json'},
+                json={
+                    "id": str(user_activation_request.uuid),
+                    "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d')
+                },
+                url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
+                timeout=60,
+            )
+        except Timeout:
+            response = {"status": ERROR, "message": "Request timed out"}
     return response

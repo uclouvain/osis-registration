@@ -30,23 +30,27 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.services.mock_service import mock_ldap_service
 from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
 
 ERROR = "error"
 
 
 def get_ldap_user_account_information(email) -> Union[Response, dict]:
-    try:
-        response = requests.get(
-            headers={'Content-Type': 'application/json'},
-            url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
-            timeout=60,
-        )
-        response = response.json()
-    except Timeout:
-        response = {"status": ERROR, "message": "Request timed out"}
+    if settings.MOCK_LDAP_CALLS:
+        response = mock_ldap_service()
+    else:
+        try:
+            response = requests.get(
+                headers={'Content-Type': 'application/json'},
+                url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
+                timeout=60,
+            )
+            response = response.json()
+        except Timeout:
+            response = {"status": ERROR, "message": "Request timed out"}
 
-    if 'status' in response and response['status'] == ERROR:
-        raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
+        if 'status' in response and response['status'] == ERROR:
+            raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
 
     return response
