@@ -33,8 +33,6 @@ INSTALLED_APPS = [
     'statici18n',
     'rest_framework',
     'base',
-    'django_celery_beat',
-    'django_celery_results',
     'captcha',
     'bootstrap3',
     'rest_framework.authtoken'
