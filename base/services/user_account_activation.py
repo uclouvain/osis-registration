@@ -49,7 +49,7 @@ def activate_ldap_user_account(user_activation_request) -> Union[Response, dict]
                 },
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
-            )
+            ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
     return response

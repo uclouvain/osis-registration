@@ -39,7 +39,7 @@ class ActivateUserAccountServiceTestCase(TestCase):
     def setUpTestData(cls):
         cls.pending_request = UserAccountRequestFactory()
 
-    @patch('base.settings.DEBUG', False)
+    @patch('base.settings.MOCK_LDAP_CALLS', False)
     @patch('base.settings.LDAP_ACCOUNT_MODIFICATION_URL', 'fake_ldap_url')
     @mock.patch('base.services.user_account_creation.requests.post')
     def test_service_should_call_endpoint_to_attempt_user_account_activation(self, mock_post):
