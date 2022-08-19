@@ -49,7 +49,7 @@ class UserAccountCreationServiceTestCase(TestCase):
             app=PollingSubscriberFactory().app_name,
         )
 
-    @patch('base.settings.DEBUG', False)
+    @patch('base.settings.MOCK_LDAP_CALLS', False)
     @patch('base.settings.LDAP_ACCOUNT_CREATION_URL', 'fake_ldap_url')
     @mock.patch('base.services.user_account_creation.requests.post')
     def test_service_should_call_endpoint_to_attempt_user_account_creation(self, mock_post):
