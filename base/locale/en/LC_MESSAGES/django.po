@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-19 11:59+0200\n"
+"POT-Creation-Date: 2022-08-19 14:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,21 @@ msgid "Identification"
 msgstr ""
 
 msgid "Authentication information"
+msgstr ""
+
+msgid "Password should validate against the following rules:"
+msgstr ""
+
+msgid "Your password can’t be too similar to your other personal information."
+msgstr ""
+
+msgid "Your password must contain at least 8 characters."
+msgstr ""
+
+msgid "Your password can’t be a commonly used password."
+msgstr ""
+
+msgid "Your password can’t be entirely numeric."
 msgstr ""
 
 msgid ""

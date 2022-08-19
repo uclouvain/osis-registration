@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-19 11:59+0200\n"
+"POT-Creation-Date: 2022-08-19 14:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,6 +93,21 @@ msgstr "Identification"
 
 msgid "Authentication information"
 msgstr "Informations d'authentification"
+
+msgid "Password should validate against the following rules:"
+msgstr "Le mot de passe doit respecter les règles suivantes:"
+
+msgid "can’t be too similar to your other personal information"
+msgstr "doit se différencier de vos autres informations personnelles"
+
+msgid "must contain at least 8 characters"
+msgstr "doit contenir au moins 8 caractères"
+
+msgid "can’t be a commonly used password"
+msgstr "ne peut pas être un mot de passe couramment utilisé"
+
+msgid "can’t be entirely numeric"
+msgstr "ne peut pas être entièrement numérique"
 
 msgid ""
 "To determine whether you are a human visitor and to prevent automated spam "

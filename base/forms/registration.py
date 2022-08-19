@@ -28,7 +28,7 @@ import datetime
 from captcha.fields import CaptchaField, CaptchaTextInput
 from django import forms
 from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
-    NumericPasswordValidator
+    NumericPasswordValidator, CommonPasswordValidator
 from django.forms import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
@@ -59,7 +59,8 @@ class RegistrationForm(forms.Form):
         widget=forms.PasswordInput(),
         validators=[
             MinimumLengthValidator().validate,
-            NumericPasswordValidator().validate
+            NumericPasswordValidator().validate,
+            CommonPasswordValidator().validate
         ]
     )
 

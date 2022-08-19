@@ -68,6 +68,15 @@
                         </div>
                         {% bootstrap_field form.email label_class="required" %}
                         {% bootstrap_field form.password label_class="required" addon_after='<span id="togglePasswordBtn"><i class="glyphicon glyphicon-eye-close"></i></span>'%}
+                        <div id="password-rules" class="alert alert-warning">
+                            <b>{% trans 'Password should validate against the following rules:' %}</b>
+                            <ul>
+                                <li>{% trans 'can’t be too similar to your other personal information' %}</li>
+                                <li>{% trans 'must contain at least 8 characters' %}</li>
+                                <li>{% trans 'can’t be a commonly used password' %}</li>
+                                <li>{% trans 'can’t be entirely numeric' %}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <hr/>
@@ -167,6 +176,12 @@
             togglePasswordIcon.classList.add('glyphicon-eye-open');
             passwordInput.setAttribute('type', 'text')
         }
+    });
+
+    document.querySelector("input#id_password").addEventListener('focusin', (e) => {
+        document.querySelector(".col-divider-left + div").classList.add('col-divider-right');
+        document.querySelector(".col-divider-left").classList.remove('col-divider-left');
+        document.querySelector("#password-rules").classList.add('show');
     });
 
 </script>

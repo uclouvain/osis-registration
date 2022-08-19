@@ -711,6 +711,7 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
 }
 
 img.captcha{
+    max-width: 100%;
     padding: 2px;
     border: 1px solid #163c69;
     display: block;
@@ -884,4 +885,13 @@ label.required:after {
 
 #id_password + .input-group-addon {
     cursor: pointer;
+}
+
+#password-rules {
+    display: none;
+    font-size: 12px;
+}
+
+#password-rules.show {
+    display: block;
 }
