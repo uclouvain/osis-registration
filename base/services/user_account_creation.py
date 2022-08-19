@@ -23,10 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import date, timedelta
+import time
 from typing import Union
 
-import requests as requests
 from requests import Response
 from requests.exceptions import Timeout
 
@@ -43,20 +42,22 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
         response = mock_ldap_service()
     else:
         try:
-            response = requests.post(
-                headers={'Content-Type': 'application/json'},
-                json={
-                    "id": str(user_creation_request.request.uuid),
-                    "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
-                    "prenom": user_creation_request.first_name,
-                    "nom": user_creation_request.last_name,
-                    "email": user_creation_request.request.email,
-                    "password": user_creation_request.password,
-                    "validite": (date.today() - timedelta(days=1)).strftime('%Y%m%d')
-                },
-                url=settings.LDAP_ACCOUNT_CREATION_URL,
-                timeout=60,
-            ).json()
+            # response = requests.post(
+            #     headers={'Content-Type': 'application/json'},
+            #     json={
+            #         "id": str(user_creation_request.request.uuid),
+            #         "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
+            #         "prenom": user_creation_request.first_name,
+            #         "nom": user_creation_request.last_name,
+            #         "email": user_creation_request.request.email,
+            #         "password": user_creation_request.password,
+            #         "validite": (date.today() - timedelta(days=1)).strftime('%Y%m%d')
+            #     },
+            #     url=settings.LDAP_ACCOUNT_CREATION_URL,
+            #     timeout=60,
+            # ).json()
+            time.sleep(11)
+            response = {"test": 'test'}
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
