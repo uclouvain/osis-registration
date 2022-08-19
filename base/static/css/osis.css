@@ -683,6 +683,14 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
     z-index: 1600;
 }
 
+.navbar-header {
+    width: 100%;
+}
+
+.navbar-right {
+    padding-right: 10px;
+}
+
 .navbar-brand {
     margin: 5px 0 5px;
     margin-left: 0 !important;

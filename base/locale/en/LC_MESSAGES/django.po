@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-20 15:48+0200\n"
+"POT-Creation-Date: 2022-08-19 11:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,15 @@ msgid "Password"
 msgstr ""
 
 msgid "Date of birth"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Day"
 msgstr ""
 
 #, python-brace-format
@@ -126,45 +135,6 @@ msgstr ""
 msgid "Validate your email address"
 msgstr ""
 
-msgid "Your email has been validated"
-msgstr ""
-
-msgid "User account creation"
-msgstr ""
-
-msgid "Your user account is being created and will be available shortly..."
-msgstr ""
-
-msgid "Your user account has been successfully created"
-msgstr ""
-
-msgid ""
-"Something went wrong during user account creation process. Please contact "
-"administration."
-msgstr ""
-
-msgid "Set your credentials"
-msgstr ""
-
-msgid "This step will be available as soon as the previous step is done"
-msgstr ""
-
-msgid ""
-"Your account has been created and you may now proceed with the setting of "
-"your credentials."
-msgstr ""
-
-msgid "In order to set your credentials, please visit "
-msgstr ""
-
-msgid "the UCLouvain account page"
-msgstr ""
-
-msgid ""
-"This will be the last step to accomplish before you may effectively log into "
-"the portal."
-msgstr ""
-
 msgid ""
 "In order to complete the registration process, we sent you an email with a "
 "validation link."
@@ -173,12 +143,26 @@ msgstr ""
 msgid "Please check your mailbox and validate your account following the link."
 msgstr ""
 
+msgid "Your email has been validated"
+msgstr ""
+
+msgid "User account creation"
+msgstr ""
+
 msgid ""
 "Your user account has been successfully created. You may now log in to "
 "continue your operations."
 msgstr ""
 
 msgid "Log in"
+msgstr ""
+
+msgid ""
+"Something went wrong during user account creation process. Please contact "
+"administration."
+msgstr ""
+
+msgid "This step will be available as soon as the previous step is done"
 msgstr ""
 
 msgid "Access refused"
@@ -208,4 +192,8 @@ msgid "The page you are looking for was not found."
 msgstr ""
 
 msgid "A server error occured."
+msgstr ""
+
+msgid ""
+"An error occured while sending the creation request. Please try again later."
 msgstr ""
