@@ -29,6 +29,7 @@ class OsisRegistrationServiceException(Exception):
 
     def __init__(self, detailed_msg):
         self.msg = self.msg.format(detailed_msg)
+        super().__init__(self.msg)
 
 
 class RetrieveUserAccountInformationErrorException(OsisRegistrationServiceException):

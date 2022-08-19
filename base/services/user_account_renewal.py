@@ -50,7 +50,7 @@ def renew_ldap_user_account_validity(account_id, validity_days) -> Union[Respons
                 },
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
-            )
+            ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
