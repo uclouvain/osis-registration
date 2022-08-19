@@ -29,6 +29,7 @@ from captcha.fields import CaptchaField, CaptchaTextInput
 from django import forms
 from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
     NumericPasswordValidator
+from django.forms import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
 from base.admin import User
@@ -38,6 +39,12 @@ CURRENT_YEAR = datetime.date.today().year
 
 class CustomCaptchaTextInput(CaptchaTextInput):
     template_name = "captcha.html"
+
+
+class EmptySelectDateWidgetField(forms.DateField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.widget.is_required = False
 
 
 class RegistrationForm(forms.Form):
@@ -56,12 +63,12 @@ class RegistrationForm(forms.Form):
         ]
     )
 
-    birth_date = forms.DateField(
-        initial=datetime.datetime.now(),
+    birth_date = EmptySelectDateWidgetField(
         label=_('Date of birth'),
         required=True,
-        widget=forms.SelectDateWidget(
-            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)
+        widget=SelectDateWidget(
+            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1),
+            empty_label=(_('Year'), _('Month'), _('Day')),
         ),
     )
     captcha = CaptchaField(

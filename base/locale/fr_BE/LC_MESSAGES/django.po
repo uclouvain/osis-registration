@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-20 15:48+0200\n"
+"POT-Creation-Date: 2022-08-19 11:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,15 @@ msgstr "Mot de passe"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
+
+msgid "Year"
+msgstr "Année"
+
+msgid "Month"
+msgstr "Mois"
+
+msgid "Day"
+msgstr "Jour"
 
 #, python-brace-format
 msgid ""
@@ -138,54 +147,6 @@ msgstr "Votre requête d'inscription a été envoyée"
 msgid "Validate your email address"
 msgstr "Validez votre adresse email"
 
-msgid "Your email has been validated"
-msgstr "Votre adresse email a été validée"
-
-msgid "User account creation"
-msgstr "Création de compte utilisateur"
-
-msgid "Your user account is being created and will be available shortly..."
-msgstr ""
-"Votre compte utilisateur est en cours de création et sera bientôt "
-"disponible..."
-
-msgid "Your user account has been successfully created"
-msgstr "Votre compte utilisateur a été créé avec succès"
-
-msgid ""
-"Something went wrong during user account creation process. Please contact "
-"administration."
-msgstr ""
-"Une erreur s'est produite pendant le processus de création de compte. "
-"Veuillez contacter l'administration."
-
-msgid "Set your credentials"
-msgstr "Configurer l'authentification"
-
-msgid "This step will be available as soon as the previous step is done"
-msgstr ""
-"Cette étape sera disponible dès que l'étape précédente aura été réalisée"
-
-msgid ""
-"Your account has been created and you may now proceed with the setting of "
-"your credentials."
-msgstr ""
-"Votre compte utilisateur a été créé et vous pouvez maintenant configurer vos "
-"informations d'authentification."
-
-msgid "In order to set your credentials, please visit "
-msgstr "Afin de fournir ces informations, veuillez vous rendre sur "
-
-msgid "the UCLouvain account page"
-msgstr "la page de gestion de votre compte UCLouvain"
-
-msgid ""
-"This will be the last step to accomplish before you may effectively log into "
-"the portal."
-msgstr ""
-"Ceci sera la dernière étape à accomplir avant de pouvoir effectivement vous "
-"connecter sur le portail."
-
 msgid ""
 "In order to complete the registration process, we sent you an email with a "
 "validation link."
@@ -198,13 +159,32 @@ msgstr ""
 "Veuillez vérifier votre boîte email et valider votre compte en suivant le "
 "lien."
 
+msgid "Your email has been validated"
+msgstr "Votre adresse email a été validée"
+
+msgid "User account creation"
+msgstr "Création de compte utilisateur"
+
 msgid ""
 "Your user account has been successfully created. You may now log in to "
 "continue your operations."
-msgstr "Votre compte utilisateur a été créé avec succès. Vous pouvez à présent vous connecter afin de poursuivre vos opérations."
+msgstr ""
+"Votre compte utilisateur a été créé avec succès. Vous pouvez à présent vous "
+"connecter afin de poursuivre vos opérations."
 
 msgid "Log in"
 msgstr ""
+
+msgid ""
+"Something went wrong during user account creation process. Please contact "
+"administration."
+msgstr ""
+"Une erreur s'est produite pendant le processus de création de compte. "
+"Veuillez contacter l'administration."
+
+msgid "This step will be available as soon as the previous step is done"
+msgstr ""
+"Cette étape sera disponible dès que l'étape précédente aura été réalisée"
 
 msgid "Access refused"
 msgstr "Accès refusé"
@@ -236,3 +216,38 @@ msgstr "La page que vous cherchez est introuvable."
 
 msgid "A server error occured."
 msgstr "Une erreur serveur est survenue."
+
+msgid ""
+"An error occured while sending the creation request. Please try again later."
+msgstr ""
+
+#~ msgid "Your user account is being created and will be available shortly..."
+#~ msgstr ""
+#~ "Votre compte utilisateur est en cours de création et sera bientôt "
+#~ "disponible..."
+
+#~ msgid "Your user account has been successfully created"
+#~ msgstr "Votre compte utilisateur a été créé avec succès"
+
+#~ msgid "Set your credentials"
+#~ msgstr "Configurer l'authentification"
+
+#~ msgid ""
+#~ "Your account has been created and you may now proceed with the setting of "
+#~ "your credentials."
+#~ msgstr ""
+#~ "Votre compte utilisateur a été créé et vous pouvez maintenant configurer "
+#~ "vos informations d'authentification."
+
+#~ msgid "In order to set your credentials, please visit "
+#~ msgstr "Afin de fournir ces informations, veuillez vous rendre sur "
+
+#~ msgid "the UCLouvain account page"
+#~ msgstr "la page de gestion de votre compte UCLouvain"
+
+#~ msgid ""
+#~ "This will be the last step to accomplish before you may effectively log "
+#~ "into the portal."
+#~ msgstr ""
+#~ "Ceci sera la dernière étape à accomplir avant de pouvoir effectivement "
+#~ "vous connecter sur le portail."
