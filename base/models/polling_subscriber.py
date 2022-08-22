@@ -27,22 +27,23 @@
 import uuid
 
 from django.contrib import admin
-from django.db import models
-
 from django.contrib.auth.models import User
+from django.db import models
 
 from base.models.user import get_osis_registration_user
 
 
 class PollingSubscriberAdmin(admin.ModelAdmin):
-    fields = ('app_name',)
-    list_display = ('app_name', 'uuid')
+    fields = ('app_name', 'redirection_url',)
+    list_display = ('app_name', 'uuid', 'redirection_url',)
 
 
 class PollingSubscriber(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     app_name = models.OneToOneField(User, on_delete=models.CASCADE)
     last_poll_requested = models.DateTimeField(auto_now_add=True)
+
+    redirection_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.app_name.username

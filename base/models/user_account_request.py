@@ -30,6 +30,7 @@ from django.contrib import admin
 from django.db import models
 
 from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
+from base.models.polling_subscriber import PollingSubscriber
 
 
 class UserAccountRequestAdmin(admin.ModelAdmin):
@@ -51,3 +52,5 @@ class UserAccountRequest(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    subscriber = models.ForeignKey(PollingSubscriber, blank=True, null=True, on_delete=models.SET_NULL)
