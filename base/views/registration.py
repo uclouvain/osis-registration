@@ -35,7 +35,7 @@ from django.views.generic.edit import FormView
 from base import settings
 from base.forms.registration import RegistrationForm
 from base.models.enum import UserAccountRequestType
-from base.models.polling_subscriber import get_osis_registration_subscriber, PollingSubscriber
+from base.models.polling_subscriber import PollingSubscriber
 from base.models.user_account_request import UserAccountRequest
 from base.override_django_captcha import captcha_audio
 from base.services import mail
@@ -50,7 +50,6 @@ class UserAccountCreationRequest:
     last_name: str
     birth_date: 'datetime'
     password: str
-    app: 'PollingSubscriber'
 
 
 class RegistrationFormView(FormView):
@@ -67,9 +66,15 @@ class RegistrationFormView(FormView):
             self.request.POST['birth_date_day']
         )
 
+        try:
+            subscriber = PollingSubscriber.objects.get(app_name__username=self.request.GET.get('source'))
+        except PollingSubscriber.DoesNotExist:
+            subscriber = None
+
         self.user_account_request = UserAccountRequest(
             email=self.request.POST['email'],
-            type=UserAccountRequestType.CREATION.value
+            type=UserAccountRequestType.CREATION.value,
+            subscriber=subscriber
         )
 
         user_account_creation_request = UserAccountCreationRequest(
@@ -78,7 +83,6 @@ class RegistrationFormView(FormView):
             last_name=self.request.POST['last_name'],
             birth_date=datetime.strptime(birth_date, '%Y-%m-%d'),
             password=self.request.POST['password'],
-            app=get_osis_registration_subscriber(),
         )
 
         user_account_creation_response = create_ldap_user_account(user_account_creation_request)

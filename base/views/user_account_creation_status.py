@@ -35,7 +35,10 @@ class UserAccountCreationStatusView(TemplateView):
     template_name = 'registration_status/user_account_status.html'
 
     def get_context_data(self, **kwargs):
+        account_request = UserAccountRequest.objects.get(uuid=kwargs['uacr_uuid'])
+        redirection_url = account_request.subscriber.redirection_url \
+            if account_request.subscriber else settings.OSIS_PORTAL_URL
         return {
-            'account_request': UserAccountRequest.objects.get(uuid=kwargs['uacr_uuid']),
-            'login_redirection_url': settings.OSIS_PORTAL_URL
+            'account_request': account_request,
+            'login_redirection_url': redirection_url
         }
