@@ -25,6 +25,7 @@
 ##############################################################################
 from django.shortcuts import render, redirect
 from django.utils import translation
+from ratelimit.exceptions import Ratelimited
 
 from base import settings
 
@@ -42,8 +43,12 @@ def method_not_allowed(request, **kwargs):
 
 
 def access_denied(request, exception, **kwargs):
-    response = render(request, 'status_page/access_denied.html', {'exception': exception})
-    response.status_code = 403
+    if isinstance(exception, Ratelimited):
+        response = render(request, 'status_page/rate_limited.html', {'exception': exception})
+        response.status_code = 429
+    else:
+        response = render(request, 'status_page/access_denied.html', {'exception': exception})
+        response.status_code = 403
     return response
 
 
