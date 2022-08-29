@@ -25,7 +25,6 @@
 ##############################################################################
 from rest_framework import serializers
 
-from base.models.polling_subscriber import PollingSubscriber
 from base.models.user_account_request import UserAccountRequest
 
 
@@ -38,4 +37,5 @@ class UserAccountRequestSerializer(serializers.ModelSerializer):
             'email_validated',
             'type',
             'status',
+            'subscriber'
         )
