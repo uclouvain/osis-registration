@@ -27,7 +27,6 @@ from datetime import date, timedelta
 from typing import Union
 
 import requests as requests
-from ratelimit.decorators import ratelimit
 from requests import Response
 from requests.exceptions import Timeout
 
@@ -39,7 +38,6 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-@ratelimit(key='ip', rate='100/d', block=True)
 def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
         response = mock_ldap_service()

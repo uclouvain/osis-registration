@@ -29,8 +29,10 @@ from captcha import views
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
+from ratelimit.decorators import ratelimit
 
 from base import settings
 from base.forms.registration import RegistrationForm
@@ -52,6 +54,7 @@ class UserAccountCreationRequest:
     password: str
 
 
+@method_decorator(ratelimit(key='ip', rate=settings.REQUESTS_RATE_LIMIT, block=True, method='POST'), name='post')
 class RegistrationFormView(FormView):
     name = 'registration'
     template_name = 'home.html'
