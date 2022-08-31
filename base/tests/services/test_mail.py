@@ -29,6 +29,7 @@ from unittest import mock
 from django.test import TestCase, RequestFactory
 
 from base.services.mail import send_validation_mail
+from base.tests.factories.user import UserFactory
 from base.tests.factories.user_account_request import UserAccountRequestFactory
 
 
@@ -37,6 +38,9 @@ class MailTestCase(TestCase):
     @mock.patch('base.messaging.send_message.send_messages')
     def test_should_send_validation_mail(self, mock_send_msg):
         request = RequestFactory().get('/')
+        request.user = UserFactory()
+        request.session = {}
+
         uacr_dataclass = SimpleNamespace(
             request=UserAccountRequestFactory(),
         )
