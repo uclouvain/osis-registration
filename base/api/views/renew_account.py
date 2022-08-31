@@ -47,6 +47,7 @@ class RenewAccount(generics.UpdateAPIView):
             account_information = get_ldap_user_account_information(email=request.data['email'])
             response = renew_ldap_user_account_validity(
                 account_id=account_information['id'],
+                email=request.data['email'],
                 validity_days=request.data.get('validity_days', settings.LDAP_ACCOUNT_VALIDITY_DAYS)
             )
             new_validity_date = datetime.strptime(response.json()['validite'], '%Y%m%d').strftime('%Y-%m-%d')
