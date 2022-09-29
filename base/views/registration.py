@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging as default_logging
 from dataclasses import dataclass
 
 from captcha import views
@@ -40,7 +41,8 @@ from base.models.enum import UserAccountRequestType
 from base.models.polling_subscriber import PollingSubscriber
 from base.models.user_account_request import UserAccountRequest
 from base.override_django_captcha import captcha_audio
-from base.services import mail
+from base.services import mail, logging
+from base.services.service_exceptions import CreateUserAccountErrorException
 from base.services.user_account_creation import create_ldap_user_account
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
@@ -55,6 +57,11 @@ class UserAccountCreationRequest:
 
 
 @method_decorator(ratelimit(key='ip', rate=settings.REQUESTS_RATE_LIMIT, block=True, method='POST'), name='post')
+@logging.log_event_decorator(
+    logging.EventType.VIEW,
+    "osis-registration",
+    "access registration form"
+)
 class RegistrationFormView(FormView):
     name = 'registration'
     template_name = 'home.html'
@@ -88,7 +95,14 @@ class RegistrationFormView(FormView):
             password=self.request.POST['password'],
         )
 
-        user_account_creation_response = create_ldap_user_account(user_account_creation_request)
+        self._log_user_creation_attempt(user_account_creation_request)
+
+        try:
+            user_account_creation_response = create_ldap_user_account(user_account_creation_request)
+        except CreateUserAccountErrorException as e:
+            self._log_user_creation_error(user_account_creation_request)
+            messages.add_message(self.request, message=e.msg, level=messages.ERROR)
+            return super().form_invalid(form)
 
         if 'status' in user_account_creation_response and user_account_creation_response['status'] == 'success':
             self.user_account_request.save()
@@ -102,6 +116,26 @@ class RegistrationFormView(FormView):
             return super().form_invalid(form)
 
         return super().form_valid(form)
+
+    def _log_user_creation_error(self, user_account_creation_request):
+        logging.log_event(
+            self.request,
+            event_type=logging.EventType.ERROR,
+            domain='osis-registration',
+            level=default_logging.ERROR,
+            description=f"a user account with the given email"
+                        f" <{user_account_creation_request.request.email}> already exists"
+        )
+
+    def _log_user_creation_attempt(self, user_account_creation_request):
+        logging.log_event(
+            request=self.request,
+            event_type=logging.EventType.CREATE,
+            domain="osis-registration",
+            description=f"create LDAP user account for "
+                        f"{user_account_creation_request.first_name}, {user_account_creation_request.last_name} "
+                        f"<{user_account_creation_request.request.email}>"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

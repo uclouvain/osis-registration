@@ -31,13 +31,18 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.services import logging
 from base.services.mock_service import mock_ldap_service
 from base.services.service_exceptions import RenewUserAccountValidityErrorException
 
 ERROR = "error"
 
-
-def renew_ldap_user_account_validity(account_id, validity_days) -> Union[Response, dict]:
+@logging.log_event_decorator(
+    logging.EventType.UPDATE,
+    "osis-registration",
+    "extends LDAP user account validity for {email} by {validity_days} days from today"
+)
+def renew_ldap_user_account_validity(account_id, email, validity_days) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
         response = mock_ldap_service()
     else:
