@@ -69,6 +69,9 @@ To enable 'audio captcha', please refer to the 'Espeak and Sox' section below.
 
 That's all folks !
 
+<!--
+
+
 ## API
 OSIS Registration provides subscribers with a RESTful API enabling apps to request user account creation and poll the requests results. The subscribers are registered as Django users and are identified by a token.
 
@@ -135,6 +138,9 @@ Update subscriber's last poll request to acknowledge poll has been sucessfully r
 }
 ```
 ------
+
+-->
+
 
 ## Espeak and Sox
 For the sake of accessibility, an audio captcha file is read by synthetic voice. 
