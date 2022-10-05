@@ -45,7 +45,8 @@ def activate_ldap_user_account(user_activation_request) -> Union[Response, dict]
                 headers={'Content-Type': 'application/json'},
                 json={
                     "id": str(user_activation_request.uuid),
-                    "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d')
+                    "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d'),
+                    "active": True,
                 },
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-19 14:21+0200\n"
+"POT-Creation-Date: 2022-08-30 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,16 +91,16 @@ msgstr ""
 msgid "Password should validate against the following rules:"
 msgstr ""
 
-msgid "Your password can’t be too similar to your other personal information."
+msgid "can’t be too similar to your other personal information"
 msgstr ""
 
-msgid "Your password must contain at least 8 characters."
+msgid "must contain at least 8 characters"
 msgstr ""
 
-msgid "Your password can’t be a commonly used password."
+msgid "can’t be a commonly used password"
 msgstr ""
 
-msgid "Your password can’t be entirely numeric."
+msgid "can’t be entirely numeric"
 msgstr ""
 
 msgid ""
@@ -204,6 +204,11 @@ msgid "Page not found"
 msgstr ""
 
 msgid "The page you are looking for was not found."
+msgstr ""
+
+msgid ""
+"Too many attempts have been made with this IP address. Please try again "
+"later."
 msgstr ""
 
 msgid "A server error occured."

@@ -1,5 +1,9 @@
 # osis-registration
-OSIS Registration is a django application to handle external account management. It provides a publish-subscribe mecanism to enable applications (subscribers) to request user account creation. OSIS Registration enable subscribers to poll an API endpoint in order for them to catch up on the last requested results.
+OSIS Registration is a django application to request external account. 
+
+<!-- It provides a publish-subscribe mecanism to enable applications (subscribers) to request user account creation. OSIS Registration enable subscribers to poll an API endpoint in order for them to catch up on the last requested results. -->
+
+Currently, it provides a form to request account creation and propagate the request to LDAP.
 
 ## Getting started
 Clone the repository
@@ -69,6 +73,9 @@ To enable 'audio captcha', please refer to the 'Espeak and Sox' section below.
 
 That's all folks !
 
+<!--
+
+
 ## API
 OSIS Registration provides subscribers with a RESTful API enabling apps to request user account creation and poll the requests results. The subscribers are registered as Django users and are identified by a token.
 
@@ -135,6 +142,9 @@ Update subscriber's last poll request to acknowledge poll has been sucessfully r
 }
 ```
 ------
+
+-->
+
 
 ## Espeak and Sox
 For the sake of accessibility, an audio captcha file is read by synthetic voice. 

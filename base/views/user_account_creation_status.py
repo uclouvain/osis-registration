@@ -28,8 +28,14 @@ from django.views.generic import TemplateView
 
 from base import settings
 from base.models.user_account_request import UserAccountRequest
+from base.services import logging
 
 
+@logging.log_event_decorator(
+    logging.EventType.VIEW,
+    "osis-registration",
+    "access user account status view"
+)
 class UserAccountCreationStatusView(TemplateView):
     name = 'user_account_status'
     template_name = 'registration_status/user_account_status.html'

@@ -25,12 +25,15 @@
 ##############################################################################
 
 
+import logging as default_logging
+
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 
 from base.models.enum import UserAccountRequestStatus
 from base.models.user_account_request import UserAccountRequest
+from base.services import logging
 from base.services.token_generator import mail_validation_token_generator
 from base.services.user_account_activation import activate_ldap_user_account
 from base.views.registration import UserAccountCreationRequest
@@ -50,12 +53,31 @@ class ValidateEmailView(View):
                 and not account_creation_request.email_validated \
                 and mail_validation_token_generator.check_token(account_creation_request, token) \
                 and account_creation_request.status == UserAccountRequestStatus.PENDING.value:
-            account_creation_request.email_validated = True
             response = activate_ldap_user_account(account_creation_request)
-            if response:
+            if 'status' in response and response['status'] == 'success':
+                account_creation_request.email_validated = True
                 account_creation_request.status = UserAccountRequestStatus.SUCCESS.value
+                self._log_account_activation_success(account_creation_request)
             else:
                 account_creation_request.status = UserAccountRequestStatus.ERROR.value
+                self._log_account_activation_error(account_creation_request)
             account_creation_request.save()
 
         return redirect(reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': uacr_uuid}))
+
+    def _log_account_activation_success(self, account_creation_request):
+        logging.log_event(
+            self.request,
+            event_type=logging.EventType.VIEW,
+            domain='osis-registration',
+            description=f"email validated and user account activated for <{account_creation_request.email}>"
+        )
+
+    def _log_account_activation_error(self, account_creation_request):
+        logging.log_event(
+            self.request,
+            event_type=logging.EventType.ERROR,
+            domain='osis-registration',
+            level=default_logging.ERROR,
+            description=f"error occured during user account activation for <{account_creation_request.email}>"
+        )

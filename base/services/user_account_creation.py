@@ -27,6 +27,7 @@ from datetime import date, timedelta
 from typing import Union
 
 import requests as requests
+from django.utils.translation import gettext_lazy as _
 from requests import Response
 from requests.exceptions import Timeout
 
@@ -61,6 +62,12 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if 'status' in response and response['status'] == ERROR:
+            if response['message'] == 'UNIQUE constraint failed: oi_users.email':
+                raise CreateUserAccountErrorException(
+                    detailed_msg=_('a user account with the given email <{}> already exists').format(
+                        user_creation_request.request.email
+                    )
+                )
             raise CreateUserAccountErrorException(detailed_msg=response['message'])
 
     return response
