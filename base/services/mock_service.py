@@ -29,10 +29,10 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def mock_ldap_service():
+def mock_ldap_service(**extra_data):
     random_success_status = random.choice([True, False])
     if random_success_status:
-        response = {"status": SUCCESS, "message": "Request has been successfully processed"}
+        response = {"status": SUCCESS, "message": "Mocked request successfully processed", **extra_data}
     else:
-        response = {"status": ERROR, "message": "An error occured"}
+        response = {"status": ERROR, "message": "Mocked error raised", **extra_data}
     return response

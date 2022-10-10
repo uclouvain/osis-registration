@@ -28,7 +28,10 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.utils.datetime_safe import datetime
 from rest_framework import generics
+from rest_framework.exceptions import ValidationError
 
+from base.api.serializers.user_account_request import UserAccountRequestSerializer
+from base.models.enum import UserAccountRequestType
 from base.models.polling_subscriber import PollingSubscriber
 from base.services.service_exceptions import RenewUserAccountValidityErrorException
 from base.services.user_account_information import get_ldap_user_account_information
@@ -40,14 +43,28 @@ class RenewAccount(generics.UpdateAPIView):
        Renew account request
     """
     name = 'renew-account'
+    serializer_class = UserAccountRequestSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         try:
-            PollingSubscriber.objects.get(app_name=self.request.user)
-            account_information = get_ldap_user_account_information(email=request.data['email'])
+            email = self.request.POST['email']
+
+            serializer = self.get_serializer(data={
+                "type": UserAccountRequestType.RENEWAL.name,
+                "email": email,
+                "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
+            })
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            account_information = get_ldap_user_account_information(email=email)
             response = renew_ldap_user_account_validity(
+                request=request,
                 account_id=account_information['id'],
-                email=request.data['email'],
+                email=email,
                 validity_days=request.data.get('validity_days', settings.LDAP_ACCOUNT_VALIDITY_DAYS)
             )
             new_validity_date = datetime.strptime(response.json()['validite'], '%Y%m%d').strftime('%Y-%m-%d')
@@ -55,7 +72,14 @@ class RenewAccount(generics.UpdateAPIView):
                 "status": "SUCCESS",
                 "msg": f"New validity set for {account_information['email']} until {new_validity_date}"
             })
+
+        except (KeyError, ValueError) as e:
+            raise ValidationError({"_": ["Missing data or wrong format: " + str(e)]})
         except PollingSubscriber.DoesNotExist:
             return JsonResponse(data={"status": "ERROR", "msg": "No matching subscriber"})
         except RenewUserAccountValidityErrorException as e:
             return JsonResponse(data={"status": "ERROR", "msg": e.msg})
+
+
+    def perform_update(self, serializer):
+        return serializer.save()

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,25 +31,27 @@ from requests.exceptions import Timeout
 
 from base import settings
 from base.services.mock_service import mock_ldap_service
-from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
+from base.services.service_exceptions import CreateUserAccountErrorException
 
+SUCCESS = "success"
 ERROR = "error"
 
 
-def get_ldap_user_account_information(email) -> Union[Response, dict]:
+def delete_ldap_user_account(user_deletion_request) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service(id="fake_id")
+        response = mock_ldap_service()
     else:
         try:
-            response = requests.get(
+            response = requests.post(
                 headers={'Content-Type': 'application/json'},
-                url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
+                json={"email": str(user_deletion_request.email)},
+                url=settings.LDAP_ACCOUNT_DELETION_URL,
                 timeout=60,
             ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if 'status' in response and response['status'] == ERROR:
-            raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
+            raise CreateUserAccountErrorException(detailed_msg=response['message'])
 
     return response

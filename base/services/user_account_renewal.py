@@ -42,7 +42,7 @@ ERROR = "error"
     "osis-registration",
     "extends LDAP user account validity for {email} by {validity_days} days from today"
 )
-def renew_ldap_user_account_validity(account_id, email, validity_days) -> Union[Response, dict]:
+def renew_ldap_user_account_validity(request, account_id, email, validity_days) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
         response = mock_ldap_service()
     else:
@@ -59,7 +59,7 @@ def renew_ldap_user_account_validity(account_id, email, validity_days) -> Union[
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-        if 'status' in response and response['status'] == ERROR:
-            raise RenewUserAccountValidityErrorException(detailed_msg=response['message'])
+    if 'status' in response and response['status'] == ERROR:
+        raise RenewUserAccountValidityErrorException(detailed_msg=response['message'])
 
     return response
