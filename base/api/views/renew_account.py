@@ -45,9 +45,6 @@ class RenewAccount(generics.UpdateAPIView):
     name = 'renew-account'
     serializer_class = UserAccountRequestSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
     def update(self, request, *args, **kwargs):
         try:
             email = self.request.POST['email']
@@ -79,7 +76,6 @@ class RenewAccount(generics.UpdateAPIView):
             return JsonResponse(data={"status": "ERROR", "msg": "No matching subscriber"})
         except RenewUserAccountValidityErrorException as e:
             return JsonResponse(data={"status": "ERROR", "msg": e.msg})
-
 
     def perform_update(self, serializer):
         return serializer.save()

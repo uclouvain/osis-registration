@@ -43,9 +43,6 @@ class DeleteAccount(generics.DestroyAPIView):
     name = 'delete-account'
     serializer_class = UserAccountRequestSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.delete(self, request, *args, **kwargs)
-
     def delete(self, request, *args, **kwargs):
         try:
             email = self.request.POST['email']
