@@ -24,9 +24,9 @@
 #
 ##############################################################################
 from django.http import HttpResponseServerError
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse
 from django.utils.datetime_safe import datetime
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
@@ -46,12 +46,11 @@ class CreateAccount(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         try:
-            first_name = self.request.POST['first_name']
-            last_name = self.request.POST['last_name']
-            birth_date = datetime.strptime(self.request.POST['birth_date'], '%Y-%m-%d')
-            email = self.request.POST['email']
-            password = self.request.POST['password']
-
+            first_name = request.data['first_name']
+            last_name = request.data['last_name']
+            birth_date = datetime.strptime(request.data['birth_date'], '%Y-%m-%d')
+            email = request.data['email']
+            password = request.data['password']
             serializer = self.get_serializer(data={
                 "type": UserAccountRequestType.CREATION.name,
                 "email": email,
@@ -75,7 +74,10 @@ class CreateAccount(generics.CreateAPIView):
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while creating account")
 
-        return JsonResponse(data={"status": "Success", "message": "Account {} created".format(user_account_request.email)})
+        return HttpResponse(
+            status=status.HTTP_201_CREATED,
+            content="Account {} created".format(user_account_request.email)
+        )
 
     def perform_create(self, serializer):
         return serializer.save()

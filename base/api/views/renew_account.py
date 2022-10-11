@@ -25,9 +25,9 @@
 ##############################################################################
 
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.datetime_safe import datetime
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
@@ -47,8 +47,7 @@ class RenewAccount(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         try:
-            email = self.request.POST['email']
-
+            email = request.data['email']
             serializer = self.get_serializer(data={
                 "type": UserAccountRequestType.RENEWAL.name,
                 "email": email,
@@ -64,11 +63,11 @@ class RenewAccount(generics.UpdateAPIView):
                 email=email,
                 validity_days=request.data.get('validity_days', settings.LDAP_ACCOUNT_VALIDITY_DAYS)
             )
-            new_validity_date = datetime.strptime(response.json()['validite'], '%Y%m%d').strftime('%Y-%m-%d')
-            return JsonResponse(data={
-                "status": "SUCCESS",
-                "msg": f"New validity set for {account_information['email']} until {new_validity_date}"
-            })
+            new_validity_date = datetime.strptime(response['validite'], '%Y%m%d').strftime('%Y-%m-%d')
+            return HttpResponse(
+                status=status.HTTP_200_OK,
+                content=f"New validity set for {account_information['email']} until {new_validity_date}"
+            )
 
         except (KeyError, ValueError) as e:
             raise ValidationError({"_": ["Missing data or wrong format: " + str(e)]})

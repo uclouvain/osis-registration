@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.http import HttpResponseServerError
-from django.http.response import JsonResponse
-from rest_framework import generics
+from django.http.response import HttpResponse
+from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
@@ -45,7 +45,7 @@ class DeleteAccount(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            email = self.request.POST['email']
+            email = request.data['email']
 
             serializer = self.get_serializer(data={
                 "type": UserAccountRequestType.DELETION.name,
@@ -63,7 +63,10 @@ class DeleteAccount(generics.DestroyAPIView):
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while creating account")
 
-        return JsonResponse(data={"status": "Success", "message": "Account {} deleted".format(user_account_request.email)})
+        return HttpResponse(
+            status=status.HTTP_200_OK,
+            content="Account {} deleted".format(user_account_request.email)
+        )
 
     def perform_destroy(self, serializer):
         return serializer.save()
