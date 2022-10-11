@@ -59,7 +59,7 @@ def renew_ldap_user_account_validity(request, account_id, email, validity_days) 
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-    if 'status' in response and response['status'] == ERROR:
+    if response.get('status') == ERROR:
         raise RenewUserAccountValidityErrorException(detailed_msg=response['message'])
 
     return response

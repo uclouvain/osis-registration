@@ -57,7 +57,7 @@ class CreateAccount(generics.CreateAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            user_account_request = self.perform_create(serializer)
+            user_account_request = serializer.save()
 
             user_account_creation_request = UserAccountCreationRequest(
                 request=user_account_request,
@@ -70,7 +70,9 @@ class CreateAccount(generics.CreateAPIView):
             create_ldap_user_account(user_account_creation_request)
 
         except (KeyError, ValueError) as e:
-            raise ValidationError({"_": ["Missing data or wrong format: " + str(e)]})
+            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+        except PollingSubscriber.DoesNotExist:
+            return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while creating account")
 
@@ -78,6 +80,3 @@ class CreateAccount(generics.CreateAPIView):
             status=status.HTTP_201_CREATED,
             content="Account {} created".format(user_account_request.email)
         )
-
-    def perform_create(self, serializer):
-        return serializer.save()

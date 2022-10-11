@@ -53,13 +53,15 @@ class DeleteAccount(generics.DestroyAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            user_account_request = self.perform_destroy(serializer)
+            user_account_request = serializer.save()
 
             get_ldap_user_account_information(email=email)
             delete_ldap_user_account(user_account_request)
 
         except (KeyError, ValueError) as e:
-            raise ValidationError({"_": ["Missing data or wrong format: " + str(e)]})
+            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+        except PollingSubscriber.DoesNotExist:
+            return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while creating account")
 
@@ -67,6 +69,3 @@ class DeleteAccount(generics.DestroyAPIView):
             status=status.HTTP_200_OK,
             content="Account {} deleted".format(user_account_request.email)
         )
-
-    def perform_destroy(self, serializer):
-        return serializer.save()

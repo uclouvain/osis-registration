@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 ##############################################################################
 
 from django.conf import settings
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.utils.datetime_safe import datetime
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
@@ -54,7 +54,7 @@ class RenewAccount(generics.UpdateAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
+            serializer.save()
 
             account_information = get_ldap_user_account_information(email=email)
             response = renew_ldap_user_account_validity(
@@ -70,11 +70,9 @@ class RenewAccount(generics.UpdateAPIView):
             )
 
         except (KeyError, ValueError) as e:
-            raise ValidationError({"_": ["Missing data or wrong format: " + str(e)]})
+            raise ValidationError(f"Missing data or wrong format: {str(e)}")
         except PollingSubscriber.DoesNotExist:
-            return JsonResponse(data={"status": "ERROR", "msg": "No matching subscriber"})
+            return HttpResponseServerError("No matching subscriber")
         except RenewUserAccountValidityErrorException as e:
-            return JsonResponse(data={"status": "ERROR", "msg": e.msg})
+            return HttpResponseServerError(e.msg)
 
-    def perform_update(self, serializer):
-        return serializer.save()
