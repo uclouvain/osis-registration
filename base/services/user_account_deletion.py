@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,16 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
+from typing import Union
 
-SUCCESS = "success"
+import requests as requests
+from requests import Response
+from requests.exceptions import Timeout
+
+from base import settings
+from base.services.mock_service import mock_ldap_service
+from base.services.service_exceptions import CreateUserAccountErrorException
+
 ERROR = "error"
 
 
-def mock_ldap_service(**extra_data):
-    random_success_status = random.choice([True, False])
-    if random_success_status:
-        response = {"status": SUCCESS, "message": "Mocked request successfully processed", **extra_data}
+def delete_ldap_user_account(user_deletion_request) -> Union[Response, dict]:
+    if settings.MOCK_LDAP_CALLS:
+        response = mock_ldap_service()
     else:
-        response = {"status": ERROR, "message": "Mocked error raised", **extra_data}
+        try:
+            response = requests.post(
+                headers={'Content-Type': 'application/json'},
+                json={"email": str(user_deletion_request.email)},
+                url=settings.LDAP_ACCOUNT_DELETION_URL,
+                timeout=60,
+            ).json()
+        except Timeout:
+            response = {"status": ERROR, "message": "Request timed out"}
+
+        if response.get('status') == ERROR:
+            raise CreateUserAccountErrorException(detailed_msg=response['message'])
+
     return response

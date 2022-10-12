@@ -38,7 +38,7 @@ ERROR = "error"
 
 def get_ldap_user_account_information(email) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service()
+        response = mock_ldap_service(id="fake_id", email=email)
     else:
         try:
             response = requests.get(
@@ -49,7 +49,7 @@ def get_ldap_user_account_information(email) -> Union[Response, dict]:
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-        if 'status' in response and response['status'] == ERROR:
+        if response.get('status') == ERROR:
             raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
 
     return response

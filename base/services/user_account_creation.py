@@ -61,7 +61,7 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-        if 'status' in response and response['status'] == ERROR:
+        if response.get('status') == ERROR:
             if response['message'] == 'UNIQUE constraint failed: oi_users.email':
                 raise CreateUserAccountErrorException(
                     detailed_msg=_('a user account with the given email <{}> already exists').format(
