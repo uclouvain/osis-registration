@@ -3,8 +3,8 @@
   "model": "base.messagetemplate",
   "fields": {
     "reference": "osis_registration_mail_validation_html",
-    "subject": "OSIS-REGISTRATION - Validation email",
-    "template": "<p>Validation email via ce lien: <a href='{{link}}'>{{link}}</a></p>",
+    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
+    "template": "<p>Validez votre compte utilisateur en suivant ce lien: <a href='{{link}}'>{{link}}</a></p><p>Please validate your user account following this link: <a href='{{link}}'>{{link}}</a></p>",
     "format": "HTML",
     "language": "fr-be"
   }
@@ -13,8 +13,8 @@
   "model": "base.messagetemplate",
   "fields": {
     "reference": "osis_registration_mail_validation_txt",
-    "subject": "OSIS-REGISTRATION - Validation email",
-    "template": "Validation email via ce lien: {{link}}",
+    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
+    "template": "Validez votre compte utilisateur en suivant ce lien: {{link}}\n Please validate your user account following this link: {{link}}",
     "format": "PLAIN",
     "language": "fr-be"
   }
