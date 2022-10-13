@@ -38,14 +38,14 @@ from base.services.user_account_information import get_ldap_user_account_informa
 from base.services.user_account_renewal import renew_ldap_user_account_validity
 
 
-class RenewAccount(generics.UpdateAPIView):
+class RenewAccount(generics.CreateAPIView):
     """
        Renew account request
     """
     name = 'renew-account'
     serializer_class = UserAccountRequestSerializer
 
-    def update(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             email = request.data['email']
             serializer = self.get_serializer(data={
