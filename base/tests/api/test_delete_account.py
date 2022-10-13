@@ -47,7 +47,7 @@ class DeleteAccountTestCase(APITestCase):
         }
 
     def test_should_unauthorize_no_subscriber(self):
-        response = self.client.delete(self.url, data=self.delete_data)
+        response = self.client.post(self.url, data=self.delete_data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_should_not_allow_get(self):
@@ -55,15 +55,10 @@ class DeleteAccountTestCase(APITestCase):
         response = self.client.get(self.url, data=self.delete_data)
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_should_not_allow_post(self):
-        self.client.force_authenticate(user=self.subscriber.app_name)
-        response = self.client.post(self.url, data=self.delete_data)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_should_deny_deletion_missing_data(self):
         self.client.force_authenticate(user=self.subscriber.app_name)
         self.delete_data.pop('email')
-        response = self.client.delete(self.url, data=self.delete_data)
+        response = self.client.post(self.url, data=self.delete_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Missing data", str(response.content))
         self.assertIn("email", str(response.content))
@@ -71,14 +66,14 @@ class DeleteAccountTestCase(APITestCase):
     def test_should_deny_deletion_wrong_email_format(self):
         self.client.force_authenticate(user=self.subscriber.app_name)
         self.delete_data['email'] = "email"
-        response = self.client.delete(self.url, data=self.delete_data)
+        response = self.client.post(self.url, data=self.delete_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("email", str(response.content))
 
     @mock.patch('base.api.views.delete_account.delete_ldap_user_account')
     def test_should_create_deletion_user_account_request_and_call_deletion_service(self, mock_delete):
         self.client.force_authenticate(user=self.subscriber.app_name)
-        response = self.client.delete(self.url, data=self.delete_data)
+        response = self.client.post(self.url, data=self.delete_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         user_account_request = UserAccountRequest.objects.first()

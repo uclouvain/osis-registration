@@ -36,14 +36,14 @@ from base.services.user_account_deletion import delete_ldap_user_account
 from base.services.user_account_information import get_ldap_user_account_information
 
 
-class DeleteAccount(generics.DestroyAPIView):
+class DeleteAccount(generics.CreateAPIView):
     """
        Delete account request
     """
     name = 'delete-account'
     serializer_class = UserAccountRequestSerializer
 
-    def delete(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         try:
             email = request.data['email']
 
@@ -63,7 +63,7 @@ class DeleteAccount(generics.DestroyAPIView):
         except PollingSubscriber.DoesNotExist:
             return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:
-            return HttpResponseServerError("An error occured while creating account")
+            return HttpResponseServerError("An error occured while deleting account")
 
         return HttpResponse(
             status=status.HTTP_200_OK,
