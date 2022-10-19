@@ -73,9 +73,6 @@ To enable 'audio captcha', please refer to the 'Espeak and Sox' section below.
 
 That's all folks !
 
-<!--
-
-
 ## API
 OSIS Registration provides subscribers with a RESTful API enabling apps to request user account creation and poll the requests results. The subscribers are registered as Django users and are identified by a token.
 
@@ -97,54 +94,45 @@ Create new user account creation request
 
 ```json
 {
-  "uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "person_uuid": "abcd-efgh-ijkl-mnop-1234-5678",
   "first_name": "John",
   "last_name": "Doe",
   "birth_date": "1989-01-01",
-  "email": "john.doe@mail.xyz"
+  "email": "john.doe@mail.xyz",
+  "password": "secret"
 }
 ```
 -----
 
-#### Poll
+#### Delete
 
-`GET /poll/`
+`POST /delete_account/`
 
-List last updated request results for a given subscriber
-
-> Example response 200
-
-```json
-{
-  "uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "person_uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "email": "john.doe@mail.xyz",
-  "request_type": "CREATION",
-  "status": "SUCCESS",
-  "app": "internship",
-  "updated_at": "2021-08-31T09:51:14.622461"
-}
-```
--------
-
-#### Acknowledge
-
-`PUT /acknowledge/`
-
-Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
+Create new user account deletion request
 
 > Body parameter
 
 ```json
 {
-  "last_poll_requested": "2021-08-31T09:51:14.622461"
+  "email": "john.doe@mail.xyz",
 }
 ```
-------
+-----
 
--->
+#### Renewal
 
+`POST /renew_account/`
+
+Create new user account renewal request
+
+> Body parameter
+
+```json
+{
+  "email": "john.doe@mail.xyz",
+  "validity_days": 365
+}
+```
+-----
 
 ## Espeak and Sox
 For the sake of accessibility, an audio captcha file is read by synthetic voice. 
