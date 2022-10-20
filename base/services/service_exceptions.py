@@ -24,8 +24,11 @@
 #
 ##############################################################################
 
+from django.utils.translation import gettext as _
+
+
 class OsisRegistrationServiceException(Exception):
-    msg = "An error occured while using the service: {}"
+    msg = _("An error occured while using the service: {}")
 
     def __init__(self, detailed_msg):
         self.msg = self.msg.format(detailed_msg)
@@ -33,12 +36,12 @@ class OsisRegistrationServiceException(Exception):
 
 
 class RetrieveUserAccountInformationErrorException(OsisRegistrationServiceException):
-    msg = "An error occured while retrieving user account information: {}"
+    msg = _("An error occured while retrieving user account information: {}")
 
 
 class CreateUserAccountErrorException(OsisRegistrationServiceException):
-    msg = "An error occured while creating user account: {}"
+    msg = _("An error occured while creating user account: {}")
 
 
 class RenewUserAccountValidityErrorException(OsisRegistrationServiceException):
-    msg = "An error occured while renewing user account validity: {}"
+    msg = _("An error occured while renewing user account validity: {}")
