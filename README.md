@@ -80,7 +80,7 @@ An authorization header with the registered app token must be provided with the 
 
 > Authorization header
 ```json
-{"Authorization": "Token cf4e903f8cc6cb81ae753d137bfa77cdfe1b8b37"}
+{"Authorization": "Token <TOKEN>"}
 ```
 ### Endpoints
 
