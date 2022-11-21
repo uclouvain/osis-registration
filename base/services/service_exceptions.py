@@ -24,14 +24,16 @@
 #
 ##############################################################################
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 class OsisRegistrationServiceException(Exception):
     msg = _("An error occured while using the service: {}")
+    error_msg = None
 
-    def __init__(self, detailed_msg):
-        self.msg = self.msg.format(detailed_msg)
+    def __init__(self, error_msg):
+        self.error_msg = error_msg
+        self.msg = self.msg.format(self.error_msg)
         super().__init__(self.msg)
 
 

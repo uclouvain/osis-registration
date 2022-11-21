@@ -51,6 +51,6 @@ def delete_ldap_user_account(user_deletion_request) -> Union[Response, dict]:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            raise CreateUserAccountErrorException(detailed_msg=response['message'])
+            raise CreateUserAccountErrorException(error_msg=response['message'])
 
     return response

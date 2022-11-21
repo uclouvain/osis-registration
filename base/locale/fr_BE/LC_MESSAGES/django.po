@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-20 13:41+0200\n"
+"POT-Creation-Date: 2022-11-21 15:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,16 +67,22 @@ msgid "An error occured while using the service: {}"
 msgstr "Une erreur est survenue lors de l'utilisation du service: {}"
 
 msgid "An error occured while retrieving user account information: {}"
-msgstr "Une erreur est survenue en récupérant les informations du compte utilisateur: {}"
+msgstr ""
+"Une erreur est survenue en récupérant les informations du compte "
+"utilisateur: {}"
 
 msgid "An error occured while creating user account: {}"
 msgstr "Une erreur est survenue pendant la création du compte utilisateur: {}"
 
 msgid "An error occured while renewing user account validity: {}"
-msgstr "Une erreur est survenue lors du renouvellement de validité du compte: {}"
+msgstr ""
+"Une erreur est survenue lors du renouvellement de validité du compte: {}"
 
 msgid "a user account with the given email <{}> already exists"
 msgstr "un compte utilisateur avec l'adresse <{}> existe déjà"
+
+msgid "Unknown error"
+msgstr "Erreur inconnue"
 
 msgid "French"
 msgstr "Français"

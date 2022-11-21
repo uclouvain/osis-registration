@@ -102,6 +102,7 @@ class RegistrationFormView(FormView):
         except CreateUserAccountErrorException as e:
             self._log_user_creation_error(user_account_creation_request)
             messages.add_message(self.request, message=e.msg, level=messages.ERROR)
+            form.add_error('email', e.error_msg)
             return super().form_invalid(form)
 
         if 'status' in user_account_creation_response and user_account_creation_response['status'] == 'success':
@@ -138,7 +139,7 @@ class RegistrationFormView(FormView):
         )
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+        context = super().get_context_data(**kwargs)
         context.update({'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL})
         return context
 
@@ -148,5 +149,3 @@ class RegistrationFormView(FormView):
 
 # replace captcha audio with custom captcha audio generator using espeak
 views.captcha_audio = captcha_audio
-
-

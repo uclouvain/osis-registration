@@ -62,12 +62,17 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            if response['message'] == 'UNIQUE constraint failed: oi_users.email':
+            if _is_ldap_constraint_raised(response):
                 raise CreateUserAccountErrorException(
-                    detailed_msg=_('a user account with the given email <{}> already exists').format(
+                    error_msg=_('a user account with the given email <{}> already exists').format(
                         user_creation_request.request.email
                     )
                 )
-            raise CreateUserAccountErrorException(detailed_msg=response['message'])
+            raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
 
     return response
+
+
+def _is_ldap_constraint_raised(response):
+    return 'LDAPConstraintViolationResult' in response['Message'] or \
+           response['message'] == 'UNIQUE constraint failed: oi_users.email'

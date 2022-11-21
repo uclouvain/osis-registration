@@ -50,6 +50,6 @@ def get_ldap_user_account_information(email) -> Union[Response, dict]:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            raise RetrieveUserAccountInformationErrorException(detailed_msg=response['message'])
+            raise RetrieveUserAccountInformationErrorException(error_msg=response['message'])
 
     return response

@@ -4,7 +4,7 @@
   "fields": {
     "reference": "osis_registration_mail_validation_html",
     "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
-    "template": "<p>Validez votre compte utilisateur en suivant ce lien: <a href='{{link}}'>{{link}}</a></p><p>Please validate your user account following this link: <a href='{{link}}'>{{link}}</a></p>",
+    "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe.</p>\n\n<p>Veuillez valider votre email en suivant ce lien:<br />\n<a href=\"{{link}}\">{{link}}</a></p>\n",
     "format": "HTML",
     "language": "fr-be"
   }
@@ -14,7 +14,7 @@
   "fields": {
     "reference": "osis_registration_mail_validation_txt",
     "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
-    "template": "Validez votre compte utilisateur en suivant ce lien: {{link}}\n Please validate your user account following this link: {{link}}",
+    "template": "Ceci est un email automatique envoyé par le service de création de compte externe. Veuillez valider votre email en suivant ce lien: {{link}}",
     "format": "PLAIN",
     "language": "fr-be"
   }
