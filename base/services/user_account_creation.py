@@ -74,5 +74,5 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
 
 
 def _is_ldap_constraint_raised(response):
-    return 'LDAPConstraintViolationResult' in response['Message'] or \
-           response['message'] == 'UNIQUE constraint failed: oi_users.email'
+    return 'Message' in response.keys() and 'LDAPConstraintViolationResult' in response['Message'] or \
+           'message' in response.keys() and response['message'] == 'UNIQUE constraint failed: oi_users.email'
