@@ -32,6 +32,7 @@ from django.contrib.auth.password_validation import MinimumLengthValidator, User
 from django.forms import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
+from base import settings
 from base.admin import User
 
 CURRENT_YEAR = datetime.date.today().year
@@ -82,9 +83,19 @@ class RegistrationForm(forms.Form):
         user_info = User(
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
-            email=self.cleaned_data['email'],
+            email=self.data['email'],
         )
 
         UserAttributeSimilarityValidator().validate(password=password, user=user_info)
 
         return password
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        domain = email.split('@')[1]
+        rejected_domains = settings.REJECTED_EMAIL_DOMAINS
+        if domain in rejected_domains:
+            raise forms.ValidationError(message=_(f"Domain {domain} is not an acceptable domain"))
+
+        return email
