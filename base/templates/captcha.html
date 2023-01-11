@@ -3,16 +3,21 @@
     {% if audio %}
         <audio id="captcha-audio" src="{{ audio }}" type="audio/wav"></audio>
     {% endif %}
-        <img src="{{ image }}" alt="captcha" class="captcha" />
 {% endspaceless %}
-<a style="width:306px; max-width: 100%;" title="{% trans "Play CAPTCHA as audio file" %}" class="btn btn-default" onclick="document.getElementById('captcha-audio').play()">
-    <i class="glyphicon glyphicon-volume-up"></i>
-    {% trans "Play CAPTCHA as audio file" %}
-</a>
-<br/>
-<a style="width:306px; margin-bottom: 20px; max-width:100%;" class='btn btn-default js-captcha-refresh'>
-    <i class="glyphicon glyphicon-refresh"></i>
-    {% trans "Refresh CAPTCHA" %}
-</a>
+<div class="row" style="margin-bottom: 10px;">
+    <div class="col-md-6">
+        <img src="{{ image }}" alt="captcha" class="captcha" />
+    </div>
+    <div class="col-md-6">
+        <a style="width: 100%;" title="{% trans "Play CAPTCHA as audio file" %}" class="btn btn-default" onclick="document.getElementById('captcha-audio').play()">
+            <i class="glyphicon glyphicon-volume-up"></i>
+            {% trans "Play CAPTCHA as audio file" %}
+        </a>
+        <a style="width:100%;" class='btn btn-default js-captcha-refresh'>
+            <i class="glyphicon glyphicon-refresh"></i>
+            {% trans "Refresh CAPTCHA" %}
+        </a>
+    </div>
+</div>
 
 {% include "django/forms/widgets/multiwidget.html" %}

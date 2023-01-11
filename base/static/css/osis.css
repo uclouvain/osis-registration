@@ -725,9 +725,6 @@ label.required:after {
 }
 
 .panel-top-alert{
-    margin-bottom: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
     display: grid;
     grid-template-columns: 40px auto auto;
 }
@@ -894,4 +891,22 @@ label.required:after {
 
 #password-rules.show {
     display: block;
+}
+
+.animate-minimize{
+    animation: minimize 0.2s forwards;
+}
+
+#col-create-account{
+    transition: all 0.2s linear;
+}
+
+#col-log-in {
+    overflow: hidden;
+}
+
+
+@keyframes minimize {
+  from { width: 50%; opacity: 1; visibility: visible;}
+  to { width: 0; height: 0; opacity: 0; visibility: hidden;}
 }

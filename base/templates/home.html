@@ -26,31 +26,82 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block breadcrumb %}
-{% endblock %}
-
 {% block content %}
     <div class="page-header">
-        <h2>{% trans 'UCLouvain user account creation request' %}</h2>
+        <h2>OSIS - Open Student Information System</h2>
     </div>
 
     {% block messages %}
         {% include "blocks/template_messages.html" %}
     {% endblock %}
 
+    <div class="row">
 
-    <div class="alert alert-warning panel-top-alert" role="alert">
-        <div class="icon"><i class="glyphicon glyphicon-warning-sign"></i></div>
-        <div class="message">
-            {% trans 'This form enables you to apply for a UCLouvain temporary account. Along with the account, you will receive credentials that may be used to access applications and prepare an admission file. The scope of these credentials is limited to the following applications: ...' %}
+    <div class="col-md-12">
+        <div class="alert alert-info panel-top-alert" role="alert">
+            <div class="icon"><i class="glyphicon glyphicon-info-sign"></i></div>
+            <div class="message">
+
+                <p>
+                {% blocktrans %}
+                In order to use the system and access the online enrolment form to apply for a program at UCLouvain,
+                you have to be authenticated.
+                {% endblocktrans %}
+                </p>
+
+                <p>
+                {% blocktrans %}
+                Either, you have already an account and in this case you may already log into our system,
+                or you do not have an account yet and have to create one filling a registration form.
+                {% endblocktrans %}
+                </p>
+
+            </div>
         </div>
     </div>
 
-    <div class="panel panel-default" style="border-radius: 0;">
-        <div class="panel-body">
-            <form id="form" method="post">
-                {% csrf_token %}
+    {% if not form_visible %}
+    <div class="col-md-6" id="col-log-in">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>
+                    {% blocktrans %}
+                        <span>You <b style="text-decoration: underline;">already have</b> an account</span>
+                    {% endblocktrans %}
+                </h4>
+            </div>
+            <div class="panel-body">
+                <p>{% trans 'Please log in using your existing credentials' %}</p>
+                <a href="{{ log_in_url }}" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
+                    {% trans 'Log in' %}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
+    <div class="{% if form_visible %} col-md-12 {% else %} col-md-6 {% endif %}" id="col-create-account">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
+                {% blocktrans %}
+                <span>You <b style="text-decoration: underline;">do not have</b> an account yet</span>
+                {% endblocktrans %}
+            </h4>
+        </div>
+        <div class="panel-body">
+            <p>{% trans 'Please  register first in order to request a new account' %}</p>
+            {% if not form_visible %}
+                <button class="btn btn-default" id="btn-register" data-toggle="collapse" data-target="#form">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    {% trans 'Register' %}
+                </button>
+            {% endif %}
+            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={{ request.GET.source }}">
+                {% csrf_token %}
+                <br/>
                 <div class="row">
                     <div class="col-md-6 col-divider-left">
                         <div class="title bg-info text-info border-info">
@@ -81,46 +132,54 @@
                 </div>
                 <hr/>
 
-                <div class="form-group">
-                    <label class="required">Captcha</label>
-                    <div class="alert alert-info">
-                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
-                        {% trans 'To determine whether you are a human visitor and to prevent automated spam submissions, please solve the following CAPTCHA.' %}
-                    </div>
-                    {% bootstrap_field form.captcha show_label=False placeholder=_("Write down the sequence of characters visible in the image above") %}
-                </div>
-
-                <hr/>
-
-                <div class="form-group">
-                    <label class="required">{% trans "Data processing agreement" %}</label>
-                    <div class="alert alert-info">
-                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
-                        {% trans "In order to continue, you have to acknowledge and accept" %}
-                        <a target="_blank" href="{{ data_protection_policy_url }}">{% trans "the UCLouvain policy on personal data protection" %}</a>
-                    </div>
-                    <div class="col-xs-9 col-md-3 input-group" style="text-align: left;">
-                        <label for="accept" class="col-xs-6">
-                            <input type="radio" id="accept" name="agreement" value="accept" required
-                                   {% if request.POST.agreement == "accept" %} checked {% endif %}
-                            >
-                            {% trans 'Accept' %}
-                        </label>
-                        <label for="reject" class="col-xs-6">
-                            <input type="radio" id="reject" name="agreement" value="reject" required
-                                   {% if request.POST.agreement == "reject" %} checked {% endif %}
-                            >
-                            {% trans 'Reject' %}
-                        </label>
+                <div class="row">
+                    <div class="col-md-6 col-divider-left">
+                    <div class="form-group">
+                        <label class="required">Captcha</label>
+                        <div class="alert alert-info">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                            {% trans 'To determine whether you are a human visitor and to prevent automated spam submissions, please solve the following CAPTCHA.' %}
+                        </div>
+                        {% bootstrap_field form.captcha show_label=False placeholder=_("Write down the sequence of characters visible in the image above") %}
                     </div>
                 </div>
 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="required">{% trans "Data processing agreement" %}</label>
+                        <div class="alert alert-info">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                            {% trans "In order to continue, you have to acknowledge and accept" %}
+                            <a target="_blank" href="{{ data_protection_policy_url }}">{% trans "the UCLouvain policy on personal data protection" %}</a>
+                        </div>
+                        <div class="col-xs-9 col-md-6 input-group" style="text-align: left;">
+                            <label for="accept" class="col-xs-6">
+                                <input type="radio" id="accept" name="agreement" value="accept" required
+                                       {% if request.POST.agreement == "accept" %} checked {% endif %}
+                                >
+                                {% trans 'Accept' %}
+                            </label>
+                            <label for="reject" class="col-xs-6">
+                                <input type="radio" id="reject" name="agreement" value="reject" required
+                                       {% if request.POST.agreement == "reject" %} checked {% endif %}
+                                >
+                                {% trans 'Reject' %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
                 <hr/>
-
-                <input class="btn btn-primary" id="btn-submit" type="submit">
-
+                 <div class="row">
+                     <div class="col-md-12">
+                         <input class="btn btn-primary" id="btn-submit" type="submit">
+                     </div>
+                </div>
             </form>
         </div>
+    </div>
+
     </div>
 {% endblock %}
 
@@ -182,6 +241,13 @@
         document.querySelector(".col-divider-left + div").classList.add('col-divider-right');
         document.querySelector(".col-divider-left").classList.remove('col-divider-left');
         document.querySelector("#password-rules").classList.add('show');
+    });
+
+    document.querySelector("#btn-register").addEventListener('click', (e) => {
+        document.querySelector("#col-log-in").classList.add('animate-minimize');
+        document.querySelector("#col-create-account").classList.remove('col-md-6');
+        document.querySelector("#col-create-account").classList.add('col-md-12');
+        document.querySelector("#btn-register").classList.add('hidden');
     });
 
 </script>
