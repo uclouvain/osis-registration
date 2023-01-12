@@ -150,7 +150,7 @@ msgid ""
 msgstr ""
 "\n"
 "                <span>Vous <b style=\"text-decoration: underline;\">n'avez "
-"pas encore </b>de compte</span>\n"
+"pas encore</b> de compte</span>\n"
 "                "
 
 msgid "Please  register first in order to request a new account"
