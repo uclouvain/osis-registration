@@ -196,6 +196,8 @@ PASSWORD_RESET_TIMEOUT = 86400
 
 REQUESTS_RATE_LIMIT = os.environ.get('REQUESTS_RATE_LIMIT', '10/h')
 
+REJECTED_EMAIL_DOMAINS = os.environ.get('REJECTED_EMAIL_DOMAINS', "uclouvain.be").split()
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -68,6 +68,11 @@ class RegistrationFormView(FormView):
     form_class = RegistrationForm
 
     user_account_request = None
+    subscriber = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.subscriber = self._get_subscriber()
+        return super(RegistrationFormView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         birth_date = "{}-{}-{}".format(
@@ -76,15 +81,10 @@ class RegistrationFormView(FormView):
             self.request.POST['birth_date_day']
         )
 
-        try:
-            subscriber = PollingSubscriber.objects.get(app_name__username=self.request.GET.get('source'))
-        except PollingSubscriber.DoesNotExist:
-            subscriber = None
-
         self.user_account_request = UserAccountRequest(
             email=self.request.POST['email'],
             type=UserAccountRequestType.CREATION.value,
-            subscriber=subscriber
+            subscriber=self.subscriber
         )
 
         user_account_creation_request = UserAccountCreationRequest(
@@ -118,6 +118,13 @@ class RegistrationFormView(FormView):
 
         return super().form_valid(form)
 
+    def _get_subscriber(self):
+        try:
+            subscriber = PollingSubscriber.objects.get(app_name__username=self.request.GET.get('source'))
+        except PollingSubscriber.DoesNotExist:
+            subscriber = None
+        return subscriber
+
     def _log_user_creation_error(self, user_account_creation_request):
         logging.log_event(
             self.request,
@@ -140,7 +147,11 @@ class RegistrationFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL})
+        context.update({
+            'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL,
+            'log_in_url': self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL,
+            'form_visible': bool(self.request.GET.get('form_visible', False)),
+        })
         return context
 
     def get_success_url(self):
