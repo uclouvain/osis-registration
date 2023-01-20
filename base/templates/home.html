@@ -154,7 +154,7 @@
                             {% trans "In order to continue, you have to acknowledge and accept" %}
                             <a target="_blank" href="{{ data_protection_policy_url }}">{% trans "the UCLouvain policy on personal data protection" %}</a>
                         </div>
-                        <div class="col-xs-9 col-md-6 input-group" style="text-align: left;">
+                        <div class="col-xs-9 col-md-8 col-lg-6 input-group" style="text-align: left;">
                             <label for="accept" class="col-xs-6">
                                 <input type="radio" id="accept" name="agreement" value="accept" required
                                        {% if request.POST.agreement == "accept" %} checked {% endif %}
