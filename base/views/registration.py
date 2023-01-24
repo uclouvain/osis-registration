@@ -35,6 +35,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 from ratelimit.decorators import ratelimit
+from requests.exceptions import MissingSchema
 
 from base import settings
 from base.forms.registration import RegistrationForm
@@ -86,7 +87,7 @@ class RegistrationFormView(FormView):
         try:
             if not self.password_valid(form):
                 return super().form_invalid(form)
-        except PasswordCheckServiceBadRequestException as e:
+        except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
             self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
 
         self.user_account_request = UserAccountRequest(
