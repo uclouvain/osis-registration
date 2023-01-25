@@ -182,7 +182,8 @@ class RegistrationFormView(FormView):
         }).json()
 
         if not password_valid_check['result']:
-            if password_valid_check['error code'] == PasswordCheckErrorEnum.MISSING_PARAMETERS.value['code']:
+            missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
+            if password_valid_check['error code'] == missing_param_error_code:
                 raise PasswordCheckServiceBadRequestException
 
             error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
