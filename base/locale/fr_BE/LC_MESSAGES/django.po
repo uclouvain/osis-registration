@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 11:42+0100\n"
+"POT-Creation-Date: 2023-01-23 17:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,8 +136,7 @@ msgstr ""
 "                    "
 
 msgid "Please log in using your existing login credentials"
-msgstr ""
-"Veuillez vous connecter à l'aide de vos identifiants"
+msgstr "Veuillez vous connecter à l'aide de vos identifiants"
 
 msgid "Log in"
 msgstr "Se connecter"
@@ -171,14 +170,16 @@ msgstr "Le mot de passe doit respecter les règles suivantes:"
 msgid "can’t be too similar to your other personal information"
 msgstr "doit se différencier de vos autres informations personnelles"
 
-msgid "must contain at least 8 characters"
-msgstr "doit contenir au moins 8 caractères"
+msgid "must contain at least 12 characters"
+msgstr "doit contenir au moins 12 caractères"
 
 msgid "can’t be a commonly used password"
 msgstr "ne peut pas être un mot de passe couramment utilisé"
 
-msgid "can’t be entirely numeric"
-msgstr "ne peut pas être entièrement numérique"
+msgid ""
+"must contain at least 3 of these types: uppercase, lowercase, digit and "
+"special"
+msgstr "doit contenir au moins 3 types de caractères parmi les suivants: majuscule, minuscule, chiffre et spécial"
 
 msgid ""
 "To determine whether you are a human visitor and to prevent automated spam "
@@ -309,6 +310,29 @@ msgstr ""
 
 msgid "A server error occured."
 msgstr "Une erreur serveur est survenue."
+
+msgid "Password too short (less than 12 characters)"
+msgstr "Mot de passe trop court (moins de 12 caractères)"
+
+msgid "Password too long (more than 200 characters)"
+msgstr "Mot de passe trop long (plus de 200 caractères)"
+
+msgid "Some unsupported characters are present in the password"
+msgstr "Des caractères non supportés sont présents dans le mot de passe"
+
+msgid ""
+"Not enough character diversity in the password. Please provide at least 3 "
+"characters types among uppercase, lowercase, digit and special"
+msgstr "La diversité des caractères n'est pas respectée. Veuillez utiliser au moins 3 types de caractères parmi les suivants: majuscule, minuscule, chiffre et spécial"
+
+msgid "The password is too similar to first name or last name"
+msgstr "Le mot de passe est trop similaire au prénom ou au nom"
+
+msgid "This password has been found in a password database leaked publicly"
+msgstr "Ce mot de passe a été trouvé dans une fuite de mots de passe déjà publiée"
+
+msgid "Some parameters are missing for the password check"
+msgstr "Des paramètres sont manquants pour la vérification du mot de passe"
 
 msgid ""
 "An error occured while sending the creation request. Please try again later."

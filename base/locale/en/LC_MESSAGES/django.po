@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 11:42+0100\n"
+"POT-Creation-Date: 2023-01-23 17:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,13 +149,15 @@ msgstr ""
 msgid "can’t be too similar to your other personal information"
 msgstr ""
 
-msgid "must contain at least 8 characters"
+msgid "must contain at least 12 characters"
 msgstr ""
 
 msgid "can’t be a commonly used password"
 msgstr ""
 
-msgid "can’t be entirely numeric"
+msgid ""
+"must contain at least 3 of these types: uppercase, lowercase, digit and "
+"special"
 msgstr ""
 
 msgid ""
@@ -267,6 +269,29 @@ msgid ""
 msgstr ""
 
 msgid "A server error occured."
+msgstr ""
+
+msgid "Password too short (less than 12 characters)"
+msgstr ""
+
+msgid "Password too long (more than 200 characters)"
+msgstr ""
+
+msgid "Some unsupported characters are present in the password"
+msgstr ""
+
+msgid ""
+"Not enough character diversity in the password. Please provide at least 3 "
+"characters types among uppercase, lowercase, digit and special"
+msgstr ""
+
+msgid "The password is too similar to first name or last name"
+msgstr ""
+
+msgid "This password has been found in a password database leaked publicly"
+msgstr ""
+
+msgid "Some parameters are missing for the password check"
 msgstr ""
 
 msgid ""

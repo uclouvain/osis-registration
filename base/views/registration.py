@@ -26,6 +26,7 @@
 import logging as default_logging
 from dataclasses import dataclass
 
+import requests
 from captcha import views
 from django.contrib import messages
 from django.urls import reverse
@@ -34,6 +35,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 from ratelimit.decorators import ratelimit
+from requests.exceptions import MissingSchema
 
 from base import settings
 from base.forms.registration import RegistrationForm
@@ -44,6 +46,7 @@ from base.override_django_captcha import captcha_audio
 from base.services import mail, logging
 from base.services.service_exceptions import CreateUserAccountErrorException
 from base.services.user_account_creation import create_ldap_user_account
+from base.utils import PasswordCheckErrorEnum, PasswordCheckServiceBadRequestException
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
@@ -80,6 +83,12 @@ class RegistrationFormView(FormView):
             self.request.POST['birth_date_month'],
             self.request.POST['birth_date_day']
         )
+
+        try:
+            if not self.password_valid(form):
+                return super().form_invalid(form)
+        except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
+            self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
 
         self.user_account_request = UserAccountRequest(
             email=self.request.POST['email'],
@@ -145,6 +154,14 @@ class RegistrationFormView(FormView):
                         f"<{user_account_creation_request.request.email}>"
         )
 
+    def _log_password_check_attempt_failed(self, email, exception_msg):
+        logging.log_event(
+            request=self.request,
+            event_type=logging.EventType.ERROR,
+            domain="osis-registration",
+            description=f"password check failed for <{email}>: {exception_msg}"
+        )
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -156,6 +173,24 @@ class RegistrationFormView(FormView):
 
     def get_success_url(self):
         return reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': self.user_account_request.uuid})
+
+    def password_valid(self, form):
+        password_valid_check = requests.post(url=settings.PASSWORD_CHECK_URL, data={
+            "pwd": self.request.POST['password'],
+            "first_name": self.request.POST['first_name'],
+            "last_name": self.request.POST['last_name'],
+        }).json()
+
+        if not password_valid_check['result']:
+            missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
+            if password_valid_check['error code'] == missing_param_error_code:
+                raise PasswordCheckServiceBadRequestException
+
+            error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
+            form.add_error('password', error_msg)
+            return False
+
+        return True
 
 
 # replace captcha audio with custom captcha audio generator using espeak

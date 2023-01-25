@@ -59,7 +59,7 @@ class RegistrationForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(),
         validators=[
-            MinimumLengthValidator().validate,
+            MinimumLengthValidator(min_length=12).validate,
             NumericPasswordValidator().validate,
             CommonPasswordValidator().validate
         ]
