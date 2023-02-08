@@ -49,7 +49,6 @@ from base.services import mail, logging
 from base.services.service_exceptions import CreateUserAccountErrorException
 from base.services.user_account_creation import create_ldap_user_account
 from base.utils import PasswordCheckErrorEnum, PasswordCheckServiceBadRequestException
-from base.views.common import auto_detect_french_language
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
@@ -78,7 +77,6 @@ class RegistrationFormView(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.subscriber = self._get_subscriber()
-        auto_detect_french_language(self.request)
         return super(RegistrationFormView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
