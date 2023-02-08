@@ -39,7 +39,7 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
+def create_ldap_user_account(user_creation_request, redirection_url=None) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
         response = mock_ldap_service()
     else:
@@ -63,10 +63,12 @@ def create_ldap_user_account(user_creation_request) -> Union[Response, dict]:
 
         if response.get('status') == ERROR:
             if _is_ldap_constraint_raised(response):
+                already_exists_msg = _('a user account with the given email "{}" already exists').format(
+                    user_creation_request.request.email
+                )
+                log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
                 raise CreateUserAccountErrorException(
-                    error_msg=_('a user account with the given email <{}> already exists').format(
-                        user_creation_request.request.email
-                    )
+                    error_msg=f"{already_exists_msg}. {log_in_link_msg}."
                 )
             raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
 
