@@ -57,12 +57,12 @@ class RegistrationForm(forms.Form):
         label=_('Password'),
         max_length=100,
         required=True,
-        widget=forms.PasswordInput(),
+        widget=forms.PasswordInput(render_value=True),
         validators=[
             MinimumLengthValidator(min_length=12).validate,
             NumericPasswordValidator().validate,
             CommonPasswordValidator().validate
-        ]
+        ],
     )
 
     birth_date = EmptySelectDateWidgetField(
@@ -91,7 +91,7 @@ class RegistrationForm(forms.Form):
         return password
 
     def clean_email(self):
-        email = self.cleaned_data['email']
+        email = self.cleaned_data['email'].lower()
 
         domain = email.split('@')[1]
         rejected_domains = settings.REJECTED_EMAIL_DOMAINS

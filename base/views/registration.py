@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import logging as default_logging
+import re
 from dataclasses import dataclass
 
 import requests
@@ -32,6 +33,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import FormView
 from ratelimit.decorators import ratelimit
@@ -107,11 +109,15 @@ class RegistrationFormView(FormView):
         self._log_user_creation_attempt(user_account_creation_request)
 
         try:
-            user_account_creation_response = create_ldap_user_account(user_account_creation_request)
+            redirection_url = self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL
+            user_account_creation_response = create_ldap_user_account(user_account_creation_request, redirection_url)
         except CreateUserAccountErrorException as e:
             self._log_user_creation_error(user_account_creation_request)
-            messages.add_message(self.request, message=e.msg, level=messages.ERROR)
-            form.add_error('email', e.error_msg)
+            messages.add_message(self.request, message=mark_safe(e.msg), level=messages.ERROR)
+            form.add_error('email', mark_safe(
+                # error msg is capitalized after each punctuation
+                re.sub("(^[a-zA-Z])|(^|[.?!])(\s)+([a-zA-Z])", lambda p: p.group(0).upper(), e.error_msg)
+            ))
             return super().form_invalid(form)
 
         if 'status' in user_account_creation_response and user_account_creation_response['status'] == 'success':
@@ -175,20 +181,21 @@ class RegistrationFormView(FormView):
         return reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': self.user_account_request.uuid})
 
     def password_valid(self, form):
-        password_valid_check = requests.post(url=settings.PASSWORD_CHECK_URL, data={
-            "pwd": self.request.POST['password'],
-            "first_name": self.request.POST['first_name'],
-            "last_name": self.request.POST['last_name'],
-        }).json()
+        if not settings.MOCK_LDAP_CALLS:
+            password_valid_check = requests.post(url=settings.PASSWORD_CHECK_URL, data={
+                "pwd": self.request.POST['password'],
+                "first_name": self.request.POST['first_name'],
+                "last_name": self.request.POST['last_name'],
+            }).json()
 
-        if not password_valid_check['result']:
-            missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
-            if password_valid_check['error code'] == missing_param_error_code:
-                raise PasswordCheckServiceBadRequestException
+            if not password_valid_check['result']:
+                missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
+                if password_valid_check['error code'] == missing_param_error_code:
+                    raise PasswordCheckServiceBadRequestException
 
-            error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
-            form.add_error('password', error_msg)
-            return False
+                error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
+                form.add_error('password', error_msg)
+                return False
 
         return True
 

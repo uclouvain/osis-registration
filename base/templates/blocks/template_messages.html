@@ -31,7 +31,9 @@
         {% for message in messages %}
             {% if 'success' in message.tags %}
                 <div class="message">
+                    <span>
                     {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                    </span>
                 </div>
             {% endif %}
         {% endfor %}
@@ -45,7 +47,9 @@
     {% for message in messages %}
         {% if 'error' in message.tags %}
             <div class="message">
+                <span>
                 {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                </span>
             </div>
         {% endif %}
     {% endfor %}
@@ -59,7 +63,9 @@
         {% for message in messages %}
             {% if 'warning' in message.tags %}
                 <div class="message">
+                    <span>
                     {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                    </span>
                 </div>
             {% endif %}
         {% endfor %}
@@ -73,7 +79,9 @@
         {% for message in messages %}
             {% if 'info' in message.tags %}
                 <div class="message">
+                    <span>
                     {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                    </span>
                 </div>
             {% endif %}
         {% endfor %}
