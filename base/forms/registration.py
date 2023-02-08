@@ -91,7 +91,7 @@ class RegistrationForm(forms.Form):
         return password
 
     def clean_email(self):
-        email = self.cleaned_data['email']
+        email = self.cleaned_data['email'].lower()
 
         domain = email.split('@')[1]
         rejected_domains = settings.REJECTED_EMAIL_DOMAINS
