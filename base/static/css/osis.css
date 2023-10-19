@@ -897,6 +897,10 @@ label.required:after {
     animation: minimize 0.2s forwards;
 }
 
+.animate-maximize{
+    animation: maximize 0.2s forwards;
+}
+
 #col-create-account{
     transition: all 0.2s linear;
 }
@@ -905,8 +909,46 @@ label.required:after {
     overflow: hidden;
 }
 
+@media (min-width: 992px) {
 
-@keyframes minimize {
-  from { width: 50%; opacity: 1; visibility: visible;}
-  to { width: 0; height: 0; opacity: 0; visibility: hidden;}
+    @keyframes minimize {
+      from { width: 50%; opacity: 1; visibility: visible;}
+      to { width: 0; height: 0; opacity: 0; visibility: hidden;}
+    }
+
+    @keyframes maximize {
+      from { width: 0; height: 0; opacity: 0; visibility: hidden; }
+      to { width: 50%; height: auto; opacity: 1; visibility: visible; }
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    @keyframes minimize {
+      from { width: 100%; opacity: 1; visibility: visible;}
+      to { width: 0; height: 0; opacity: 0; visibility: hidden;}
+    }
+
+    @keyframes maximize {
+      from { width: 0; height: 0; opacity: 0; visibility: hidden; }
+      to { width: 100%; height: auto; opacity: 1; visibility: visible; }
+    }
+
+}
+
+
+
+.welcome-text {
+    color: #2b679b; padding: 20px; text-align: center; font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.panel-img {
+    width: 100%; border-radius: 5px; border: 1px solid #e7e7e7;
+}
+
+.panel-banner {
+    border-bottom: 0;
 }

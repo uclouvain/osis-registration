@@ -27,9 +27,10 @@
 {% endcomment %}
 
 {% block content %}
-    <div class="page-header">
-        <h2>OSIS - Open Student Information System</h2>
+    <div class="page-header panel-banner">
+       <img src="{% static "img/uclouvain-from-sky-restored-unsaturated.png" %}" class="panel-img img-responsive" alt="Responsive image">
     </div>
+    <h3 class="welcome-text">{% trans "Welcome to the UCLouvain registration application platform" %}</h3>
 
     {% block messages %}
         {% include "blocks/template_messages.html" %}
@@ -44,15 +45,13 @@
 
                 <p>
                 {% blocktrans %}
-                In order to use the system and access the online enrolment form to apply for a program at UCLouvain,
-                you have to be authenticated.
+                If you are visiting this website for the first time, you must first <b style="text-decoration: underline;">register</b> yourself: we will ask you for some personal information, which will enable you to create an access account. This account requires a valid and functioning private email address, which will be used as your identifier. A verification email will be sent to you with an account activation link.
                 {% endblocktrans %}
                 </p>
 
                 <p>
                 {% blocktrans %}
-                Either, you have already an account and in this case you may already log into our system,
-                or you do not have an account yet and have to create one filling a registration form.
+                If you have already created an access account, simply <b style="text-decoration: underline;">log in</b>.
                 {% endblocktrans %}
                 </p>
 
@@ -176,6 +175,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <input class="btn btn-primary" id="btn-submit" type="submit">
+                         <a class="btn btn-default" id="btn-cancel">{% trans 'Cancel' %}</a>
                      </div>
                 </div>
             </form>
@@ -246,11 +246,23 @@
     });
 
     document.querySelector("#btn-register").addEventListener('click', (e) => {
+        document.querySelector("#col-log-in").classList.remove('animate-maximize');
         document.querySelector("#col-log-in").classList.add('animate-minimize');
         document.querySelector("#col-create-account").classList.remove('col-md-6');
         document.querySelector("#col-create-account").classList.add('col-md-12');
         document.querySelector("#btn-register").classList.add('hidden');
     });
+
+    document.querySelector("#btn-cancel").addEventListener('click', (e) => {
+        document.querySelector("#col-log-in").classList.remove('animate-minimize');
+        document.querySelector("#col-log-in").classList.add('animate-maximize');
+        document.querySelector("#col-create-account").classList.add('col-md-6');
+        document.querySelector("#col-create-account").classList.remove('col-md-12');
+        document.querySelector("#col-create-account #form").classList.remove('in');
+        document.querySelector("#btn-register").classList.remove('hidden');
+    })
+
+
 
 </script>
 {% endblock %}
