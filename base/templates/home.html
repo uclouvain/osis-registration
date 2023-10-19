@@ -251,6 +251,7 @@
         document.querySelector("#col-create-account").classList.remove('col-md-6');
         document.querySelector("#col-create-account").classList.add('col-md-12');
         document.querySelector("#btn-register").classList.add('hidden');
+        setTimeout(()=>document.querySelector("#col-create-account").scrollIntoView({behavior: 'smooth'}), 400);
     });
 
     document.querySelector("#btn-cancel").addEventListener('click', (e) => {
@@ -260,7 +261,7 @@
         document.querySelector("#col-create-account").classList.remove('col-md-12');
         document.querySelector("#col-create-account #form").classList.remove('in');
         document.querySelector("#btn-register").classList.remove('hidden');
-    })
+    });
 
 
 
