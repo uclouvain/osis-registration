@@ -51,7 +51,7 @@ class EmptySelectDateWidgetField(forms.DateField):
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
     last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
-    email = forms.EmailField(label=_('Email'), max_length=100, required=True)
+    email = forms.EmailField(label=_('Private email address'), max_length=100, required=True)
 
     password = forms.CharField(
         label=_('Password'),
@@ -96,6 +96,6 @@ class RegistrationForm(forms.Form):
         domain = email.split('@')[1]
         rejected_domains = settings.REJECTED_EMAIL_DOMAINS
         if domain in rejected_domains:
-            raise forms.ValidationError(message=_(f"Domain {domain} is not an acceptable domain"))
+            raise forms.ValidationError(message=_("Domain {} is not an acceptable domain").format(domain))
 
         return email
