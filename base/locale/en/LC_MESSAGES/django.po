@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 14:37+0200\n"
+"POT-Creation-Date: 2023-10-20 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-msgid "Email"
+msgid "Private email address"
 msgstr ""
 
 msgid "Password"
@@ -45,8 +45,7 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#, python-brace-format
-msgid "Domain {domain} is not an acceptable domain"
+msgid "Domain {} is not an acceptable domain"
 msgstr ""
 
 #, python-brace-format
@@ -108,14 +107,12 @@ msgid ""
 "                "
 msgstr ""
 
-
 msgid ""
 "\n"
 "                If you have already created an access account, simply <b "
 "style=\"text-decoration: underline;\">log in</b>.\n"
 "                "
 msgstr ""
-
 
 msgid ""
 "\n"

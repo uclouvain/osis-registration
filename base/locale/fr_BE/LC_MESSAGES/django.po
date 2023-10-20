@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 14:37+0200\n"
+"POT-Creation-Date: 2023-10-20 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,8 +26,8 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom"
 
-msgid "Email"
-msgstr "Email"
+msgid "Private email address"
+msgstr "Adresse email privée"
 
 msgid "Password"
 msgstr "Mot de passe"
@@ -44,9 +44,8 @@ msgstr "Mois"
 msgid "Day"
 msgstr "Jour"
 
-#, python-brace-format
-msgid "Domain {domain} is not an acceptable domain"
-msgstr "Le domaine {domain} n'est pas un domaine accepté"
+msgid "Domain {} is not an acceptable domain"
+msgstr "Le domaine {} n'est pas un domaine accepté"
 
 #, python-brace-format
 msgid ""
