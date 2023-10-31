@@ -69,7 +69,7 @@ class RegistrationForm(forms.Form):
         label=_('Date of birth'),
         required=True,
         widget=SelectDateWidget(
-            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1),
+            years=range(CURRENT_YEAR-10, CURRENT_YEAR-101, -1),
             empty_label=(_('Year'), _('Month'), _('Day')),
         ),
     )
