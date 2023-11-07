@@ -54,7 +54,7 @@ def send_validation_mail(request, user_account_creation_request):
     receivers = [
         message_config.create_receiver(
             receiver_email=user_account_creation_request.request.email,
-            receiver_lang=None
+            receiver_lang=request.LANGUAGE_CODE
         )
     ]
     token = mail_validation_token_generator.make_token(user_account_creation_request.request)
