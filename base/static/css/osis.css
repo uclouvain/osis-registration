@@ -683,6 +683,14 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
     z-index: 1600;
 }
 
+.navbar-header {
+    width: 100%;
+}
+
+.navbar-right {
+    padding-right: 10px;
+}
+
 .navbar-brand {
     margin: 5px 0 5px;
     margin-left: 0 !important;
@@ -703,7 +711,9 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
 }
 
 img.captcha{
-    border: 3px dashed #163c69;
+    max-width: 100%;
+    padding: 2px;
+    border: 1px solid #163c69;
     display: block;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -715,11 +725,8 @@ label.required:after {
 }
 
 .panel-top-alert{
-    margin-bottom: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
     display: grid;
-    grid-template-columns: 40px auto;
+    grid-template-columns: 40px auto auto;
 }
 
 .panel-top-alert .icon {
@@ -850,4 +857,98 @@ label.required:after {
 
 .back-home {
     margin-top: 30px;
+}
+
+@media(min-width: 992px) {
+    .col-divider-right {
+        border-left: 1px solid #eee;
+    }
+
+    .col-divider-left {
+        border-right: 1px solid #eee;
+    }
+}
+
+.title{
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+.border-info{
+    border-color: #bce8f1;
+}
+
+#id_password + .input-group-addon {
+    cursor: pointer;
+}
+
+#password-rules {
+    display: none;
+    font-size: 12px;
+}
+
+#password-rules.show {
+    display: block;
+}
+
+.animate-minimize{
+    animation: minimize 0.2s forwards;
+}
+
+.animate-maximize{
+    animation: maximize 0.2s forwards;
+}
+
+#col-create-account{
+    transition: all 0.2s linear;
+}
+
+#col-log-in {
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+
+    @keyframes minimize {
+      from { width: 50%; opacity: 1; visibility: visible;}
+      to { width: 0; height: 0; opacity: 0; visibility: hidden;}
+    }
+
+    @keyframes maximize {
+      from { width: 0; height: 0; opacity: 0; visibility: hidden; }
+      to { width: 50%; height: auto; opacity: 1; visibility: visible; }
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    @keyframes minimize {
+      from { width: 100%; opacity: 1; visibility: visible;}
+      to { width: 0; height: 0; opacity: 0; visibility: hidden;}
+    }
+
+    @keyframes maximize {
+      from { width: 0; height: 0; opacity: 0; visibility: hidden; }
+      to { width: 100%; height: auto; opacity: 1; visibility: visible; }
+    }
+
+}
+
+
+
+.welcome-text {
+    color: #2b679b; padding: 20px; text-align: center; font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.panel-img {
+    width: 100%; border-radius: 5px; border: 1px solid #e7e7e7;
+}
+
+.panel-banner {
+    border-bottom: 0;
 }

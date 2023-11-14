@@ -26,6 +26,7 @@
 from django.shortcuts import reverse
 
 from base.messaging import send_message, message_config
+from base.services import logging
 from base.services.token_generator import mail_validation_token_generator
 
 
@@ -49,20 +50,26 @@ def send_validation_mail(request, user_account_creation_request):
         'html': 'osis_registration_mail_validation_html',
         'txt': 'osis_registration_mail_validation_txt'
     }
-    # TODO: change receiver_person_id
+
     receivers = [
         message_config.create_receiver(
-            receiver_person_id=user_account_creation_request.id,
-            receiver_email=user_account_creation_request.email,
-            receiver_lang=None
+            receiver_email=user_account_creation_request.request.email,
+            receiver_lang=request.LANGUAGE_CODE
         )
     ]
-    token = mail_validation_token_generator.make_token(user_account_creation_request)
+    token = mail_validation_token_generator.make_token(user_account_creation_request.request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
-            'uacr_uuid': user_account_creation_request.uuid,
+            'uacr_uuid': user_account_creation_request.request.uuid,
             'token': token
         }))},
         'subject': {}
     }
+
     send_email(template_references, receivers, data)
+    logging.log_event(
+        request=request,
+        event_type=logging.EventType.VIEW,
+        domain="osis-registration",
+        description=f"validation mail sent to {user_account_creation_request.request.email}"
+    )

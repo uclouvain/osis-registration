@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,11 +23,49 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
+from django.http import HttpResponseServerError
+from django.http.response import HttpResponse
+from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
+
+from base.api.serializers.user_account_request import UserAccountRequestSerializer
+from base.models.enum import UserAccountRequestType
+from base.models.polling_subscriber import PollingSubscriber
+from base.services.service_exceptions import CreateUserAccountErrorException
+from base.services.user_account_deletion import delete_ldap_user_account
+from base.services.user_account_information import get_ldap_user_account_information
 
 
-class DeleteAccount(generics.DestroyAPIView):
+class DeleteAccount(generics.CreateAPIView):
     """
        Delete account request
     """
     name = 'delete-account'
+    serializer_class = UserAccountRequestSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            email = request.data['email']
+
+            serializer = self.get_serializer(data={
+                "type": UserAccountRequestType.DELETION.name,
+                "email": email,
+                "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
+            })
+            serializer.is_valid(raise_exception=True)
+            user_account_request = serializer.save()
+
+            get_ldap_user_account_information(email=email)
+            delete_ldap_user_account(user_account_request)
+
+        except (KeyError, ValueError) as e:
+            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+        except PollingSubscriber.DoesNotExist:
+            return HttpResponseServerError("No matching subscriber")
+        except CreateUserAccountErrorException:
+            return HttpResponseServerError("An error occured while deleting account")
+
+        return HttpResponse(
+            status=status.HTTP_200_OK,
+            content="Account {} deleted".format(user_account_request.email)
+        )

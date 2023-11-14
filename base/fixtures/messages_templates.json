@@ -3,8 +3,8 @@
   "model": "base.messagetemplate",
   "fields": {
     "reference": "osis_registration_mail_validation_html",
-    "subject": "OSIS-REGISTRATION - Validation email",
-    "template": "<p>Validation email via ce lien: <a href='{{link}}'>{{link}}</a></p>",
+    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
+    "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe, merci de ne pas y r&eacute;pondre.</p> <p>&nbsp;</p> <p>Bonjour,</p> <p>Vous avez demand&eacute; la cr&eacute;ation d&#39;un compte pour vous permettre d&#39;acc&eacute;der &agrave; une plateforme informatique de UCLouvain.&nbsp;</p> <p>Afin de&nbsp;terminer la proc&eacute;dure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>A bient&ocirc;t,</p> <p>L&#39;&eacute;quipe informatique de l&#39;UCLouvain</p>",
     "format": "HTML",
     "language": "fr-be"
   }
@@ -13,8 +13,8 @@
   "model": "base.messagetemplate",
   "fields": {
     "reference": "osis_registration_mail_validation_txt",
-    "subject": "OSIS-REGISTRATION - Validation email",
-    "template": "Validation email via ce lien: {{link}}",
+    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
+    "template": "Ceci est un email automatique envoyé par le service de création de compte externe, merci de ne pas y répondre. Bonjour, Vous avez demandé la création d'un compte pour vous permettre d'accéder à une plateforme informatique de UCLouvain. Afin de terminer la procédure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h). {{link}} A bientôt, L'équipe informatique de l'UCLouvain",
     "format": "PLAIN",
     "language": "fr-be"
   }

@@ -25,28 +25,77 @@
 ##############################################################################
 import datetime
 
+from captcha.fields import CaptchaField, CaptchaTextInput
+from django import forms
+from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
+    NumericPasswordValidator, CommonPasswordValidator
+from django.forms import SelectDateWidget
 from django.utils.translation import gettext_lazy as _
 
-from django import forms
-from captcha.fields import CaptchaField, CaptchaTextInput
+from base import settings
+from base.admin import User
 
 CURRENT_YEAR = datetime.date.today().year
+
 
 class CustomCaptchaTextInput(CaptchaTextInput):
     template_name = "captcha.html"
 
+
+class EmptySelectDateWidgetField(forms.DateField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.widget.is_required = False
+
+
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(label=_('First name'), max_length=100, required=True)
     last_name = forms.CharField(label=_('Last name'), max_length=100, required=True)
-    email = forms.CharField(label=_('Email'), max_length=100, required=True)
-    birth_date = forms.DateField(
-        initial=datetime.datetime.now(),
+    email = forms.EmailField(label=_('Private email address'), max_length=100, required=True)
+
+    password = forms.CharField(
+        label=_('Password'),
+        max_length=100,
+        required=True,
+        widget=forms.PasswordInput(render_value=True),
+        validators=[
+            MinimumLengthValidator(min_length=12).validate,
+            NumericPasswordValidator().validate,
+            CommonPasswordValidator().validate
+        ],
+    )
+
+    birth_date = EmptySelectDateWidgetField(
         label=_('Date of birth'),
         required=True,
-        widget=forms.SelectDateWidget(
-            years=range(CURRENT_YEAR-100, CURRENT_YEAR+1)
+        widget=SelectDateWidget(
+            years=range(CURRENT_YEAR-10, CURRENT_YEAR-101, -1),
+            empty_label=(_('Year'), _('Month'), _('Day')),
         ),
     )
     captcha = CaptchaField(
-        widget=CustomCaptchaTextInput()
+        widget=CustomCaptchaTextInput(),
     )
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+
+        user_info = User(
+            first_name=self.cleaned_data['first_name'],
+            last_name=self.cleaned_data['last_name'],
+            email=self.data['email'],
+        )
+
+        UserAttributeSimilarityValidator().validate(password=password, user=user_info)
+
+        return password
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+
+        domain = email.split('@')[1]
+        rejected_domains = settings.REJECTED_EMAIL_DOMAINS
+        if domain in rejected_domains:
+            raise forms.ValidationError(message=_("Domain {} is not an acceptable domain").format(domain))
+
+        return email

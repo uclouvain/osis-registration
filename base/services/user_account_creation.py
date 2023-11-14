@@ -23,42 +23,58 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
+from datetime import date, timedelta
+from typing import Union
 
 import requests as requests
+from django.utils.translation import gettext as _
+from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
-from base.models.user_account_creation_request import UserAccountCreationRequest
+from base.services.mock_service import mock_ldap_service
+from base.services.service_exceptions import CreateUserAccountErrorException
 
 SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request: UserAccountCreationRequest) -> dict:
-    # mock endpoint in debug
-    if settings.DEBUG:
-        random_success_status = random.choice([True, False])
-        if random_success_status:
-            response = {"status": SUCCESS, "message": "User created entry in db"}
-        else:
-            response = {"status": ERROR, "message": "Missing data"}
+def create_ldap_user_account(user_creation_request, redirection_url=None) -> Union[Response, dict]:
+    if settings.MOCK_LDAP_CALLS:
+        response = mock_ldap_service()
     else:
         try:
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
                 json={
-                    "id": str(user_creation_request.person_uuid),
+                    "id": str(user_creation_request.request.uuid),
                     "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
                     "prenom": user_creation_request.first_name,
                     "nom": user_creation_request.last_name,
-                    "email": user_creation_request.email
+                    "email": user_creation_request.request.email,
+                    "password": user_creation_request.password,
+                    "validite": (date.today() - timedelta(days=1)).strftime('%Y%m%d')
                 },
                 url=settings.LDAP_ACCOUNT_CREATION_URL,
-                timeout=1,
+                timeout=60,
             ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
-        except Exception:
-            response = {"status": ERROR, "message": "Unknown error"}
+
+        if response.get('status') == ERROR:
+            if _is_ldap_constraint_raised(response):
+                already_exists_msg = _('a user account with the given email "{}" already exists').format(
+                    user_creation_request.request.email
+                )
+                log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
+                raise CreateUserAccountErrorException(
+                    error_msg=f"{already_exists_msg}. {log_in_link_msg}."
+                )
+            raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
+
     return response
+
+
+def _is_ldap_constraint_raised(response):
+    return 'Message' in response.keys() and 'LDAPConstraintViolationResult' in response['Message'] or \
+           'message' in response.keys() and response['message'] == 'UNIQUE constraint failed: oi_users.email'

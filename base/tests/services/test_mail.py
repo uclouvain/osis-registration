@@ -23,12 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from types import SimpleNamespace
 from unittest import mock
 
 from django.test import TestCase, RequestFactory
 
 from base.services.mail import send_validation_mail
-from base.tests.factories.user_account_creation_request import UserAccountCreationRequestFactory
+from base.tests.factories.user import UserFactory
+from base.tests.factories.user_account_request import UserAccountRequestFactory
 
 
 class MailTestCase(TestCase):
@@ -36,9 +38,14 @@ class MailTestCase(TestCase):
     @mock.patch('base.messaging.send_message.send_messages')
     def test_should_send_validation_mail(self, mock_send_msg):
         request = RequestFactory().get('/')
-        uacr = UserAccountCreationRequestFactory()
-        send_validation_mail(request, uacr)
+        request.user = UserFactory()
+        request.session = {}
+
+        uacr_dataclass = SimpleNamespace(
+            request=UserAccountRequestFactory(),
+        )
+        send_validation_mail(request, uacr_dataclass)
         self.assertTrue(mock_send_msg.called)
 
         _, kwargs = mock_send_msg.call_args
-        self.assertTrue(uacr.email in str(kwargs['message_content']['receivers']))
+        self.assertTrue(uacr_dataclass.request.email in str(kwargs['message_content']['receivers']))

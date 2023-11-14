@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,11 +23,56 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from rest_framework import generics
+
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseServerError
+from django.utils.datetime_safe import datetime
+from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
+
+from base.api.serializers.user_account_request import UserAccountRequestSerializer
+from base.models.enum import UserAccountRequestType
+from base.models.polling_subscriber import PollingSubscriber
+from base.services.service_exceptions import RenewUserAccountValidityErrorException
+from base.services.user_account_information import get_ldap_user_account_information
+from base.services.user_account_renewal import renew_ldap_user_account_validity
 
 
-class RenewAccount(generics.UpdateAPIView):
+class RenewAccount(generics.CreateAPIView):
     """
        Renew account request
     """
     name = 'renew-account'
+    serializer_class = UserAccountRequestSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            email = request.data['email']
+            serializer = self.get_serializer(data={
+                "type": UserAccountRequestType.RENEWAL.name,
+                "email": email,
+                "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
+            })
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            account_information = get_ldap_user_account_information(email=email)
+            response = renew_ldap_user_account_validity(
+                request=request,
+                account_id=account_information['id'],
+                email=email,
+                validity_days=request.data.get('validity_days', settings.LDAP_ACCOUNT_VALIDITY_DAYS)
+            )
+            new_validity_date = datetime.strptime(response['validite'], '%Y%m%d').strftime('%Y-%m-%d')
+            return HttpResponse(
+                status=status.HTTP_200_OK,
+                content=f"New validity set for {account_information['email']} until {new_validity_date}"
+            )
+
+        except (KeyError, ValueError) as e:
+            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+        except PollingSubscriber.DoesNotExist:
+            return HttpResponseServerError("No matching subscriber")
+        except RenewUserAccountValidityErrorException as e:
+            return HttpResponseServerError(e.msg)
+

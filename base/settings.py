@@ -6,7 +6,6 @@ import os
 
 from django.utils.translation import gettext_lazy as _
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,8 +15,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = [] if DEBUG else os.environ.get('ALLOWED_HOSTS', "['*']")
+# MOCK LDAP SERVICE CALLS
+MOCK_LDAP_CALLS = os.environ.get('MOCK_LDAP_CALLS', 'True').lower() == 'true'
 
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'LOCAL')
 
 # Application definition
 
@@ -33,8 +36,6 @@ INSTALLED_APPS = [
     'statici18n',
     'rest_framework',
     'base',
-    'django_celery_beat',
-    'django_celery_results',
     'captcha',
     'bootstrap3',
     'rest_framework.authtoken'
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'base.middleware.auto_detect_lang.AutoDetectLanguage',
 ]
 
 ROOT_URLCONF = 'base.urls'
@@ -78,7 +80,7 @@ WSGI_APPLICATION = 'base.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get("DATABASE_NAME", 'osis_registration_local'),
         'USER': os.environ.get("POSTGRES_USER", 'osis'),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
@@ -127,22 +129,18 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'base/static'),)
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 
 LDAP_ACCOUNT_CREATION_URL = os.environ.get('LDAP_ACCOUNT_CREATION_URL', '')
-LDAP_ACCOUNT_CONFIGURATION_URL = os.environ.get('LDAP_ACCOUNT_CONFIGURATION_URL', '')
+LDAP_ACCOUNT_DELETION_URL = os.environ.get('LDAP_ACCOUNT_DELETION_URL', '')
+LDAP_ACCOUNT_MODIFICATION_URL = os.environ.get('LDAP_ACCOUNT_MODIFICATION_URL', '')
+LDAP_ACCOUNT_DESCRIBE_EMAIL_URL = os.environ.get('LDAP_ACCOUNT_DESCRIBE_EMAIL_URL', '')
+LDAP_ACCOUNT_VALIDITY_DAYS = os.environ.get('LDAP_ACCOUNT_VALIDITY_DAYS', 120)
+
+PASSWORD_CHECK_URL = os.environ.get('PASSWORD_CHECK_URL', '')
+
+OSIS_PORTAL_URL = os.environ.get('OSIS_PORTAL_URL', '')
+
 DATA_PROTECTION_POLICY_URL = os.environ.get('DATA_PROTECTION_POLICY_URL', '')
 
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
-
-# Celery settings
-CELERY_BROKER_URL = "amqp://{user}:{password}@{host}:{port}".format(
-    user=os.environ.get('RABBITMQ_USER', 'guest'),
-    password=os.environ.get('RABBITMQ_PASSWORD', 'guest'),
-    host=os.environ.get('RABBITMQ_HOST', 'localhost'),
-    port=os.environ.get('RABBITMQ_PORT', '5672')
-)
-CELERY_CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'django-db')
-
-REQUEST_ATTEMPT_LIMIT = os.environ.get('REQUEST_ATTEMPT_LIMIT', 3)
 
 CAPTCHA_FONT_SIZE = 50
 CAPTCHA_IMAGE_SIZE = (300, 80)
@@ -189,7 +187,6 @@ EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "mess
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
-INTERNAL_EMAIL_SUFFIX = os.environ.get('INTERNAL_EMAIL_SUFFIX', 'osis.org')
 MAIL_SENDER_CLASSES = os.environ.get(
     'MAIL_SENDER_CLASSES',
     'base.messaging.mail_sender_classes.MessageHistorySender'
@@ -199,3 +196,41 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
 # set token validity to 24 hours
 PASSWORD_RESET_TIMEOUT = 86400
+
+REQUESTS_RATE_LIMIT = os.environ.get('REQUESTS_RATE_LIMIT', '10/h')
+
+REJECTED_EMAIL_DOMAINS = os.environ.get('REJECTED_EMAIL_DOMAINS', "uclouvain.be").split()
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%d-%m-%Y %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'event': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

@@ -3,7 +3,7 @@
 import logging
 import os
 import sys
-from dotenv import load_dotenv
+import dotenv
 
 
 def main():
@@ -20,8 +20,7 @@ def main():
 
 
 if __name__ == '__main__':
-    project_folder = os.path.expanduser('base')
-    load_dotenv(os.path.join(project_folder, '.env'))
+    dotenv.read_dotenv()
 
     if 'test' in sys.argv:
         os.environ.setdefault('TESTING', 'True')
