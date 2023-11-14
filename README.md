@@ -1,5 +1,9 @@
 # osis-registration
-OSIS Registration is a django application to handle external account management. It provides a publish-subscribe mecanism to enable applications (subscribers) to request user account creation. OSIS Registration enable subscribers to poll an API endpoint in order for them to catch up on the last requested results.
+OSIS Registration is a django application to request external account. 
+
+<!-- It provides a publish-subscribe mecanism to enable applications (subscribers) to request user account creation. OSIS Registration enable subscribers to poll an API endpoint in order for them to catch up on the last requested results. -->
+
+Currently providing a form to request account creation and propagate the request to LDAP.
 
 ## Getting started
 Clone the repository
@@ -76,7 +80,7 @@ An authorization header with the registered app token must be provided with the 
 
 > Authorization header
 ```json
-{"Authorization": "Token cf4e903f8cc6cb81ae753d137bfa77cdfe1b8b37"}
+{"Authorization": "Token <TOKEN>"}
 ```
 ### Endpoints
 
@@ -90,51 +94,45 @@ Create new user account creation request
 
 ```json
 {
-  "uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "person_uuid": "abcd-efgh-ijkl-mnop-1234-5678",
   "first_name": "John",
   "last_name": "Doe",
   "birth_date": "1989-01-01",
-  "email": "john.doe@mail.xyz"
+  "email": "john.doe@mail.xyz",
+  "password": "secret"
 }
 ```
 -----
 
-#### Poll
+#### Delete
 
-`GET /poll/`
+`POST /delete_account/`
 
-List last updated request results for a given subscriber
-
-> Example response 200
-
-```json
-{
-  "uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "person_uuid": "abcd-efgh-ijkl-mnop-1234-5678",
-  "email": "john.doe@mail.xyz",
-  "request_type": "CREATION",
-  "status": "SUCCESS",
-  "app": "internship",
-  "updated_at": "2021-08-31T09:51:14.622461"
-}
-```
--------
-
-#### Acknowledge
-
-`PUT /acknowledge/`
-
-Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
+Create new user account deletion request
 
 > Body parameter
 
 ```json
 {
-  "last_poll_requested": "2021-08-31T09:51:14.622461"
+  "email": "john.doe@mail.xyz",
 }
 ```
-------
+-----
+
+#### Renewal
+
+`POST /renew_account/`
+
+Create new user account renewal request
+
+> Body parameter
+
+```json
+{
+  "email": "john.doe@mail.xyz",
+  "validity_days": 365
+}
+```
+-----
 
 ## Espeak and Sox
 For the sake of accessibility, an audio captcha file is read by synthetic voice. 

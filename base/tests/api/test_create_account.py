@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,39 +26,70 @@
 from unittest import mock
 
 from django.shortcuts import reverse
-from django.test import TestCase
-from rest_framework.status import HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-from base.api.views.create_account import CreateAccount
-from base.models.user_account_creation_request import UserAccountCreationRequest
+from base.models.enum import UserAccountRequestType
+from base.models.user_account_request import UserAccountRequest
 from base.tests.factories.polling_subscriber import PollingSubscriberFactory
+from base.tests.factories.user import UserFactory
 
 
-class PollRequestResultsTestCase(TestCase):
+class CreateAccountTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.subscriber = PollingSubscriberFactory(app_name__username='polling_application')
-        cls.request_data = {
-            'first_name': 'test',
-            'last_name': 'test',
+        cls.user = UserFactory()
+        cls.subscriber = PollingSubscriberFactory(app_name=cls.user)
+
+        cls.url = reverse('create-account')
+        cls.post_data = {
+            'first_name': 'FirstName',
+            'last_name': 'LastName',
             'birth_date': '2000-01-01',
-            'email': 'test@test.xyz'
+            'email': 'email@email.com',
+            'password': 'password'
         }
 
-    @mock.patch('rest_framework.authentication.TokenAuthentication.authenticate')
-    def test_should_create_user_account_creation_request_with_token_related_app_name(self, mock_token_auth):
-        mock_token_auth.return_value = (self.subscriber.app_name, 'tokenkey')
-        url = reverse(CreateAccount.name)
-        response = self.client.post(url, data=self.request_data)
+    def test_should_unauthorize_no_subscriber(self):
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        self.assertEqual(response.status_code, HTTP_201_CREATED)
+    def test_should_not_allow_get(self):
+        self.client.force_authenticate(user=self.subscriber.app_name)
+        response = self.client.get(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-        # request created with token related app_name (user)
-        uacr = UserAccountCreationRequest.objects.get(uuid=response.json()['uuid'])
-        self.assertEqual(uacr.app, self.subscriber)
+    def test_should_deny_creation_missing_data(self):
+        self.client.force_authenticate(user=self.subscriber.app_name)
+        self.post_data.pop('password')
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Missing data", str(response.content))
+        self.assertIn("password", str(response.content))
 
-    def test_should_not_authorize_user_creation_when_no_token_provided(self):
-        url = reverse(CreateAccount.name)
-        response = self.client.post(url, data=self.request_data)
+    def test_should_deny_creation_wrong_birth_date_format(self):
+        self.client.force_authenticate(user=self.subscriber.app_name)
+        self.post_data['birth_date'] = "01-01-2000"
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("does not match format", str(response.content))
 
-        self.assertEqual(response.status_code, HTTP_401_UNAUTHORIZED)
+    def test_should_deny_creation_wrong_email_format(self):
+        self.client.force_authenticate(user=self.subscriber.app_name)
+        self.post_data['email'] = "email"
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", str(response.content))
+
+
+    @mock.patch('base.api.views.create_account.create_ldap_user_account')
+    def test_should_create_user_account_request_and_call_creation_service(self, mock_create):
+        self.client.force_authenticate(user=self.subscriber.app_name)
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        user_account_request = UserAccountRequest.objects.first()
+        self.assertEqual(user_account_request.email, self.post_data['email'])
+        self.assertEqual(user_account_request.type, UserAccountRequestType.CREATION.name)
+
+        self.assertTrue(mock_create.called)

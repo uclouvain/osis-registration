@@ -18,8 +18,8 @@
                        aria-expanded="false"
                        id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
                             class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        {% for lang in LANGUAGES%}
+                    <ul class="dropdown-menu language-menu">
+                        {% for lang in LANGUAGES %}
                             {% if lang.0 != LANGUAGE_CODE%}
                                 <li><a href="{% url 'lang_edit' lang.0 %}">{{ lang.0 }}</a></li>
                             {% endif %}

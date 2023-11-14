@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+from types import SimpleNamespace
 from unittest import mock
 from unittest.mock import patch
 
@@ -30,16 +32,24 @@ from django.test import TestCase
 
 from base import settings
 from base.services.user_account_creation import create_ldap_user_account
-from base.tests.factories.user_account_creation_request import UserAccountCreationRequestFactory
+from base.tests.factories.polling_subscriber import PollingSubscriberFactory
+from base.tests.factories.user_account_request import UserAccountRequestFactory
 
 
 class UserAccountCreationServiceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.pending_request = UserAccountCreationRequestFactory()
+        cls.pending_request = SimpleNamespace(
+            request=UserAccountRequestFactory(),
+            first_name='first_name',
+            last_name='last_name',
+            birth_date=datetime.date.today(),
+            password='secret',
+            app=PollingSubscriberFactory().app_name,
+        )
 
-    @patch('base.settings.DEBUG', False)
+    @patch('base.settings.MOCK_LDAP_CALLS', False)
     @patch('base.settings.LDAP_ACCOUNT_CREATION_URL', 'fake_ldap_url')
     @mock.patch('base.services.user_account_creation.requests.post')
     def test_service_should_call_endpoint_to_attempt_user_account_creation(self, mock_post):

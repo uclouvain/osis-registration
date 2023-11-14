@@ -8,15 +8,9 @@ info:
     url: https://github.com/uclouvain/osis-registration
 
 servers:
-  - url: https://{environment}.osis-registration.uclouvain.be/api/v1/
-    variables:
-      environment:
-        default: dev
-        enum:
-          - dev # Development server
-          - qa # Staging server
-          - test # Test server
-  - url: https://osis-registration.uclouvain.be/api/v1/
+  - url: https://test.registration.osis.uclouvain.be/api/v1/
+    description: Test server
+  - url: https://registration.osis.uclouvain.be/api/v1/
     description: Production server
 
 paths:
@@ -32,49 +26,36 @@ paths:
       responses:
         201:
           description: Successfully created an user account creation request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserAccountCreationRequest'
       tags:
         - osis-registration
-
-  /poll:
-    get:
-      description: List last updated request results for a given subscriber
-      responses:
-        200:
-          description: Successfully retrieved user account request results
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserAccountRequestResult'
-      tags:
-        - osis-registration
-
-  /acknowledge:
-    put:
-      description: Update subscriber's last poll request to acknowledge poll has been sucessfully retrieved
+  /delete_account:
+    post:
+      description: Create new user account deletion request
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                last_poll_requested:
-                  type: string
-                  example: 2021-08-31T09:51:14.622461
+              $ref: '#/components/schemas/UserAccountDeletionRequest'
       responses:
         200:
-          description: Successfully acknowledge subscriber's last poll
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PollingSubscriber'
+          description: Successfully created an user account deletion request
       tags:
         - osis-registration
-
+  /renew_account:
+    post:
+      description: Create new user account renewal request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccountRenewalRequest'
+      responses:
+        200:
+          description: Successfully created an user account renewal request
+      tags:
+        - osis-registration
 components:
   securitySchemes:
     Token:
@@ -87,10 +68,6 @@ components:
     UserAccountCreationRequest:
       type: object
       properties:
-          uuid:
-            $ref: '#/components/schemas/Uuid'
-          person_uuid:
-            $ref: '#/components/schemas/Uuid'
           first_name:
             type: string
             example: "John"
@@ -103,51 +80,24 @@ components:
           email:
             type: string
             example: "john.doe@mail.xyz"
-    Uuid:
-      type: string
-      format: uuid
-      example: "abcd-efgh-ijkl-mnop-1234-5678"
-
-    UserAccountRequestResult:
+          password:
+            type: string
+            format: password
+    UserAccountDeletionRequest:
       type: object
       properties:
-          uuid:
-            $ref: '#/components/schemas/Uuid'
-          person_uuid:
-            $ref: '#/components/schemas/Uuid'
           email:
             type: string
             example: "john.doe@mail.xyz"
-          request_type:
-            type: string
-            example: "CREATION"
-          status:
-            type: string
-            example: "SUCCESS"
-          app:
-            type: string
-            example: "internship"
-          updated_at:
-            type: string
-            example: "2021-08-31T09:51:14.622461"
-
-    PollingSubscriber:
+    UserAccountRenewalRequest:
       type: object
       properties:
-          uuid:
-            $ref: '#/components/schemas/Uuid'
-          app_name:
+          email:
             type: string
-            example: "internship"
-          last_poll_requested:
-            type: string
-            example: "2021-08-31T09:51:14.622461"
-
-    Uuid:
-      type: string
-      format: uuid
-      example: "abcd-efgh-ijkl-mnop-1234-5678"
-
+            example: "john.doe@mail.xyz"
+          validity_days:
+            type: number
+            example: 365
 
 security:
   - Token: []

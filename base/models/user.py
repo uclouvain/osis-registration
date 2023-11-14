@@ -43,6 +43,7 @@ class OsisRegistrationUserCreationForm(UserCreationForm):
         self.cleaned_data['password2'] = password
         return super().clean()
 
+
 class OsisRegistrationUserAdmin(UserAdmin):
     fieldsets = (
         (None, {

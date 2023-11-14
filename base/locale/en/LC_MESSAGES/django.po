@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-06 17:40+0100\n"
+"POT-Creation-Date: 2023-10-20 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,10 +27,25 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-msgid "Email"
+msgid "Private email address"
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 msgid "Date of birth"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Domain {} is not an acceptable domain"
 msgstr ""
 
 #, python-brace-format
@@ -48,6 +63,24 @@ msgid ""
 "exist."
 msgstr ""
 
+msgid "An error occured while using the service: {}"
+msgstr ""
+
+msgid "An error occured while retrieving user account information: {}"
+msgstr ""
+
+msgid "An error occured while creating user account: {}"
+msgstr ""
+
+msgid "An error occured while renewing user account validity: {}"
+msgstr ""
+
+msgid "a user account with the given email \"{}\" already exists"
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
 msgid "French"
 msgstr ""
 
@@ -60,14 +93,74 @@ msgstr ""
 msgid "Refresh CAPTCHA"
 msgstr ""
 
-msgid "UCLouvain user account creation request"
+msgid "Welcome to the UCLouvain registration application platform"
 msgstr ""
 
 msgid ""
-"This form enables you to apply for a UCLouvain temporary account. Along with "
-"the account, you will receive credentials that may be used to access "
-"applications and prepare an admission file. The scope of these credentials "
-"is limited to the following applications: ..."
+"\n"
+"                If you are visiting this website for the first time, you "
+"must first <b style=\"text-decoration: underline;\">register</b> yourself: "
+"we will ask you for some personal information, which will enable you to "
+"create an access account. This account requires a valid and functioning "
+"private email address, which will be used as your identifier. A verification "
+"email will be sent to you with an account activation link.\n"
+"                "
+msgstr ""
+
+msgid ""
+"\n"
+"                If you have already created an access account, simply <b "
+"style=\"text-decoration: underline;\">log in</b>.\n"
+"                "
+msgstr ""
+
+msgid ""
+"\n"
+"                        <span>You <b style=\"text-decoration: underline;"
+"\">already have</b> an account</span>\n"
+"                    "
+msgstr ""
+
+msgid "Please log in using your existing login credentials"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid ""
+"\n"
+"                <span>You <b style=\"text-decoration: underline;\">do not "
+"have</b> an account yet</span>\n"
+"                "
+msgstr ""
+
+msgid "Please  register first in order to request a new account"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Identification"
+msgstr ""
+
+msgid "Authentication information"
+msgstr ""
+
+msgid "Password should validate against the following rules:"
+msgstr ""
+
+msgid "can’t be too similar to your other personal information"
+msgstr ""
+
+msgid "must contain at least 12 characters"
+msgstr ""
+
+msgid "can’t be a commonly used password"
+msgstr ""
+
+msgid ""
+"must contain at least 3 of these types: uppercase, lowercase, digit and "
+"special"
 msgstr ""
 
 msgid ""
@@ -93,6 +186,9 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Agreement is required to proceed with registration"
 msgstr ""
 
@@ -108,6 +204,9 @@ msgstr ""
 msgid "Source code"
 msgstr ""
 
+msgid "UCLouvain user account creation request"
+msgstr ""
+
 msgid "Submit registration form"
 msgstr ""
 
@@ -117,16 +216,23 @@ msgstr ""
 msgid "Validate your email address"
 msgstr ""
 
+msgid ""
+"In order to complete the registration process, we sent you an email with a "
+"validation link."
+msgstr ""
+
+msgid "Please check your mailbox and validate your account following the link."
+msgstr ""
+
 msgid "Your email has been validated"
 msgstr ""
 
 msgid "User account creation"
 msgstr ""
 
-msgid "Your user account is being created and will be available shortly..."
-msgstr ""
-
-msgid "Your user account has been successfully created"
+msgid ""
+"Your user account has been successfully created. You may now log in to "
+"continue your operations."
 msgstr ""
 
 msgid ""
@@ -134,34 +240,7 @@ msgid ""
 "administration."
 msgstr ""
 
-msgid "Set your credentials"
-msgstr ""
-
 msgid "This step will be available as soon as the previous step is done"
-msgstr ""
-
-msgid ""
-"Your account has been created and you may now proceed with the setting of "
-"your credentials."
-msgstr ""
-
-msgid "In order to set your credentials, please visit "
-msgstr ""
-
-msgid "the UCLouvain account page"
-msgstr ""
-
-msgid ""
-"This will be the last step to accomplish before you may effectively log into "
-"the portal."
-msgstr ""
-
-msgid ""
-"In order to complete the registration process, we sent you an email with a "
-"validation link."
-msgstr ""
-
-msgid "Please check your mailbox and validate your account following the link."
 msgstr ""
 
 msgid "Access refused"
@@ -190,5 +269,37 @@ msgstr ""
 msgid "The page you are looking for was not found."
 msgstr ""
 
+msgid ""
+"Too many attempts have been made with this IP address. Please try again "
+"later."
+msgstr ""
+
 msgid "A server error occured."
+msgstr ""
+
+msgid "Password too short (less than 12 characters)"
+msgstr ""
+
+msgid "Password too long (more than 200 characters)"
+msgstr ""
+
+msgid "Some unsupported characters are present in the password"
+msgstr ""
+
+msgid ""
+"Not enough character diversity in the password. Please provide at least 3 "
+"characters types among uppercase, lowercase, digit and special"
+msgstr ""
+
+msgid "The password is too similar to first name or last name"
+msgstr ""
+
+msgid "This password has been found in a password database leaked publicly"
+msgstr ""
+
+msgid "Some parameters are missing for the password check"
+msgstr ""
+
+msgid ""
+"An error occured while sending the creation request. Please try again later."
 msgstr ""
