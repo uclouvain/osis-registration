@@ -194,6 +194,13 @@ class RegistrationFormView(FormView):
                     raise PasswordCheckServiceBadRequestException
 
                 error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
+
+                unsupported_char, _ = PasswordCheckErrorEnum.UNSUPPORTED_CHAR.value
+                if password_valid_check['error code'] == unsupported_char:
+                    regexp = '[^a-zA-Z0-9À-ÿ#()!?_+*/=$%,.;:@&<>§-]'
+                    error_chars = re.findall(regexp, self.request.POST['password'])
+                    error_msg += f": {' '.join(error_chars)}"
+
                 form.add_error('password', error_msg)
                 return False
 
