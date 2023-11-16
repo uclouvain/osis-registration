@@ -156,13 +156,13 @@
                         <div class="col-xs-9 col-md-8 col-lg-6 input-group" style="text-align: left;">
                             <label for="accept" class="col-xs-6">
                                 <input type="radio" id="accept" name="agreement" value="accept" required
-                                       {% if request.POST.agreement == "accept" %} checked {% endif %}
+                                       {% if 'agreement' in request.POST and request.POST.agreement == "accept" %} checked {% endif %}
                                 >
                                 {% trans 'Accept' %}
                             </label>
                             <label for="reject" class="col-xs-6">
                                 <input type="radio" id="reject" name="agreement" value="reject" required
-                                       {% if request.POST.agreement == "reject" %} checked {% endif %}
+                                       {% if 'agreement' in request.POST and request.POST.agreement == "reject" %} checked {% endif %}
                                 >
                                 {% trans 'Reject' %}
                             </label>
