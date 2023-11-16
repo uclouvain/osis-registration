@@ -100,7 +100,7 @@
                     {% trans 'Register' %}
                 </button>
             {% endif %}
-            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={{ request.GET.source }}">
+            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={% if 'source' in request.GET %}{{ request.GET.source }}{% endif %}">
                 {% csrf_token %}
                 <br/>
                 <div class="row">
