@@ -75,6 +75,11 @@ class RegistrationFormView(FormView):
     user_account_request = None
     subscriber = None
 
+    def get_template_names(self):
+        if self.request.GET.get('source') == "admission":
+            return ["home_admission.html"]
+        return [self.template_name]
+
     def dispatch(self, request, *args, **kwargs):
         self.subscriber = self._get_subscriber()
         return super(RegistrationFormView, self).dispatch(request, *args, **kwargs)

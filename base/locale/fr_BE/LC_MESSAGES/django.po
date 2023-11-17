@@ -147,6 +147,10 @@ msgstr "Veuillez vous connecter à l'aide de vos identifiants"
 msgid "Log in"
 msgstr "Se connecter"
 
+msgctxt "admission"
+msgid "Log in"
+msgstr "Connectez-vous"
+
 msgid ""
 "\n"
 "                <span>You <b style=\"text-decoration: underline;\">do not "

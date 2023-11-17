@@ -1,6 +1,6 @@
 {% load i18n static %}
 
-<nav class="navbar navbar-default navbar-fixed-top  justify-content-start flex-nowrap">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -9,24 +9,24 @@
                                         {% else %}
                                             href="#"
                                         {% endif %} id="lnk_home">
-                <img src="{% static 'img/logo_header.jpg' %}"></a>
+                <img src="{% static 'img/logo_uclouvain.png' %}"></a>
 
-            <ul class="nav navbar-nav navbar-right pull-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true"
-                       aria-expanded="false"
-                       id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
-                            class="caret"></span></a>
-                    <ul class="dropdown-menu language-menu">
-                        {% for lang in LANGUAGES %}
-                            {% if lang.0 != LANGUAGE_CODE%}
-                                <li><a href="{% url 'lang_edit' lang.0 %}">{{ lang.0 }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </li>
-            </ul>
+                <ul class="nav navbar-nav navbar-right pull-right" style="margin: 5px 0;">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"
+                           id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu language-menu">
+                            {% for lang in LANGUAGES %}
+                                {% if lang.0 != LANGUAGE_CODE%}
+                                    <li><a href="{% url 'lang_edit' lang.0 %}">{{ lang.0 }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
 
             </div>
     </div>

@@ -39,7 +39,7 @@ body {
     margin: 0;
     padding-bottom: 9rem;
     min-height: 100%;
-    padding-top: 70px;
+    padding-top: 60px;
 }
 
 .nopadding {
@@ -683,6 +683,14 @@ https://stackoverflow.com/questions/16897285/bootstrap-datepicker-is-displaying-
     z-index: 1600;
 }
 
+.navbar {
+    background-color: white;
+}
+
+.container:after, .container:before {
+    content: none !important;
+}
+
 .navbar-header {
     width: 100%;
 }
@@ -940,7 +948,7 @@ label.required:after {
 
 
 .welcome-text {
-    color: #2b679b; padding: 20px; text-align: center; font-weight: bold;
+    color: white; padding: 20px; text-align: center; font-weight: bold;
     margin-top: 10px;
     margin-bottom: 20px;
 }
@@ -951,4 +959,33 @@ label.required:after {
 
 .panel-banner {
     border-bottom: 0;
+}
+
+.uclouvain-title {
+    color: #002d62;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    font-family: "Montserrat", sans-serif;
+    line-height: 45px;
+}
+
+.card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+ }
+
+.uclouvain-btn{
+    text-transform: uppercase;
+    border-radius: 0;
+    border: none;
+    background-color: #00214e;
 }

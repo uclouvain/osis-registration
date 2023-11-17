@@ -80,6 +80,9 @@
 
         body {
             font-family: 'Armata', sans-serif;
+            {% if 'source' in request.GET and request.GET.source == 'admission' %}
+                background-color: #eeeeee;
+            {% endif %}
         }
     </style>
 </head>
@@ -114,6 +117,21 @@
 </div>
 
 {% block sidebar %}{% endblock %}
+
+{% if 'source' in request.GET and request.GET.source == 'admission' %}
+
+<div class="page-header panel-banner" style="position: relative; background-color: #00214e; padding: 40px 50px; margin-top: 0;">
+    <img style="position: absolute; left:10vw; bottom: 50px;" src="{% static "img/guillemet-ucl-1.svg" %}"/>
+    <img style="position: absolute; right:10vw; top: 50px;" src="{% static "img/guillemet-ucl-2.svg" %}"/>
+    <div class="welcome-text-container">
+        <h3 class="welcome-text" style="padding: 50px; line-height: 1.5; text-transform: uppercase;">
+            <div style="margin-bottom: 15px;">{% trans "Are you decided? Do you wish to pursue your studies at UCLouvain?" %}</div>
+            <div>{% trans "Welcome to the online registration page! Please feel free to get started." %}</div>
+        </h3>
+    </div>
+</div>
+
+{% endif %}
 
 <div class="container" id="main">
 
