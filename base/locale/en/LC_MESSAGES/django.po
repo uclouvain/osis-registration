@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-20 14:30+0200\n"
+"POT-Creation-Date: 2023-11-20 11:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,22 +186,115 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
+msgid "Send"
+msgstr ""
+
 msgid "Cancel"
 msgstr ""
 
 msgid "Agreement is required to proceed with registration"
 msgstr ""
 
+msgid ""
+"\n"
+"                    <span>You <b style=\"text-decoration: underline;"
+"\">already have</b> an account ?</span>\n"
+"                "
+msgstr ""
+
+msgctxt "admission"
+msgid "Log in"
+msgstr ""
+
+msgid ""
+"\n"
+"                <span>You <b style=\"text-decoration: underline;\">do not "
+"have</b> an account yet ?</span>\n"
+"                "
+msgstr ""
+
+msgid "Create your account"
+msgstr ""
+
+msgid "Your account is personal !"
+msgstr ""
+
+msgid ""
+"Sharing your account among multiple individuals is not allowed and will "
+"result in the closure of all related requests."
+msgstr ""
+
+msgid "Before registering"
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"                        Check the <a href=\"%(url)s\">registration calendar</"
+"a> to ensure that your application is submitted within the deadlines\n"
+"                    "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"                           Verify the <a href=\"%(url)s\">entry "
+"requirements</a> for the program you wish to join\n"
+"                        "
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"                          Gather all the <a href=\"%(url)s\">necessary "
+"documents</a> to be provided\n"
+"                        "
+msgstr ""
+
+msgid "A few more questions?"
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"                          Check out our <a href=\"%(url)s\">FAQ</a>\n"
+"                        "
+msgstr ""
+
+msgid "Tuition fees"
+msgstr ""
+
+msgid "Passerelles"
+msgstr ""
+
+msgid "Funding eligibility"
+msgstr ""
+
+msgid "Accommodations"
+msgstr ""
+
+msgid "Preparing for your arrival in Belgium"
+msgstr ""
+
+msgid "Assimilation"
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"                          <a href=\"%(url)s\">Contact us</a> or come meet us "
+"at our offices\n"
+"                        "
+msgstr ""
+
 msgid "Your browser is out of date. This can lead to unknown behaviour."
 msgstr ""
 
-msgid "Documentation"
+msgid "Are you decided? Do you wish to pursue your studies at UCLouvain?"
 msgstr ""
 
-msgid "Website"
-msgstr ""
-
-msgid "Source code"
+msgid ""
+"Welcome to the online registration page! Please feel free to get started."
 msgstr ""
 
 msgid "UCLouvain user account creation request"

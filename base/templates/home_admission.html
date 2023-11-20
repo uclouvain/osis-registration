@@ -27,80 +27,44 @@
 {% endcomment %}
 
 {% block content %}
-    <div class="page-header panel-banner">
-       <img src="{% static "img/uclouvain.png" %}" class="panel-img img-responsive" alt="Responsive image">
-    </div>
-    <h3 class="welcome-text">{% trans "Welcome to the UCLouvain registration application platform" %}</h3>
-
     {% block messages %}
         {% include "blocks/template_messages.html" %}
     {% endblock %}
 
-    <div class="row">
-
-    <div class="col-md-12">
-        <div class="alert alert-info panel-top-alert" role="alert">
-            <div class="icon"><i class="glyphicon glyphicon-info-sign"></i></div>
-            <div class="message">
-
-                <p>
-                {% blocktrans %}
-                If you are visiting this website for the first time, you must first <b style="text-decoration: underline;">register</b> yourself: we will ask you for some personal information, which will enable you to create an access account. This account requires a valid and functioning private email address, which will be used as your identifier. A verification email will be sent to you with an account activation link.
-                {% endblocktrans %}
-                </p>
-
-                <p>
-                {% blocktrans %}
-                If you have already created an access account, simply <b style="text-decoration: underline;">log in</b>.
-                {% endblocktrans %}
-                </p>
-
-            </div>
-        </div>
-    </div>
+    <div class="row" style="margin-top: 60px;">
 
     {% if not form_visible %}
-    <div class="col-md-6" id="col-log-in">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h4>
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    {% blocktrans %}
-                        <span>You <b style="text-decoration: underline;">already have</b> an account</span>
-                    {% endblocktrans %}
-                </h4>
-            </div>
-            <div class="panel-body">
-                <p>{% trans 'Please log in using your existing login credentials' %}</p>
-                <a href="{{ log_in_url }}" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
-                    {% trans 'Log in' %}
-                </a>
-            </div>
+    <div class="col-md-6" id="admission-col-log-in">
+        <div class="card">
+            <h4 class="text-center" style="color: #00214e;">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                {% blocktrans %}
+                    <span>You <b style="text-decoration: underline;">already have</b> an account ?</span>
+                {% endblocktrans %}
+            </h4>
+            <a href="{{ log_in_url }}" class="btn btn-primary uclouvain-btn">
+                <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
+                <b>{% trans 'Log in' context "admission" %}</b>
+            </a>
         </div>
     </div>
     {% endif %}
 
-    <div class="{% if form_visible %} col-md-12 {% else %} col-md-6 {% endif %}" id="col-create-account">
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4>
+    <div class="{% if form_visible %} col-md-12 {% else %} col-md-6 {% endif %}" id="admission-col-create-account">
+        <div class="card">
+            <h4 class="text-center" style="color: #00214e;">
                 <span class="glyphicon glyphicon-remove-circle"></span>
                 {% blocktrans %}
-                <span>You <b style="text-decoration: underline;">do not have</b> an account yet</span>
+                <span>You <b style="text-decoration: underline;">do not have</b> an account yet ?</span>
                 {% endblocktrans %}
             </h4>
-        </div>
-        <div class="panel-body">
-            <p>{% trans 'Please  register first in order to request a new account' %}</p>
             {% if not form_visible %}
-                <button class="btn btn-default" id="btn-register" data-toggle="collapse" data-target="#form">
+                <button class="btn btn-primary uclouvain-btn" id="btn-register" data-toggle="collapse" data-target="#form">
                     <span class="glyphicon glyphicon-pencil"></span>
-                    {% trans 'Register' %}
+                    <b>{% trans 'Create your account' %}</b>
                 </button>
             {% endif %}
-            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={% if 'source' in request.GET %}{{ request.GET.source }}{% endif %}">
+            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={{ request.GET.source }}">
                 {% csrf_token %}
                 <br/>
                 <div class="row">
@@ -174,14 +138,89 @@
                 <hr/>
                  <div class="row">
                      <div class="col-md-12">
-                         <input class="btn btn-primary" id="btn-submit" type="submit" value="{% trans 'Send' %}">
-                         <a class="btn btn-default" id="btn-cancel">{% trans 'Cancel' %}</a>
+                         <input class="btn btn-primary uclouvain-btn" id="btn-submit" type="submit" value="{% trans 'Send' %}">
+                         <a class="btn btn-default uclouvain-btn-default" id="btn-cancel">{% trans 'Cancel' %}</a>
                      </div>
                 </div>
             </form>
         </div>
+
+    </div>
     </div>
 
+    <div class="alert alert-info" style="margin-top: 30px; display: flex; gap: 15px; align-items: center;">
+        <i class="glyphicon glyphicon-info-sign" aria-hidden="true" style="font-size: 20px;"></i>
+        <div>
+            <b>{% trans "Your account is personal !" %}</b>
+            <br/>
+            <span>{% trans "Sharing your account among multiple individuals is not allowed and will result in the closure of all related requests." %}</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3 style="color: #00214e;">{% trans 'Before registering' %}</h3>
+        <hr style="border-top: 1px solid #00214e;"/>
+        <div class="row cards-grid">
+                <div class="card">
+                    <span class="glyphicon glyphicon-calendar" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                    {% blocktrans with url=urls.REGISTRATION_CALENDAR_URL %}
+                        Check the <a href="{{ url }}">registration calendar</a> to ensure that your application is submitted within the deadlines
+                    {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="glyphicon glyphicon-list-alt" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.STUDY_PROGRAMME_URL %}
+                           Verify the <a href="{{ url }}">entry requirements</a> for the program you wish to join
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="glyphicon glyphicon-paperclip" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.PROGRAMME_REQUIREMENTS_URL %}
+                          Gather all the <a href="{{ url }}">necessary documents</a> to be provided
+                        {% endblocktrans %}
+                    </p>
+                </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3 style="color: #00214e;">{% trans 'A few more questions?' %}</h3>
+        <hr style="border-top: 1px solid #00214e;"/>
+        <div class="row cards-grid">
+                <div class="card">
+                    <span class="glyphicon glyphicon-question-sign" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.FAQ_URL %}
+                          Check out our <a href="{{ url }}">FAQ</a>
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <ul>
+                        <li><a href="{{ urls.TUITION_FEES_URL }}">{% trans 'Tuition fees' %}</a></li>
+                        <li><a href="{{ urls.PASSERELLES_URL }}">{% trans 'Passerelles' %}</a></li>
+                        <li><a href="{{ urls.FUNDING_ELIGIBILITY_URL }}">{% trans 'Funding eligibility' %}</a></li>
+                        <li><a href="{{ urls.ACCOMMODATIONS_URL }}">{% trans 'Accommodations' %}</a></li>
+                        <li><a href="{{ urls.PREPARING_ARRIVAL_URL }}">{% trans 'Preparing for your arrival in Belgium' %}</a></li>
+                        <li><a href="{{ urls.ASSIMILATION_URL }}">{% trans 'Assimilation' %}</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div>
+                        <span class="glyphicon glyphicon-phone-alt" style="font-size: 50px; color: #00214e;"></span>
+                    </div>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.CONTACT_URL %}
+                          <a href="{{ url }}">Contact us</a> or come meet us at our offices
+                        {% endblocktrans %}
+                    </p>
+                </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -246,20 +285,20 @@
     });
 
     document.querySelector("#btn-register").addEventListener('click', (e) => {
-        document.querySelector("#col-log-in").classList.remove('animate-maximize');
-        document.querySelector("#col-log-in").classList.add('animate-minimize');
-        document.querySelector("#col-create-account").classList.remove('col-md-6');
-        document.querySelector("#col-create-account").classList.add('col-md-12');
+        document.querySelector("#admission-col-log-in").classList.remove('animate-maximize');
+        document.querySelector("#admission-col-log-in").classList.add('animate-minimize');
+        document.querySelector("#admission-col-create-account").classList.remove('col-md-6');
+        document.querySelector("#admission-col-create-account").classList.add('col-md-12');
         document.querySelector("#btn-register").classList.add('hidden');
-        setTimeout(()=>document.querySelector("#col-create-account").scrollIntoView({behavior: 'smooth'}), 400);
+        setTimeout(()=>document.querySelector("#anchor").scrollIntoView({behavior: 'smooth'}), 400);
     });
 
     document.querySelector("#btn-cancel").addEventListener('click', (e) => {
-        document.querySelector("#col-log-in").classList.remove('animate-minimize');
-        document.querySelector("#col-log-in").classList.add('animate-maximize');
-        document.querySelector("#col-create-account").classList.add('col-md-6');
-        document.querySelector("#col-create-account").classList.remove('col-md-12');
-        document.querySelector("#col-create-account #form").classList.remove('in');
+        document.querySelector("#admission-col-log-in").classList.remove('animate-minimize');
+        document.querySelector("#admission-col-log-in").classList.add('animate-maximize');
+        document.querySelector("#admission-col-create-account").classList.add('col-md-6');
+        document.querySelector("#admission-col-create-account").classList.remove('col-md-12');
+        document.querySelector("#admission-col-create-account #form").classList.remove('in');
         document.querySelector("#btn-register").classList.remove('hidden');
     });
 
