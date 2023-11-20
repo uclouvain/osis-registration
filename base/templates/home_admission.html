@@ -1,0 +1,308 @@
+{% extends "layout.html" %}
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block content %}
+    {% block messages %}
+        {% include "blocks/template_messages.html" %}
+    {% endblock %}
+
+    <div class="row" style="margin-top: 60px;">
+
+    {% if not form_visible %}
+    <div class="col-md-6" id="admission-col-log-in">
+        <div class="card">
+            <h4 class="text-center" style="color: #00214e;">
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                {% blocktrans %}
+                    <span>You <b style="text-decoration: underline;">already have</b> an account ?</span>
+                {% endblocktrans %}
+            </h4>
+            <a href="{{ log_in_url }}" class="btn btn-primary uclouvain-btn">
+                <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
+                <b>{% trans 'Log in' context "admission" %}</b>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="{% if form_visible %} col-md-12 {% else %} col-md-6 {% endif %}" id="admission-col-create-account">
+        <div class="card">
+            <h4 class="text-center" style="color: #00214e;">
+                <span class="glyphicon glyphicon-remove-circle"></span>
+                {% blocktrans %}
+                <span>You <b style="text-decoration: underline;">do not have</b> an account yet ?</span>
+                {% endblocktrans %}
+            </h4>
+            {% if not form_visible %}
+                <button class="btn btn-primary uclouvain-btn" id="btn-register" data-toggle="collapse" data-target="#form">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <b>{% trans 'Create your account' %}</b>
+                </button>
+            {% endif %}
+            <form class="{% if not form_visible %} collapse {% endif %}" id="form" method="post" action="{% url 'registration' %}?form_visible=true&source={{ request.GET.source }}">
+                {% csrf_token %}
+                <br/>
+                <div class="row">
+                    <div class="col-md-6 col-divider-left">
+                        <div class="title bg-info text-info border-info">
+                            <i class="glyphicon glyphicon-user"></i>
+                            {% trans 'Identification' %}
+                        </div>
+                        {% bootstrap_field form.first_name label_class="required" %}
+                        {% bootstrap_field form.last_name label_class="required" %}
+                        {% bootstrap_field form.birth_date label_class="required" %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="title bg-info text-info border-info">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            {% trans 'Authentication information' %}
+                        </div>
+                        {% bootstrap_field form.email label_class="required" %}
+                        {% bootstrap_field form.password label_class="required" addon_after='<span id="togglePasswordBtn"><i class="glyphicon glyphicon-eye-close"></i></span>'%}
+                        <div id="password-rules" class="alert alert-warning">
+                            <b>{% trans 'Password should validate against the following rules:' %}</b>
+                            <ul>
+                                <li>{% trans 'can’t be too similar to your other personal information' %}</li>
+                                <li>{% trans 'must contain at least 12 characters' %}</li>
+                                <li>{% trans 'can’t be a commonly used password' %}</li>
+                                <li>{% trans 'must contain at least 3 of these types: uppercase, lowercase, digit and special' %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="row">
+                    <div class="col-md-6 col-divider-left">
+                    <div class="form-group">
+                        <label class="required">Captcha</label>
+                        <div class="alert alert-info">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                            {% trans 'To determine whether you are a human visitor and to prevent automated spam submissions, please solve the following CAPTCHA.' %}
+                        </div>
+                        {% bootstrap_field form.captcha show_label=False placeholder=_("Write down the sequence of characters visible in the image above") %}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="required">{% trans "Data processing agreement" %}</label>
+                        <div class="alert alert-info">
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                            {% trans "In order to continue, you have to acknowledge and accept" %}
+                            <a target="_blank" href="{{ data_protection_policy_url }}">{% trans "the UCLouvain policy on personal data protection" %}</a>
+                        </div>
+                        <div class="col-xs-9 col-md-8 col-lg-6 input-group" style="text-align: left;">
+                            <label for="accept" class="col-xs-6">
+                                <input type="radio" id="accept" name="agreement" value="accept" required
+                                       {% if 'agreement' in request.POST and request.POST.agreement == "accept" %} checked {% endif %}
+                                >
+                                {% trans 'Accept' %}
+                            </label>
+                            <label for="reject" class="col-xs-6">
+                                <input type="radio" id="reject" name="agreement" value="reject" required
+                                       {% if 'agreement' in request.POST and request.POST.agreement == "reject" %} checked {% endif %}
+                                >
+                                {% trans 'Reject' %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <hr/>
+                 <div class="row">
+                     <div class="col-md-12">
+                         <input class="btn btn-primary uclouvain-btn" id="btn-submit" type="submit">
+                         <a class="btn btn-default uclouvain-btn-default" id="btn-cancel">{% trans 'Cancel' %}</a>
+                     </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top: 30px; display: flex; gap: 15px; align-items: center;">
+        <i class="glyphicon glyphicon-info-sign" aria-hidden="true" style="font-size: 20px;"></i>
+        <div>
+            <b>{% trans "Your account is personal !" %}</b>
+            <br/>
+            <span>{% trans "Sharing your account among multiple individuals is not allowed and will result in the closure of all related requests." %}</span>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3 style="color: #00214e;">{% trans 'Before registering' %}</h3>
+        <hr style="border-top: 1px solid #00214e;"/>
+        <div class="row cards-grid">
+                <div class="card">
+                    <span class="glyphicon glyphicon-calendar" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                    {% blocktrans with url=urls.REGISTRATION_CALENDAR_URL %}
+                        Check the <a href="{{ url }}">registration calendar</a> to ensure that your application is submitted within the deadlines
+                    {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="glyphicon glyphicon-list-alt" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.STUDY_PROGRAMME_URL %}
+                           Verify the <a href="{{ url }}">entry requirements</a> for the program you wish to join
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="glyphicon glyphicon-paperclip" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.PROGRAMME_REQUIREMENTS_URL %}
+                          Gather all the <a href="{{ url }}">necessary documents</a> to be provided
+                        {% endblocktrans %}
+                    </p>
+                </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3 style="color: #00214e;">{% trans 'A few more questions?' %}</h3>
+        <hr style="border-top: 1px solid #00214e;"/>
+        <div class="row cards-grid">
+                <div class="card">
+                    <span class="glyphicon glyphicon-question-sign" style="font-size: 50px; color: #00214e;"></span>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.FAQ_URL %}
+                          Check out our <a href="{{ url }}">FAQ</a>
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="card">
+                    <ul>
+                        <li><a href="{{ urls.TUITION_FEES_URL }}">{% trans 'Tuition fees' %}</a></li>
+                        <li><a href="{{ urls.PASSERELLES_URL }}">{% trans 'Passerelles' %}</a></li>
+                        <li><a href="{{ urls.FUNDING_ELIGIBILITY_URL }}">{% trans 'Funding eligibility' %}</a></li>
+                        <li><a href="{{ urls.ACCOMMODATIONS_URL }}">{% trans 'Accommodations' %}</a></li>
+                        <li><a href="{{ urls.PREPARING_ARRIVAL_URL }}">{% trans 'Preparing for your arrival in Belgium' %}</a></li>
+                        <li><a href="{{ urls.ASSIMILATION_URL }}">{% trans 'Assimilation' %}</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div>
+                        <span class="glyphicon glyphicon-phone-alt" style="font-size: 50px; color: #00214e;"></span>
+                    </div>
+                    <p class="text-center">
+                        {% blocktrans with url=urls.CONTACT_URL %}
+                          <a href="{{ url }}">Contact us</a> or come meet us at our offices
+                        {% endblocktrans %}
+                    </p>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    const refreshButton = document.querySelector('.js-captcha-refresh');
+    const form = document.querySelector('#form');
+    const input = form.querySelector('input[name="captcha_0"]');
+    const img = form.querySelector('img.captcha');
+    const audio = form.querySelector('#captcha-audio');
+
+    refreshButton.addEventListener('click', () => {
+        // captcha_refresh in library filters requests based on header
+        const options = {headers: new Headers({'x-requested-with': 'XMLHttpRequest'})};
+
+        fetch('/captcha/refresh/', options).then(res => res.json()).then(json => {
+            input.value = json.key;
+            img.src = json.image_url;
+            audio.src = json.audio_url;
+        });
+    });
+
+
+    // data policy consent (accept required to submit form)
+    form.addEventListener('submit', (e) => {
+        const acceptOption = form.querySelector('#accept');
+        const rejectOption = form.querySelector('#reject');
+
+        if(rejectOption.checked && !acceptOption.checked){
+            rejectOption.setCustomValidity("{% trans "Agreement is required to proceed with registration" %}");
+            rejectOption.reportValidity();
+            e.preventDefault();
+        }
+
+        // somehow reportValidity prevent to submit form after, we need to listen click on btn-submit
+        form.querySelector('#btn-submit').addEventListener('click', (e) => {
+            if(acceptOption.checked){
+                rejectOption.setCustomValidity("");
+                form.submit();
+            }
+        });
+    });
+
+    document.querySelector("input#id_password + .input-group-addon").addEventListener('click', (e) => {
+        const passwordInput = document.querySelector('input#id_password');
+        const togglePasswordIcon = document.querySelector('#togglePasswordBtn i');
+        if(togglePasswordIcon.classList.contains('glyphicon-eye-open')) {
+            togglePasswordIcon.classList.remove('glyphicon-eye-open');
+            togglePasswordIcon.classList.add('glyphicon-eye-close');
+            passwordInput.setAttribute('type', 'password')
+        } else {
+            togglePasswordIcon.classList.remove('glyphicon-eye-close');
+            togglePasswordIcon.classList.add('glyphicon-eye-open');
+            passwordInput.setAttribute('type', 'text')
+        }
+    });
+
+    document.querySelector("input#id_password").addEventListener('focusin', (e) => {
+        document.querySelector(".col-divider-left + div").classList.add('col-divider-right');
+        document.querySelector(".col-divider-left").classList.remove('col-divider-left');
+        document.querySelector("#password-rules").classList.add('show');
+    });
+
+    document.querySelector("#btn-register").addEventListener('click', (e) => {
+        document.querySelector("#admission-col-log-in").classList.remove('animate-maximize');
+        document.querySelector("#admission-col-log-in").classList.add('animate-minimize');
+        document.querySelector("#admission-col-create-account").classList.remove('col-md-6');
+        document.querySelector("#admission-col-create-account").classList.add('col-md-12');
+        document.querySelector("#btn-register").classList.add('hidden');
+        setTimeout(()=>document.querySelector("#anchor").scrollIntoView({behavior: 'smooth'}), 400);
+    });
+
+    document.querySelector("#btn-cancel").addEventListener('click', (e) => {
+        document.querySelector("#admission-col-log-in").classList.remove('animate-minimize');
+        document.querySelector("#admission-col-log-in").classList.add('animate-maximize');
+        document.querySelector("#admission-col-create-account").classList.add('col-md-6');
+        document.querySelector("#admission-col-create-account").classList.remove('col-md-12');
+        document.querySelector("#admission-col-create-account #form").classList.remove('in');
+        document.querySelector("#btn-register").classList.remove('hidden');
+    });
+
+
+
+</script>
+{% endblock %}
