@@ -57,6 +57,9 @@
     <meta name="msapplication-TileColor" content="#2d89ef">
     <meta name="theme-color" content="#ffffff">
 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200" rel="stylesheet">
+
+
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis.css' %}">
@@ -120,11 +123,11 @@
 
 {% if 'source' in request.GET and request.GET.source == 'admission' %}
 
-<div class="page-header panel-banner" style="position: relative; background-color: #00214e; padding: 40px 50px; margin-top: 0;">
-    <img style="position: absolute; left:10vw; bottom: 50px;" src="{% static "img/guillemet-ucl-1.svg" %}"/>
-    <img style="position: absolute; right:10vw; top: 50px;" src="{% static "img/guillemet-ucl-2.svg" %}"/>
+<div id="welcome-banner" class="page-header panel-banner" style="position: relative; background-color: #00214e; padding: 40px 50px; margin-top: 0;">
+    <img class="guillemet-left" src="{% static "img/guillemet-ucl-1.svg" %}"/>
+    <img class="guillemet-right" src="{% static "img/guillemet-ucl-2.svg" %}"/>
     <div class="welcome-text-container">
-        <h3 class="welcome-text" style="padding: 50px; line-height: 1.5; text-transform: uppercase;">
+        <h3 class="welcome-text-admission">
             <div style="margin-bottom: 15px;">{% trans "Are you decided? Do you wish to pursue your studies at UCLouvain?" %}</div>
             <div>{% trans "Welcome to the online registration page! Please feel free to get started." %}</div>
         </h3>
@@ -133,7 +136,9 @@
 
 {% endif %}
 
-<div class="container" id="main">
+<span id="anchor" style="scroll-margin: 50px;"></span>
+
+<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' %} style="font-family: 'Montserrat', sans-serif; font-weight: bold;" {% endif %}>
 
     {% block header_content %}{% endblock %}
     {% block content %}{% endblock %}

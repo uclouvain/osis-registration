@@ -945,12 +945,18 @@ label.required:after {
 
 }
 
-
-
 .welcome-text {
-    color: white; padding: 20px; text-align: center; font-weight: bold;
+    padding-bottom: 20px;
+    text-align: center;
+    color: #337ab7;
+}
+
+.welcome-text-admission {
+    color: white; text-align: center; font-weight:bold;
     margin-top: 10px;
     margin-bottom: 20px;
+    padding: 50px 180px; line-height: 1.5; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif; font-weight: bold;
 }
 
 .panel-img {
@@ -988,4 +994,66 @@ label.required:after {
     border-radius: 0;
     border: none;
     background-color: #00214e;
+}
+
+.uclouvain-btn-default{
+    text-transform: uppercase;
+    border-radius: 0;
+    border: none;
+    background-color: #ffffff;
+}
+
+.cards-grid {
+    display: grid; grid-auto-flow: column; gap: 15px;
+}
+
+@media screen and (max-width: 768px) {
+    .cards-grid {
+        grid-auto-flow: row;
+        padding: 15px;
+    }
+    .navbar-nav>li>a {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .container>.navbar-header {
+        margin-right: 0;
+        margin-left: 0;
+    }
+    .navbar-right {
+        padding-right: 0;
+    }
+    .navbar-brand {
+        margin-left: 0 !important;
+    }
+    .welcome-text-admission {
+        font-size: calc(12px + 1.5vw);
+        padding: 13vw;
+    }
+}
+
+@media screen and (max-width: 350px){
+    .navbar-brand>img {
+        padding-top: 7px;
+        height: auto;
+        width: 150px;
+    }
+}
+
+.guillemet-left{
+    position: absolute; left: 15vw; bottom: 50px;
+}
+
+.guillemet-right{
+    position: absolute; right: 15vw; top: 50px;
+}
+
+@media screen and (min-width: 1650px){
+    .guillemet-left{
+        position: absolute; left: calc(50vw - 570px); bottom: 50px;
+    }
+
+    .guillemet-right{
+        position: absolute; right: calc(50vw - 570px); top: 50px;
+    }
 }

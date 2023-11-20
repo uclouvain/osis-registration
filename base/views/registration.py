@@ -179,8 +179,25 @@ class RegistrationFormView(FormView):
             'data_protection_policy_url': settings.DATA_PROTECTION_POLICY_URL,
             'log_in_url': self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL,
             'form_visible': bool(self.request.GET.get('form_visible', False)),
+            'urls': self.get_tiles_urls(),
         })
         return context
+
+    def get_tiles_urls(self):
+        lang_code = self.request.LANGUAGE_CODE.upper()[:2]
+        return {
+            'REGISTRATION_CALENDAR_URL': getattr(settings, f"REGISTRATION_CALENDAR_URL_{lang_code}"),
+            'STUDY_PROGRAMME_URL': getattr(settings, f"STUDY_PROGRAMME_URL_{lang_code}"),
+            'PROGRAMME_REQUIREMENTS_URL': getattr(settings, f"PROGRAMME_REQUIREMENTS_URL_{lang_code}"),
+            'FAQ_URL': getattr(settings, f"FAQ_URL_{lang_code}"),
+            'CONTACT_URL': getattr(settings, f"CONTACT_URL_{lang_code}"),
+            'TUITION_FEES_URL': getattr(settings, f"TUITION_FEES_URL_{lang_code}"),
+            'PASSERELLES_URL': getattr(settings, f"PASSERELLES_URL_{lang_code}"),
+            'FUNDING_ELIGIBILITY_URL': getattr(settings, f"FUNDING_ELIGIBILITY_URL_{lang_code}"),
+            'ACCOMMODATIONS_URL': getattr(settings, f"ACCOMMODATIONS_URL_{lang_code}"),
+            'PREPARING_ARRIVAL_URL': getattr(settings, f"PREPARING_ARRIVAL_URL_{lang_code}"),
+            'ASSIMILATION_URL': getattr(settings, f"ASSIMILATION_URL_{lang_code}"),
+        }
 
     def get_success_url(self):
         return reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': self.user_account_request.uuid})
