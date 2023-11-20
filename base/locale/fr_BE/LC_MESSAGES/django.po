@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-20 10:09+0100\n"
+"POT-Creation-Date: 2023-11-20 11:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,6 +216,9 @@ msgstr "Accepter"
 msgid "Reject"
 msgstr "Refuser"
 
+msgid "Send"
+msgstr "Envoyer"
+
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -286,7 +289,7 @@ msgid ""
 msgstr ""
 "\n"
 "                           Vérifiez les <a href=\"%(url)s\">conditions "
-"d'accès</a> duu programme que vous souhaitez intégrer\n"
+"d'accès</a> du programme que vous souhaitez intégrer\n"
 "                        "
 
 #, python-format
