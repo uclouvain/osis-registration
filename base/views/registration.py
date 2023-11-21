@@ -78,7 +78,7 @@ class RegistrationFormView(FormView):
 
     def get(self, request, *args, **kwargs):
         # default redirect to admission source if no source is specified
-        if not request.GET.get('source') == "admission":
+        if not request.GET.get('source'):
             return redirect("/?source=admission")
         return super().get(self, request, *args, **kwargs)
 

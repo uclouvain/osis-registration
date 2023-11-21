@@ -78,4 +78,4 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
 
 def _is_ldap_constraint_raised(response):
     return 'Message' in response.keys() and 'LDAPConstraintViolationResult' in response['Message'] or \
-           'message' in response.keys() and response['message'] == 'UNIQUE constraint failed: oi_users.email'
+           'message' in response.keys() and response['message'] == 'SQL Integrity Error UNIQUE constraint failed: oi_users.email'
