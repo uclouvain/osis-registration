@@ -30,6 +30,7 @@ from dataclasses import dataclass
 import requests
 from captcha import views
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
@@ -74,6 +75,12 @@ class RegistrationFormView(FormView):
 
     user_account_request = None
     subscriber = None
+
+    def get(self, request, *args, **kwargs):
+        # default redirect to admission source if no source is specified
+        if not request.GET.get('source') == "admission":
+            return redirect("/?source=admission")
+        return super().get(self, request, *args, **kwargs)
 
     def get_template_names(self):
         if self.request.GET.get('source') == "admission":
