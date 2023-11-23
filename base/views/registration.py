@@ -41,6 +41,7 @@ from ratelimit.decorators import ratelimit
 from requests.exceptions import MissingSchema
 
 from base import settings
+from base.forms.login import LoginForm
 from base.forms.registration import RegistrationForm
 from base.models.enum import UserAccountRequestType
 from base.models.polling_subscriber import PollingSubscriber
@@ -187,6 +188,8 @@ class RegistrationFormView(FormView):
             'log_in_url': self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL,
             'form_visible': bool(self.request.GET.get('form_visible', False)),
             'urls': self.get_tiles_urls(),
+            'login_form': LoginForm(),
+            'admission_login_url': settings.ADMISSION_LOGIN_URL,
         })
         return context
 
