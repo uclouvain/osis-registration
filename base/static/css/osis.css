@@ -1037,6 +1037,18 @@ label.required:after {
     padding: 15px;
 }
 
+.login-form {
+    width: 90%;
+}
+
+.login-form input {
+    font-size: 12px;
+}
+
+.login-form label {
+    font-size: 13px;
+}
+
 @media screen and (max-width: 991px) {
     .register-form-card {
         margin-top: 20px;
