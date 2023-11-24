@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-20 11:56+0100\n"
+"POT-Creation-Date: 2023-11-24 11:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,12 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
+msgid "Email"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
 msgid "First name"
 msgstr ""
 
@@ -28,9 +34,6 @@ msgid "Last name"
 msgstr ""
 
 msgid "Private email address"
-msgstr ""
-
-msgid "Password"
 msgstr ""
 
 msgid "Date of birth"
@@ -202,6 +205,9 @@ msgid ""
 "                "
 msgstr ""
 
+msgid "Email or password invalid"
+msgstr ""
+
 msgctxt "admission"
 msgid "Log in"
 msgstr ""
@@ -293,8 +299,7 @@ msgstr ""
 msgid "Are you decided? Do you wish to pursue your studies at UCLouvain?"
 msgstr ""
 
-msgid ""
-"Welcome to the online registration page! Please feel free to get started."
+msgid "Welcome to the online registration page!"
 msgstr ""
 
 msgid "UCLouvain user account creation request"
