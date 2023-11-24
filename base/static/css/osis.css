@@ -23,6 +23,24 @@
 * OSIS Custom layout
 */
 
+
+@font-face
+{
+    font-family: 'Montserrat';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/Montserrat-Light.ttf');
+}
+
+@font-face
+{
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-style: normal;
+    src: url('../fonts/Montserrat-Medium.ttf');
+}
+
+
 html {
     height: 100%;
     box-sizing: border-box;
@@ -1041,12 +1059,8 @@ label.required:after {
     width: 90%;
 }
 
-.login-form input {
+.login-form input, .login-form label {
     font-size: 12px;
-}
-
-.login-form label {
-    font-size: 13px;
 }
 
 @media screen and (max-width: 991px) {
@@ -1105,4 +1119,8 @@ label.required:after {
 
 .login-card {
     gap: 0;
+}
+
+.card a {
+    font-weight: bold;
 }
