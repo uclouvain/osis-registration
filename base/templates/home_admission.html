@@ -35,23 +35,40 @@
 
     {% if not form_visible %}
     <div class="col-md-6" id="admission-col-log-in">
-        <div class="card">
+        <div class="card login-card">
+
             <h4 class="text-center" style="color: #00214e;">
                 <span class="glyphicon glyphicon-ok-circle"></span>
                 {% blocktrans %}
                     <span>You <b style="text-decoration: underline;">already have</b> an account ?</span>
                 {% endblocktrans %}
             </h4>
-            <a href="{{ log_in_url }}" class="btn btn-primary uclouvain-btn">
-                <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
-                <b>{% trans 'Log in' context "admission" %}</b>
-            </a>
+
+            <form class="login-form" method="POST" action="{{ admission_login_url }}">
+                {% csrf_token %}
+
+                {% if request.GET.login_error %}
+                    <div class="text-danger text-center">{% trans "Email or password invalid" %}</div>
+                {% endif %}
+
+                <div class="row">
+                {% bootstrap_field login_form.httpd_username layout='horizontal' label_class='col-sm-3 login-label' field_class='col-sm-9' %}
+                {% bootstrap_field login_form.httpd_password layout='horizontal' label_class='col-sm-3 login-label' field_class='col-sm-9' %}
+                </div>
+
+                <div class="form-group col-md-12 text-center button-group">
+                    <button type="submit" class="btn btn-primary uclouvain-btn" style="margin-top: 10px;">
+                        <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
+                        <b>{% trans 'Log in' context "admission" %}</b>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     {% endif %}
 
     <div class="{% if form_visible %} col-md-12 {% else %} col-md-6 {% endif %}" id="admission-col-create-account">
-        <div class="card">
+        <div class="card register-form-card">
             <h4 class="text-center" style="color: #00214e;">
                 <span class="glyphicon glyphicon-remove-circle"></span>
                 {% blocktrans %}

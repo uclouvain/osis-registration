@@ -33,7 +33,11 @@
 <head>
     <meta charset="utf-8">
     {% block title %}
-        <title>OSIS-Registration</title>
+        {% if not request.GET.source == "admission" %}
+            <title>OSIS-Registration</title>
+        {% else %}
+            <title>Registration UCLouvain (OSIS)</title>
+        {% endif %}
     {% endblock %}
 
     <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -48,17 +52,19 @@
         <link rel="manifest" href="{% static "img/favicon/local/site.webmanifest" %}">
         <link rel="mask-icon" href="{% static "img/favicon/local/safari-pinned-tab.svg" %}" color="#5bbad5">
     {% else %}
-        <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/apple-touch-icon.png" %}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{% static "img/favicon/favicon-32x32.png" %}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{% static "img/favicon/favicon-16x16.png" %}">
-        <link rel="manifest" href="{% static "img/favicon/site.webmanifest" %}">
-        <link rel="mask-icon" href="{% static "img/favicon/safari-pinned-tab.svg" %}" color="#5bbad5">
+        {% if not request.GET.source == "admission" %}
+            <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/uclouvain/apple-touch-icon.png" %}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{% static "img/favicon/uclouvain/favicon-32x32.png" %}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{% static "img/favicon/uclouvain/favicon-16x16.png" %}">
+            <link rel="manifest" href="{% static "img/favicon/uclouvain/site.webmanifest" %}">
+            <link rel="mask-icon" href="{% static "img/favicon/uclouvain/safari-pinned-tab.svg" %}" color="#5bbad5">
+        {% else %}
+            <link rel="shortcut icon" href="https://uclouvain.be/sites/all/themes/ucltheme/favicon.ico" type="image/vnd.microsoft.icon">
+        {% endif %}
     {% endif %}
+
     <meta name="msapplication-TileColor" content="#2d89ef">
     <meta name="theme-color" content="#ffffff">
-
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200" rel="stylesheet">
-
 
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -129,7 +135,7 @@
     <div class="welcome-text-container">
         <h3 class="welcome-text-admission">
             <div style="margin-bottom: 15px;">{% trans "Are you decided? Do you wish to pursue your studies at UCLouvain?" %}</div>
-            <div>{% trans "Welcome to the online registration page! Please feel free to get started." %}</div>
+            <div>{% trans "Welcome to the online registration page!" %}</div>
         </h3>
     </div>
 </div>
@@ -138,7 +144,7 @@
 
 <span id="anchor" style="scroll-margin: 50px;"></span>
 
-<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' %} style="font-family: 'Montserrat', sans-serif; font-weight: bold;" {% endif %}>
+<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' %} style="font-family: 'Montserrat', sans-serif;" {% endif %}>
 
     {% block header_content %}{% endblock %}
     {% block content %}{% endblock %}

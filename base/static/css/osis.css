@@ -23,6 +23,24 @@
 * OSIS Custom layout
 */
 
+
+@font-face
+{
+    font-family: 'Montserrat';
+    font-weight: normal;
+    font-style: normal;
+    src: url('../fonts/Montserrat-Light.ttf');
+}
+
+@font-face
+{
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-style: normal;
+    src: url('../fonts/Montserrat-Medium.ttf');
+}
+
+
 html {
     height: 100%;
     box-sizing: border-box;
@@ -1007,7 +1025,53 @@ label.required:after {
     display: grid; grid-auto-flow: column; gap: 15px;
 }
 
-@media screen and (max-width: 768px) {
+.register-form-card, .login-card {
+    min-height: 286px;
+}
+
+.guillemet-left{
+    position: absolute; left: 15vw; bottom: 50px;
+}
+
+.guillemet-right{
+    position: absolute; right: 15vw; top: 50px;
+}
+
+@media screen and (min-width: 1650px){
+    .guillemet-left{
+        position: absolute; left: calc(50vw - 570px); bottom: 50px;
+    }
+
+    .guillemet-right{
+        position: absolute; right: calc(50vw - 570px); top: 50px;
+    }
+}
+
+.login-label{
+    font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 14px; text-align: right; padding-top: 7px;
+}
+
+.login-form .form-group {
+    padding: 15px;
+}
+
+.login-form {
+    width: 90%;
+}
+
+.login-form input, .login-form label {
+    font-size: 12px;
+}
+
+@media screen and (max-width: 991px) {
+    .register-form-card {
+        margin-top: 20px;
+        min-height: auto;
+    }
+}
+
+
+@media screen and (max-width: 767px) {
     .cards-grid {
         grid-auto-flow: row;
         padding: 15px;
@@ -1030,6 +1094,15 @@ label.required:after {
         font-size: calc(12px + 1.5vw);
         padding: 13vw;
     }
+    .login-label {
+        display: none;
+    }
+    .login-form .form-group {
+        padding: 0;
+    }
+    .login-form {
+        margin-top: 10px;
+    }
 }
 
 @media screen and (max-width: 350px){
@@ -1040,20 +1113,14 @@ label.required:after {
     }
 }
 
-.guillemet-left{
-    position: absolute; left: 15vw; bottom: 50px;
+.login-form .button-group {
+    margin-bottom: 0;
 }
 
-.guillemet-right{
-    position: absolute; right: 15vw; top: 50px;
+.login-card {
+    gap: 0;
 }
 
-@media screen and (min-width: 1650px){
-    .guillemet-left{
-        position: absolute; left: calc(50vw - 570px); bottom: 50px;
-    }
-
-    .guillemet-right{
-        position: absolute; right: calc(50vw - 570px); top: 50px;
-    }
+.card a {
+    font-weight: bold;
 }

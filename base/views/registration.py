@@ -30,6 +30,7 @@ from dataclasses import dataclass
 import requests
 from captcha import views
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.utils.decorators import method_decorator
@@ -40,6 +41,7 @@ from ratelimit.decorators import ratelimit
 from requests.exceptions import MissingSchema
 
 from base import settings
+from base.forms.login import LoginForm
 from base.forms.registration import RegistrationForm
 from base.models.enum import UserAccountRequestType
 from base.models.polling_subscriber import PollingSubscriber
@@ -74,6 +76,12 @@ class RegistrationFormView(FormView):
 
     user_account_request = None
     subscriber = None
+
+    def get(self, request, *args, **kwargs):
+        # default redirect to admission source if no source is specified
+        if not request.GET.get('source'):
+            return redirect("/?source=admission")
+        return super().get(self, request, *args, **kwargs)
 
     def get_template_names(self):
         if self.request.GET.get('source') == "admission":
@@ -180,6 +188,8 @@ class RegistrationFormView(FormView):
             'log_in_url': self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL,
             'form_visible': bool(self.request.GET.get('form_visible', False)),
             'urls': self.get_tiles_urls(),
+            'login_form': LoginForm(),
+            'admission_login_url': settings.ADMISSION_LOGIN_URL,
         })
         return context
 
