@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-24 11:00+0100\n"
+"POT-Creation-Date: 2023-11-27 09:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,6 +241,9 @@ msgstr ""
 
 msgid "Email or password invalid"
 msgstr "Email ou mot de passe non valide"
+
+msgid "Forgot password?"
+msgstr "Mot de passe oublié ?"
 
 msgctxt "admission"
 msgid "Log in"
