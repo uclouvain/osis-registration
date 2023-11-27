@@ -1026,7 +1026,10 @@ label.required:after {
 }
 
 .register-form-card, .login-card {
-    min-height: 286px;
+    /* uncomment when using login form inside page */
+    /* min-height: 286px; */
+    gap: 20px !important;
+    min-height: 200px;
 }
 
 .guillemet-left{
@@ -1064,7 +1067,7 @@ label.required:after {
 }
 
 @media screen and (max-width: 991px) {
-    .register-form-card {
+    .register-form-card, .login-card {
         margin-top: 20px;
         min-height: auto;
     }
