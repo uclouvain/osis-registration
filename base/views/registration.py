@@ -190,6 +190,7 @@ class RegistrationFormView(FormView):
             'urls': self.get_tiles_urls(),
             'login_form': LoginForm(),
             'admission_login_url': settings.ADMISSION_LOGIN_URL,
+            'lost_password_url': settings.LOST_PASSWORD_URL,
         })
         return context
 
