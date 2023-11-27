@@ -189,6 +189,7 @@ class RegistrationFormView(FormView):
             'form_visible': bool(self.request.GET.get('form_visible', False)),
             'urls': self.get_tiles_urls(),
             'login_form': LoginForm(),
+            'show_login_form': False,
             'admission_login_url': settings.ADMISSION_LOGIN_URL,
             'lost_password_url': settings.LOST_PASSWORD_URL,
         })

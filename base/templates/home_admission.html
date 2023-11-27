@@ -44,6 +44,8 @@
                 {% endblocktrans %}
             </h4>
 
+            {% if show_login_form %}
+
             <form class="login-form" method="POST" action="{{ admission_login_url }}">
                 {% csrf_token %}
 
@@ -66,6 +68,18 @@
                     </button>
                 </div>
             </form>
+
+            {% else %}
+
+                <div class="col-md-12 button-group text-center">
+                    <a href="{{ log_in_url }}" type="submit" class="btn btn-primary uclouvain-btn">
+                        <span class="glyphicon glyphicon-log-in" style="margin-right: 5px;"></span>
+                        <b>{% trans 'Log in' context "admission" %}</b>
+                    </a>
+                </div>
+
+            {% endif %}
+
         </div>
     </div>
     {% endif %}
