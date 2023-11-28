@@ -33,10 +33,10 @@
 <head>
     <meta charset="utf-8">
     {% block title %}
-        {% if not request.GET.source == "admission" %}
-            <title>OSIS-Registration</title>
-        {% else %}
+        {% if 'source' in request.GET and request.GET.source == "admission" %}
             <title>Registration UCLouvain (OSIS)</title>
+        {% else %}
+            <title>OSIS-Registration</title>
         {% endif %}
     {% endblock %}
 
@@ -52,14 +52,14 @@
         <link rel="manifest" href="{% static "img/favicon/local/site.webmanifest" %}">
         <link rel="mask-icon" href="{% static "img/favicon/local/safari-pinned-tab.svg" %}" color="#5bbad5">
     {% else %}
-        {% if not request.GET.source == "admission" %}
+        {% if 'source' in request.GET and request.GET.source == "admission" %}
+            <link rel="shortcut icon" href="https://uclouvain.be/sites/all/themes/ucltheme/favicon.ico" type="image/vnd.microsoft.icon">
+        {% else %}
             <link rel="apple-touch-icon" sizes="180x180" href="{% static "img/favicon/uclouvain/apple-touch-icon.png" %}">
             <link rel="icon" type="image/png" sizes="32x32" href="{% static "img/favicon/uclouvain/favicon-32x32.png" %}">
             <link rel="icon" type="image/png" sizes="16x16" href="{% static "img/favicon/uclouvain/favicon-16x16.png" %}">
             <link rel="manifest" href="{% static "img/favicon/uclouvain/site.webmanifest" %}">
             <link rel="mask-icon" href="{% static "img/favicon/uclouvain/safari-pinned-tab.svg" %}" color="#5bbad5">
-        {% else %}
-            <link rel="shortcut icon" href="https://uclouvain.be/sites/all/themes/ucltheme/favicon.ico" type="image/vnd.microsoft.icon">
         {% endif %}
     {% endif %}
 
