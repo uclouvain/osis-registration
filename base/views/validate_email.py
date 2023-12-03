@@ -27,6 +27,7 @@
 
 import logging as default_logging
 
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
@@ -61,7 +62,11 @@ class ValidateEmailView(View):
             else:
                 account_creation_request.status = UserAccountRequestStatus.ERROR.value
                 self._log_account_activation_error(account_creation_request)
-            account_creation_request.save()
+
+            try:
+                account_creation_request.save()
+            except ValidationError:
+                self._log_save_request_error(account_creation_request)
 
         return redirect(reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': uacr_uuid}))
 
@@ -80,4 +85,14 @@ class ValidateEmailView(View):
             domain='osis-registration',
             level=default_logging.ERROR,
             description=f"error occured during user account activation for <{account_creation_request.email}>"
+        )
+
+    def _log_save_request_error(self, account_creation_request):
+        logging.log_event(
+            self.request,
+            event_type=logging.EventType.ERROR,
+            domain='osis-registration',
+            level=default_logging.ERROR,
+            description=f"save request error for {account_creation_request.email}"
+                        f"(uuid:{account_creation_request.uuid})"
         )
