@@ -63,7 +63,7 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            if _is_ldap_constraint_raised(response):
+            if _is_ldap_constraint_email_exists_raised(response):
                 already_exists_msg = _('a user account with the given email "{}" already exists').format(
                     user_creation_request.request.email
                 )
@@ -71,11 +71,19 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
                 raise CreateUserAccountErrorException(
                     error_msg=f"{already_exists_msg}. {log_in_link_msg}."
                 )
+            if _is_ldap_constraint_wrong_password_raised(response):
+                raise CreateUserAccountErrorException(
+                    error_msg=_("The used password contains an unaccepted character")
+                )
             raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
 
     return response
 
 
-def _is_ldap_constraint_raised(response):
-    return 'Message' in response.keys() and 'LDAPConstraintViolationResult' in response['Message'] or \
-           'message' in response.keys() and response['message'] == 'SQL Integrity Error UNIQUE constraint failed: oi_users.email'
+def _is_ldap_constraint_email_exists_raised(response):
+    return 'message' in response.keys() and 'Another entry with the same attribute value already exists' in response['message'] or \
+           'message' in response.keys() and 'SQL Integrity Error UNIQUE constraint failed: oi_users.email' in response['message']
+
+
+def _is_ldap_constraint_wrong_password_raised(response):
+    return 'message' in response.keys() and 'Value of attribute userpassword contains extended' in response['message']
