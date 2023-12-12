@@ -67,7 +67,7 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
                 used_for_recovery = _('The given email "{}" is already linked as a private email address for an existing UCLouvain account').format(
                     user_creation_request.request.email
                 )
-                please_try_with_uclouvain = _('Please log in using your UCLouvain email address (...@student.uclouvain.be or ...@uclouvain.be)')
+                please_try_with_uclouvain = _('Please log in using your UCLouvain email address - @student.uclouvain.be / @uclouvain.be')
                 log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
                 raise CreateUserAccountErrorException(
                     error_msg=f"{used_for_recovery}. {please_try_with_uclouvain}. {log_in_link_msg}."
