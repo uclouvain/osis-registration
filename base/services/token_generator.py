@@ -40,3 +40,16 @@ class MailValidationTokenGenerator(PasswordResetTokenGenerator):
 
 
 mail_validation_token_generator = MailValidationTokenGenerator()
+
+
+class EmailPasswordResetTokenGenerator(PasswordResetTokenGenerator):
+
+    def _make_hash_value(self, email, timestamp):
+        """
+        Hash the reset password request's email, timestamp to produce a token
+        Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
+        """
+        return f'{email}'
+
+
+password_reset_token_generator = EmailPasswordResetTokenGenerator()

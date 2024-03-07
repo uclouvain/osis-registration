@@ -27,7 +27,7 @@ from django.shortcuts import reverse
 
 from base.messaging import send_message, message_config
 from base.services import logging
-from base.services.token_generator import mail_validation_token_generator
+from base.services.token_generator import mail_validation_token_generator, password_reset_token_generator
 
 
 def send_email(template_references, receivers, data, connected_user=None):
@@ -72,4 +72,34 @@ def send_validation_mail(request, user_account_creation_request):
         event_type=logging.EventType.VIEW,
         domain="osis-registration",
         description=f"validation mail sent to {user_account_creation_request.request.email}"
+    )
+
+
+def send_reset_password_mail(request, email):
+    template_references = {
+        'html': 'osis_registration_mail_reset_password_html',
+        'txt': 'osis_registration_mail_reset_password_txt'
+    }
+
+    receivers = [
+        message_config.create_receiver(
+            receiver_email=email,
+            receiver_lang=request.LANGUAGE_CODE
+        )
+    ]
+    token = password_reset_token_generator.make_token(email)
+    data = {
+        'template': {'link': request.build_absolute_uri(reverse('modify_password', kwargs={
+            'email': email,
+            'token': token
+        }))},
+        'subject': {}
+    }
+
+    send_email(template_references, receivers, data)
+    logging.log_event(
+        request=request,
+        event_type=logging.EventType.VIEW,
+        domain="osis-registration",
+        description=f"validation mail sent to {email}"
     )

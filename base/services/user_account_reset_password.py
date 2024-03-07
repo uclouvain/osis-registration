@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,30 +26,44 @@
 from typing import Union
 
 import requests as requests
+from django.utils.translation import gettext as _
 from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
 from base.services.mock_service import mock_ldap_service
-from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
+from base.services.service_exceptions import CreateUserAccountErrorException
 
+SUCCESS = "success"
 ERROR = "error"
 
 
-def get_ldap_user_account_information(email) -> Union[Response, dict]:
+def reset_password_ldap_user_account(user_modification_request) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service(id="fake_id", email=email, prenom="prenom", nom="nom")
+        response = mock_ldap_service()
     else:
         try:
-            response = requests.get(
+            response = requests.post(
                 headers={'Content-Type': 'application/json'},
-                url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
+                json={
+                    "id": str(user_modification_request.request.uuid),
+                    "password": user_modification_request.password,
+                },
+                url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
             ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            raise RetrieveUserAccountInformationErrorException(error_msg=response['message'])
+            if _is_ldap_constraint_wrong_password_raised(response):
+                raise CreateUserAccountErrorException(
+                    error_msg=_("The used password contains an unaccepted character")
+                )
+            raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
 
     return response
+
+
+def _is_ldap_constraint_wrong_password_raised(response):
+    return 'message' in response.keys() and 'Value of attribute userpassword contains extended' in response['message']

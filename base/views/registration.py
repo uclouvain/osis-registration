@@ -192,6 +192,7 @@ class RegistrationFormView(FormView):
             'show_login_form': False,
             'admission_login_url': settings.ADMISSION_LOGIN_URL,
             'lost_password_url': settings.LOST_PASSWORD_URL,
+            'welcome_banner': True,
         })
         return context
 

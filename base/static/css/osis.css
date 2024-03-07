@@ -1128,6 +1128,6 @@ label.required:after {
     gap: 0;
 }
 
-.card a {
+.card a, .card input[type="submit"] {
     font-weight: bold;
 }
