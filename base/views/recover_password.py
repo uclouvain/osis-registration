@@ -164,7 +164,8 @@ class ModifyPasswordFormView(FormView):
                 password=form.cleaned_data['password'],
             ):
                 return super().form_invalid(form)
-            reset_password_ldap_user_account(self.user_account, form.cleaned_data['password'])
+            response = reset_password_ldap_user_account(self.user_account, form.cleaned_data['password'])
+            UserPasswordResetRequest.objects.filter(uuid=self.kwargs['uprr_uuid']).update(status=response['status'])
             return super().form_valid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
             self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
