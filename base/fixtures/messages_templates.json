@@ -22,6 +22,26 @@
   {
     "model": "base.messagetemplate",
     "fields": {
+      "reference": "osis_registration_mail_validation_html",
+      "subject": "UCLouvain - Email validation",
+      "template": "<p>This is an automated email sent by the external account creation service. Please do not reply to this email.</p>\n\n<p>&nbsp;</p>\n\n<p>Hello,</p>\n\n<p>You have requested the creation of an account to access a UCLouvain web platform.</p>\n\n<p>To complete the process, please click on the following link to validate your email address (this link will only remain valid for 24 hours).</p>\n\n<p>&nbsp;</p>\n\n<p><a href=\"{{link}}\" target=\"_blank\">{{link}}</a></p>\n\n<p>&nbsp;</p>\n\n<p>See you soon,</p>\n\n<p>The UCLouvain IT team</p>\n",
+      "format": "HTML",
+      "language": "en"
+    }
+  },
+  {
+    "model": "base.messagetemplate",
+    "fields": {
+      "reference": "osis_registration_mail_validation_txt",
+      "subject": "UCLouvain - Email validation",
+      "template": "This is an automated email sent by the external account creation service. Please do not reply to this email. Hello, You have requested the creation of an account to access a UCLouvain computer platform. To complete the process, please click on the following link to validate your email address (this link will only remain valid for 24 hours). {{link}} See you soon, The UCLouvain IT team",
+      "format": "PLAIN",
+      "language": "en"
+    }
+  },
+  {
+    "model": "base.messagetemplate",
+    "fields": {
       "reference": "osis_registration_mail_reset_password_html",
       "subject": "UCLouvain - Réinitialisation du mot de passe",
       "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe, merci de ne pas y r&eacute;pondre.</p> <p>&nbsp;</p> <p>Bonjour,</p> <p>Vous avez demand&eacute; une réinitialisation de votre mot de passe.&nbsp;</p> <p>Veuillez cliquer sur le lien suivant pour accéder au formulaire de réinitialisation du mot de passe (ce lien ne restera valide que 24h).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>A bient&ocirc;t,</p> <p>L&#39;&eacute;quipe informatique de l&#39;UCLouvain</p>",
@@ -46,7 +66,7 @@
     "subject": "UCLouvain - Reset Password",
     "template": "<p>This is an automated email sent by the external account creation service, please do not reply.</p> <p>&nbsp;</p> <p>Hello,</p> <p>You have requested a password reset.</p> <p>Please click on the following link to access the password reset form (this link will only be valid for 24 hours).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>Best regards,</p> <p>The IT team at UCLouvain</p>",
     "format": "HTML",
-    "language": "en-us"
+    "language": "en"
     }
   },
   {
@@ -56,7 +76,7 @@
     "subject": "UCLouvain - Reset Password",
     "template": "This is an automated email sent by the external account creation service, please do not reply. Hello, You have requested a password reset. Please click on the following link to access the password reset form (this link will only be valid for 24 hours). {{link}} Best regards, The IT team at UCLouvain",
     "format": "PLAIN",
-    "language": "en-us"
+    "language": "en"
     }
   }
 ]
