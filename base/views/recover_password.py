@@ -159,8 +159,8 @@ class ModifyPasswordFormView(FormView):
         try:
             if not password_valid(
                 form=form,
-                last_name=self.user_account['last_name'],
-                first_name=self.user_account['first_name'],
+                last_name=self.user_account['nom'],
+                first_name=self.user_account['prenom'],
                 password=form.cleaned_data['password'],
             ):
                 return super().form_invalid(form)
