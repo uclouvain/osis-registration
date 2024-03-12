@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 17:04+0100\n"
+"POT-Creation-Date: 2024-03-12 10:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -396,8 +396,8 @@ msgstr ""
 msgid "Please provide a new password"
 msgstr "Veuillez fournir un nouveau mot de passe"
 
-msgid "Submit"
-msgstr "Soumettre"
+msgid "Save"
+msgstr ""
 
 msgid ""
 "\n"
@@ -418,6 +418,12 @@ msgstr ""
 
 msgid "Mail not received ? Check the spam folder or"
 msgstr "Email non reçu ? Vérifiez dans le dossier 'spam' ou"
+
+msgid "wait"
+msgstr "attendez"
+
+msgid "to send again"
+msgstr "pour renvoyer"
 
 msgid "send again"
 msgstr "renvoyer"

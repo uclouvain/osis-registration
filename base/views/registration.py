@@ -27,7 +27,6 @@ import logging as default_logging
 import re
 from dataclasses import dataclass
 
-import requests
 from captcha import views
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -48,9 +47,10 @@ from base.models.polling_subscriber import PollingSubscriber
 from base.models.user_account_request import UserAccountRequest
 from base.override_django_captcha import captcha_audio
 from base.services import mail, logging
+from base.services.password_validation_check import password_valid
 from base.services.service_exceptions import CreateUserAccountErrorException
 from base.services.user_account_creation import create_ldap_user_account
-from base.utils import PasswordCheckErrorEnum, PasswordCheckServiceBadRequestException
+from base.utils import PasswordCheckServiceBadRequestException
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
@@ -100,7 +100,12 @@ class RegistrationFormView(FormView):
         )
 
         try:
-            if not self.password_valid(form):
+            if not password_valid(
+                form=form,
+                last_name=self.request.POST['last_name'],
+                first_name=self.request.POST['first_name'],
+                password=self.request.POST['password'],
+            ):
                 return super().form_invalid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
             self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
@@ -214,32 +219,6 @@ class RegistrationFormView(FormView):
 
     def get_success_url(self):
         return reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': self.user_account_request.uuid})
-
-    def password_valid(self, form):
-        if not settings.MOCK_LDAP_CALLS:
-            password_valid_check = requests.post(url=settings.PASSWORD_CHECK_URL, data={
-                "pwd": self.request.POST['password'],
-                "first_name": self.request.POST['first_name'],
-                "last_name": self.request.POST['last_name'],
-            }).json()
-
-            if not password_valid_check['result']:
-                missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
-                if password_valid_check['error code'] == missing_param_error_code:
-                    raise PasswordCheckServiceBadRequestException
-
-                error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
-
-                unsupported_char, _ = PasswordCheckErrorEnum.UNSUPPORTED_CHAR.value
-                if password_valid_check['error code'] == unsupported_char:
-                    regexp = '[^a-zA-Z0-9À-ÿ#()!?_+*/=$%,.;:@&<>§-]'
-                    error_chars = re.findall(regexp, self.request.POST['password'])
-                    error_msg += f": {' '.join(error_chars)}"
-
-                form.add_error('password', error_msg)
-                return False
-
-        return True
 
 
 # replace captcha audio with custom captcha audio generator using espeak

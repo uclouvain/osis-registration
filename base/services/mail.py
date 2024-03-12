@@ -75,7 +75,7 @@ def send_validation_mail(request, user_account_creation_request):
     )
 
 
-def send_reset_password_mail(request, email):
+def send_reset_password_mail(request, user_password_reset_request):
     template_references = {
         'html': 'osis_registration_mail_reset_password_html',
         'txt': 'osis_registration_mail_reset_password_txt'
@@ -83,14 +83,14 @@ def send_reset_password_mail(request, email):
 
     receivers = [
         message_config.create_receiver(
-            receiver_email=email,
+            receiver_email=user_password_reset_request.email,
             receiver_lang=request.LANGUAGE_CODE
         )
     ]
-    token = password_reset_token_generator.make_token(email)
+    token = password_reset_token_generator.make_token(user_password_reset_request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('modify_password', kwargs={
-            'email': email,
+            'uprr_uuid': user_password_reset_request.uuid,
             'token': token
         }))},
         'subject': {}
@@ -101,5 +101,5 @@ def send_reset_password_mail(request, email):
         request=request,
         event_type=logging.EventType.VIEW,
         domain="osis-registration",
-        description=f"validation mail sent to {email}"
+        description=f"validation mail sent to {user_password_reset_request.email}"
     )

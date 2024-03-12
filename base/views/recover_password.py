@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import re
 
-import requests
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -37,12 +35,16 @@ from requests.exceptions import MissingSchema
 
 from base import settings
 from base.forms.recover_password import RecoverPasswordForm, ModifyPasswordForm
+from base.models.enum import UserPasswordResetRequestStatus
+from base.models.user_password_reset_request import UserPasswordResetRequest
 from base.services import logging
 from base.services.mail import send_reset_password_mail
+from base.services.password_validation_check import password_valid
 from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
 from base.services.token_generator import password_reset_token_generator
 from base.services.user_account_information import get_ldap_user_account_information
-from base.utils import PasswordCheckErrorEnum, PasswordCheckServiceBadRequestException
+from base.services.user_account_reset_password import reset_password_ldap_user_account
+from base.utils import PasswordCheckServiceBadRequestException
 
 
 @method_decorator(ratelimit(key='ip', rate=settings.REQUESTS_RATE_LIMIT, block=True, method='POST'), name='post')
@@ -61,7 +63,9 @@ class RecoverPasswordFormView(FormView):
     def form_valid(self, form):
         try:
             self.user_account = get_ldap_user_account_information(form.cleaned_data['email'])
-            send_reset_password_mail(self.request, self.user_account['email'])
+            uprr = UserPasswordResetRequest.objects.create(email=self.user_account['email'])
+            send_reset_password_mail(self.request, uprr)
+            self._log_reset_password_mail_sent(email=uprr.email)
         except RetrieveUserAccountInformationErrorException:
             form.add_error('email', "Email not found")
         return super().form_valid(form)
@@ -84,6 +88,13 @@ class RecoverPasswordFormView(FormView):
         )
         return reverse(self.name) + f"?reset_mail={self.user_account['email']}"
 
+    def _log_reset_password_mail_sent(self, email):
+        logging.log_event(
+            request=self.request,
+            event_type=logging.EventType.VIEW,
+            domain="osis-registration",
+            description=f"reset password mail sent to <{email}>"
+        )
 
 
 @method_decorator(ratelimit(key='ip', rate=settings.REQUESTS_RATE_LIMIT, block=True, method='POST'), name='post')
@@ -100,25 +111,36 @@ class ModifyPasswordFormView(FormView):
     user_account = None
 
     def get(self, request, *args, **kwargs):
-        if password_reset_token_generator.check_token(kwargs['email'], kwargs['token']):
+        uprr = self._get_user_password_reset_request(kwargs['uprr_uuid'])
+        if (uprr.status == UserPasswordResetRequestStatus.PENDING.name and
+                password_reset_token_generator.check_token(uprr, kwargs['token'])):
             return super().get(request, *args, **kwargs)
-        messages.add_message(
-            self.request,
-            message=_("The link provided for password reset is invalid or expired. Please try again."),
-            level=messages.ERROR
-        )
+        self._show_link_error_msg()
         return redirect(reverse('registration') + "?source=admission")
 
     def post(self, request, *args, **kwargs):
-        if password_reset_token_generator.check_token(kwargs['email'], kwargs['token']):
-            self.user_account = get_ldap_user_account_information(kwargs['email'])
+        uprr = self._get_user_password_reset_request(kwargs['uprr_uuid'])
+        if (uprr.status == UserPasswordResetRequestStatus.PENDING.name and
+                password_reset_token_generator.check_token(uprr, kwargs['token'])):
+            self.user_account = get_ldap_user_account_information(uprr.email)
             return super().post(request, *args, **kwargs)
+        self._show_link_error_msg()
+        return redirect(reverse('registration') + "?source=admission")
+
+    def _show_link_error_msg(self):
         messages.add_message(
             self.request,
             message=_("The link provided for password reset is invalid or expired. Please try again."),
             level=messages.ERROR
         )
-        return redirect(reverse('registration') + "?source=admission")
+
+    @staticmethod
+    def _get_user_password_reset_request(uprr_uuid):
+        try:
+            uprr = UserPasswordResetRequest.objects.get(uuid=uprr_uuid)
+        except UserPasswordResetRequest.DoesNotExist:
+            uprr = None
+        return uprr
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -135,8 +157,14 @@ class ModifyPasswordFormView(FormView):
 
     def form_valid(self, form):
         try:
-            if not self.password_valid(form, self.user_account):
+            if not password_valid(
+                form=form,
+                last_name=self.user_account['last_name'],
+                first_name=self.user_account['first_name'],
+                password=form.cleaned_data['password'],
+            ):
                 return super().form_invalid(form)
+            reset_password_ldap_user_account(self.user_account, form.cleaned_data['password'])
             return super().form_valid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
             self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
@@ -144,36 +172,11 @@ class ModifyPasswordFormView(FormView):
     def get_success_url(self):
         messages.add_message(
             self.request,
-            message=_("Password successfully reset for {}. You may now try to log in.").format(self.kwargs['email']),
+            message=_("Password successfully reset for {}. You may now try to log in.").format(self.user_account['email']),
             level=messages.SUCCESS
         )
+        self._log_password_successfully_reset(self.user_account['email'])
         return reverse('registration') + f"?source=admission"
-
-    def password_valid(self, form, user_info):
-        if not settings.MOCK_LDAP_CALLS:
-            password_valid_check = requests.post(url=settings.PASSWORD_CHECK_URL, data={
-                "pwd": self.request.POST['password'],
-                "first_name": user_info['first_name'],
-                "last_name": user_info['last_name'],
-            }).json()
-
-            if not password_valid_check['result']:
-                missing_param_error_code, _ = PasswordCheckErrorEnum.MISSING_PARAMETERS.value
-                if password_valid_check['error code'] == missing_param_error_code:
-                    raise PasswordCheckServiceBadRequestException
-
-                error_msg = PasswordCheckErrorEnum.get_error_msg(password_valid_check['error code'])
-
-                unsupported_char, _ = PasswordCheckErrorEnum.UNSUPPORTED_CHAR.value
-                if password_valid_check['error code'] == unsupported_char:
-                    regexp = '[^a-zA-Z0-9À-ÿ#()!?_+*/=$%,.;:@&<>§-]'
-                    error_chars = re.findall(regexp, self.request.POST['password'])
-                    error_msg += f": {' '.join(error_chars)}"
-
-                form.add_error('password', error_msg)
-                return False
-
-        return True
 
     def _log_password_check_attempt_failed(self, email, exception_msg):
         logging.log_event(
@@ -181,4 +184,12 @@ class ModifyPasswordFormView(FormView):
             event_type=logging.EventType.ERROR,
             domain="osis-registration",
             description=f"password check failed for <{email}>: {exception_msg}"
+        )
+
+    def _log_password_successfully_reset(self, email):
+        logging.log_event(
+            request=self.request,
+            event_type=logging.EventType.VIEW,
+            domain="osis-registration",
+            description=f"password successfully reset for <{email}>"
         )

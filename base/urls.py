@@ -17,7 +17,7 @@ urlpatterns = [
     path('', RegistrationFormView.as_view(), name=RegistrationFormView.name),
     path('home/', RegistrationFormView.as_view(), name=RegistrationFormView.name),
     path('recover_password/', RecoverPasswordFormView.as_view(), name=RecoverPasswordFormView.name),
-    path('recover_password/<email>/<token>', ModifyPasswordFormView.as_view(), name=ModifyPasswordFormView.name),
+    path('recover_password/<uprr_uuid>/<token>', ModifyPasswordFormView.as_view(), name=ModifyPasswordFormView.name),
     path('admin/', admin.site.urls),
     path('noscript/', common.noscript, name='noscript'),
     path('captcha/', include('captcha.urls')),

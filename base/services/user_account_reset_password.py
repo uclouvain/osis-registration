@@ -38,16 +38,16 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def reset_password_ldap_user_account(user_modification_request) -> Union[Response, dict]:
+def reset_password_ldap_user_account(user_account, password) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service()
+        response = mock_ldap_service(id=user_account['id'])
     else:
         try:
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
                 json={
-                    "id": str(user_modification_request.request.uuid),
-                    "password": user_modification_request.password,
+                    "id": user_account['id'],
+                    "password": password,
                 },
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
