@@ -1,22 +1,62 @@
 [
-{
+  {
+    "model": "base.messagetemplate",
+    "fields": {
+      "reference": "osis_registration_mail_validation_html",
+      "subject": "UCLouvain - Validation email",
+      "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe, merci de ne pas y r&eacute;pondre.</p> <p>&nbsp;</p> <p>Bonjour,</p> <p>Vous avez demand&eacute; la cr&eacute;ation d&#39;un compte pour vous permettre d&#39;acc&eacute;der &agrave; une plateforme informatique de UCLouvain.&nbsp;</p> <p>Afin de&nbsp;terminer la proc&eacute;dure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>A bient&ocirc;t,</p> <p>L&#39;&eacute;quipe informatique de l&#39;UCLouvain</p>",
+      "format": "HTML",
+      "language": "fr-be"
+    }
+  },
+  {
+    "model": "base.messagetemplate",
+    "fields": {
+      "reference": "osis_registration_mail_validation_txt",
+      "subject": "UCLouvain - Validation email",
+      "template": "Ceci est un email automatique envoyé par le service de création de compte externe, merci de ne pas y répondre. Bonjour, Vous avez demandé la création d'un compte pour vous permettre d'accéder à une plateforme informatique de UCLouvain. Afin de terminer la procédure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h). {{link}} A bientôt, L'équipe informatique de l'UCLouvain",
+      "format": "PLAIN",
+      "language": "fr-be"
+    }
+  },
+  {
+    "model": "base.messagetemplate",
+    "fields": {
+      "reference": "osis_registration_mail_reset_password_html",
+      "subject": "UCLouvain - Réinitialisation du mot de passe",
+      "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe, merci de ne pas y r&eacute;pondre.</p> <p>&nbsp;</p> <p>Bonjour,</p> <p>Vous avez demand&eacute; une réinitialisation de votre mot de passe.&nbsp;</p> <p>Veuillez cliquer sur le lien suivant pour accéder au formulaire de réinitialisation du mot de passe (ce lien ne restera valide que 24h).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>A bient&ocirc;t,</p> <p>L&#39;&eacute;quipe informatique de l&#39;UCLouvain</p>",
+      "format": "HTML",
+      "language": "fr-be"
+    }
+  },
+  {
+    "model": "base.messagetemplate",
+    "fields": {
+      "reference": "osis_registration_mail_reset_password_txt",
+      "subject": "UCLouvain - Réinitialisation du mot de passe",
+      "template": "Ceci est un email automatique envoyé par le service de création de compte externe, merci de ne pas y répondre. Bonjour, Vous avez demandé une réinitialisation de votre mot de passe. Veuillez cliquer sur le lien suivant pour accéder au formulaire de réinitialisation du mot de passe (ce lien ne restera valide que 24h). {{link}} A bientôt, L'équipe informatique de l'UCLouvain",
+      "format": "PLAIN",
+      "language": "fr-be"
+    }
+  },
+  {
   "model": "base.messagetemplate",
   "fields": {
-    "reference": "osis_registration_mail_validation_html",
-    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
-    "template": "<p>Ceci est un email automatique envoy&eacute; par le service de cr&eacute;ation de compte externe, merci de ne pas y r&eacute;pondre.</p> <p>&nbsp;</p> <p>Bonjour,</p> <p>Vous avez demand&eacute; la cr&eacute;ation d&#39;un compte pour vous permettre d&#39;acc&eacute;der &agrave; une plateforme informatique de UCLouvain.&nbsp;</p> <p>Afin de&nbsp;terminer la proc&eacute;dure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>A bient&ocirc;t,</p> <p>L&#39;&eacute;quipe informatique de l&#39;UCLouvain</p>",
+    "reference": "osis_registration_mail_reset_password_html",
+    "subject": "UCLouvain - Reset Password",
+    "template": "<p>This is an automated email sent by the external account creation service, please do not reply.</p> <p>&nbsp;</p> <p>Hello,</p> <p>You have requested a password reset.</p> <p>Please click on the following link to access the password reset form (this link will only be valid for 24 hours).</p> <p>&nbsp;</p> <p><a href=\"{{link}}\">{{link}}</a></p> <p>&nbsp;</p> <p>Best regards,</p> <p>The IT team at UCLouvain</p>",
     "format": "HTML",
-    "language": "fr-be"
-  }
-},
-{
+    "language": "en-us"
+    }
+  },
+  {
   "model": "base.messagetemplate",
   "fields": {
-    "reference": "osis_registration_mail_validation_txt",
-    "subject": "OSIS-REGISTRATION - Validation compte utilisateur - Validate user account",
-    "template": "Ceci est un email automatique envoyé par le service de création de compte externe, merci de ne pas y répondre. Bonjour, Vous avez demandé la création d'un compte pour vous permettre d'accéder à une plateforme informatique de UCLouvain. Afin de terminer la procédure, merci de cliquer sur le lien suivant pour nous permettre de valider votre adresse email (ce lien ne restera valide que 24h). {{link}} A bientôt, L'équipe informatique de l'UCLouvain",
+    "reference": "osis_registration_mail_reset_password_txt",
+    "subject": "UCLouvain - Reset Password",
+    "template": "This is an automated email sent by the external account creation service, please do not reply. Hello, You have requested a password reset. Please click on the following link to access the password reset form (this link will only be valid for 24 hours). {{link}} Best regards, The IT team at UCLouvain",
     "format": "PLAIN",
-    "language": "fr-be"
+    "language": "en-us"
+    }
   }
-}
 ]

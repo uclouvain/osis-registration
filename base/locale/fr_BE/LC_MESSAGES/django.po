@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-12 16:19+0100\n"
+"POT-Creation-Date: 2024-03-12 15:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,14 +26,14 @@ msgstr "Email"
 msgid "Password"
 msgstr "Mot de passe"
 
+msgid "Private email address"
+msgstr "Adresse email privée"
+
 msgid "First name"
 msgstr "Prénom"
 
 msgid "Last name"
 msgstr "Nom"
-
-msgid "Private email address"
-msgstr "Adresse email privée"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
@@ -95,8 +95,8 @@ msgid ""
 "Please log in using your UCLouvain email address - @student.uclouvain.be / "
 "@uclouvain.be"
 msgstr ""
-"Veuillez vous connecter en utilisant votre adresse email UCLouvain - @student.uclouvain.be / "
-"@uclouvain.be"
+"Veuillez vous connecter en utilisant votre adresse email UCLouvain - "
+"@student.uclouvain.be / @uclouvain.be"
 
 msgid "a user account with the given email \"{}\" already exists"
 msgstr "un compte utilisateur avec l'adresse \"{}\" existe déjà"
@@ -384,6 +384,51 @@ msgstr "Alors, décidé.e... Vous souhaitez suivre votre cursus à l'UCLouvain ?
 msgid "Welcome to the online registration page!"
 msgstr "Soyez le.la bienvenu.e sur la page d'inscription en ligne !"
 
+msgid "Modify your password"
+msgstr "Modifier le mot de passe"
+
+msgid "Please provide a new password"
+msgstr "Veuillez fournir un nouveau mot de passe"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Reset password mail sent"
+msgstr "Email de réinitialisation du mot de passe envoyé"
+
+msgid "A mail has been sent to "
+msgstr "Un email a été envoyé à "
+
+msgid "Please check the instructions to reset your password"
+msgstr ""
+"Veuillez consulter les instructions pour réinitialiser votre mot de passe"
+
+msgid "Mail not received ? Check the spam folder or"
+msgstr "Email non reçu ? Vérifiez dans le dossier 'spam' ou"
+
+msgid "wait"
+msgstr "attendez"
+
+msgid "to send again"
+msgstr "pour renvoyer"
+
+msgid "send again"
+msgstr "renvoyer"
+
+msgid "Back to registration page"
+msgstr "Retour à la page d'inscription"
+
+msgid "Forgot your password ?"
+msgstr "Mot de passe oublié ?"
+
+msgid "Enter your email and we'll send you instructions to reset your password"
+msgstr ""
+"Entrez votre adresse email et nous vous enverrons les instructions pour "
+"rénitialiser votre mot de passe"
+
+msgid "Reset password"
+msgstr "Réinitialiser le mot de passe"
+
 msgid "UCLouvain user account creation request"
 msgstr "Demande de création de compte UCLouvain"
 
@@ -496,6 +541,22 @@ msgstr ""
 
 msgid "Some parameters are missing for the password check"
 msgstr "Des paramètres sont manquants pour la vérification du mot de passe"
+
+msgid "A mail with instructions to reset password has been sent to {}"
+msgstr ""
+"Un email avec les instructions pour réinitialiser le mot de passe a été "
+"envoyé à {}"
+
+msgid ""
+"The link provided for password reset is invalid or expired. Please try again."
+msgstr ""
+"Le lien fourni pour la réinitialisation du mot de passe est invalide ou "
+"expiré. Veuillez réessayer."
+
+msgid "Password successfully reset for {}. You may now try to log in."
+msgstr ""
+"Mot de passe réinitialisé avec succès pour {}. Vous pouvez essayer de vous "
+"connecter à nouveau."
 
 msgid ""
 "An error occured while sending the creation request. Please try again later."

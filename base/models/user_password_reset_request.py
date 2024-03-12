@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,41 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin, auth
 
-from base.messaging import message_history, message_template
-from base.models.polling_subscriber import PollingSubscriber, PollingSubscriberAdmin
-from base.models.user import OsisRegistrationUserAdmin
-from base.models.user_account_request import UserAccountRequest, UserAccountRequestAdmin
-from base.models.user_password_reset_request import UserPasswordResetRequest, UserPasswordResetRequestAdmin
+import uuid
 
-admin.site.register(
-    message_history.MessageHistory,
-    message_history.MessageHistoryAdmin,
-)
+from django.contrib import admin
+from django.db import models
 
-admin.site.register(
-    message_template.MessageTemplate,
-    message_template.MessageTemplateAdmin,
-)
-
-admin.site.register(
-    PollingSubscriber,
-    PollingSubscriberAdmin,
-)
-
-admin.site.register(
-    UserAccountRequest,
-    UserAccountRequestAdmin,
-)
-
-admin.site.register(
-    UserPasswordResetRequest,
-    UserPasswordResetRequestAdmin,
-)
+from base.models.enum import UserPasswordResetRequestStatus
+from base.models.polling_subscriber import PollingSubscriber
 
 
-# replace user admin with custom admin
-User = auth.get_user_model()
-admin.site.unregister(User)
-admin.site.register(User, OsisRegistrationUserAdmin)
+class UserPasswordResetRequestAdmin(admin.ModelAdmin):
+    fields = ('email', 'status')
+    list_display = ('uuid', 'email', 'status')
+
+
+class UserPasswordResetRequest(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+
+    status = models.CharField(
+        choices=UserPasswordResetRequestStatus.choices(),
+        default=UserPasswordResetRequestStatus.PENDING.value,
+        max_length=50
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    subscriber = models.ForeignKey(PollingSubscriber, blank=True, null=True, on_delete=models.SET_NULL)

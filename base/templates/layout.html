@@ -89,7 +89,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            {% if 'source' in request.GET and request.GET.source == 'admission' %}
+            {% if 'source' in request.GET and request.GET.source == 'admission' or recover_password %}
                 background-color: #eeeeee;
             {% endif %}
         }
@@ -127,7 +127,7 @@
 
 {% block sidebar %}{% endblock %}
 
-{% if 'source' in request.GET and request.GET.source == 'admission' %}
+{% if 'source' in request.GET and request.GET.source == 'admission' and welcome_banner %}
 
 <div id="welcome-banner" class="page-header panel-banner" style="position: relative; background-color: #00214e; padding: 40px 50px; margin-top: 0;">
     <img class="guillemet-left" src="{% static "img/guillemet-ucl-1.svg" %}"/>
@@ -144,7 +144,7 @@
 
 <span id="anchor" style="scroll-margin: 50px;"></span>
 
-<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' %} style="font-family: 'Montserrat', sans-serif;" {% endif %}>
+<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' or recover_password %} style="font-family: 'Montserrat', sans-serif;" {% endif %}>
 
     {% block header_content %}{% endblock %}
     {% block content %}{% endblock %}
