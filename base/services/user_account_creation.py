@@ -64,21 +64,23 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
 
         if response.get('status') == ERROR:
             if _is_ldap_constraint_email_exists_raised(response):
-                used_for_recovery = _('The given email "{}" is already linked as a private email address for an existing UCLouvain account').format(
+                used_for_recovery = _('The given email <{}> is already linked as a private email address for an existing UCLouvain account').format(
                     user_creation_request.request.email
                 )
-                please_try_with_uclouvain = _('Please log in using your UCLouvain email address - @student.uclouvain.be / @uclouvain.be')
+                please_try_with_uclouvain = _('Please log in using your UCLouvain email address <{}>').format(
+                    response.get('email', '- @student.uclouvain.be / @uclouvain.be')
+                )
                 log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
                 raise CreateUserAccountErrorException(
                     error_msg=f"{used_for_recovery}. {please_try_with_uclouvain}. {log_in_link_msg}."
                 )
             if _is_email_already_used(response):
-                already_exists_msg = _('a user account with the given email "{}" already exists').format(
+                already_exists_msg = _('a user account with the given email <{}> already exists').format(
                     user_creation_request.request.email
                 )
                 log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
                 raise CreateUserAccountErrorException(
-                    error_msg=f"{already_exists_msg}. {log_in_link_msg}."
+                    error_msg=f"{already_exists_msg}.<br/>{log_in_link_msg}"
                 )
             if _is_ldap_constraint_wrong_password_raised(response):
                 raise CreateUserAccountErrorException(
@@ -90,11 +92,18 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
 
 
 def _is_ldap_constraint_email_exists_raised(response):
-    return 'message' in response.keys() and 'Another entry with the same attribute value already exists' in response['message']
+    return (
+        'message' in response.keys()
+        and 'Another entry with the same attribute value already exists' in response['message']
+        or 'Adresse existante' in response['message']
+    )
 
 
 def _is_email_already_used(response):
-    return 'message' in response.keys() and 'SQL Integrity Error UNIQUE constraint failed: oi_users.email' in response['message']
+    return (
+        'message' in response.keys()
+        and 'SQL Integrity Error UNIQUE constraint failed: oi_users.email' in response['message']
+    )
 
 
 def _is_ldap_constraint_wrong_password_raised(response):
