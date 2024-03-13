@@ -43,7 +43,7 @@ from base.services.password_validation_check import password_valid
 from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
 from base.services.token_generator import password_reset_token_generator
 from base.services.user_account_information import get_ldap_user_account_information
-from base.services.user_account_reset_password import reset_password_ldap_user_account
+from base.services.user_account_reset_password import reset_password_ldap_user_account, ERROR
 from base.utils import PasswordCheckServiceBadRequestException
 
 
@@ -165,7 +165,10 @@ class ModifyPasswordFormView(FormView):
             ):
                 return super().form_invalid(form)
             response = reset_password_ldap_user_account(self.user_account, form.cleaned_data['password'])
-            UserPasswordResetRequest.objects.filter(uuid=self.kwargs['uprr_uuid']).update(status=response['status'])
+            UserPasswordResetRequest.objects.filter(uuid=self.kwargs['uprr_uuid']).update(
+                status=UserPasswordResetRequestStatus.ERROR.name
+                if response['status'] == ERROR else UserPasswordResetRequestStatus.SUCCESS.name
+            )
             return super().form_valid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
             self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
