@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 11:27+0100\n"
+"POT-Creation-Date: 2024-03-27 14:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,13 +21,13 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
+msgid "Private email address"
+msgstr ""
+
 msgid "Email"
 msgstr ""
 
 msgid "Password"
-msgstr ""
-
-msgid "Private email address"
 msgstr ""
 
 msgid "First name"
@@ -108,6 +108,18 @@ msgid "Play CAPTCHA as audio file"
 msgstr ""
 
 msgid "Refresh CAPTCHA"
+msgstr ""
+
+msgid "Check the status of a user account creation request"
+msgstr ""
+
+msgid "Please provide the email linked with user account creation request"
+msgstr ""
+
+msgid "Check status"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Welcome to the UCLouvain registration application platform"
@@ -204,9 +216,6 @@ msgid "Reject"
 msgstr ""
 
 msgid "Send"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "Agreement is required to proceed with registration"
@@ -458,6 +467,14 @@ msgid "This password has been found in a password database leaked publicly"
 msgstr ""
 
 msgid "Some parameters are missing for the password check"
+msgstr ""
+
+msgid ""
+"No account creation request been found with the given email. You may have to "
+"create an account first: <br/><a href='{}'>Create account</a>"
+msgstr ""
+
+msgid "A mail with instructions to validate your email has been sent to {}"
 msgstr ""
 
 msgid ""

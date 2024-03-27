@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 11:27+0100\n"
+"POT-Creation-Date: 2024-03-27 14:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,14 +20,14 @@ msgstr ""
 msgid "This field is required."
 msgstr "Ce champ est requis."
 
+msgid "Private email address"
+msgstr "Adresse email privée"
+
 msgid "Email"
 msgstr "Email"
 
 msgid "Password"
 msgstr "Mot de passe"
-
-msgid "Private email address"
-msgstr "Adresse email privée"
 
 msgid "First name"
 msgstr "Prénom"
@@ -119,6 +119,19 @@ msgstr "Écouter la version audio"
 
 msgid "Refresh CAPTCHA"
 msgstr "Réinitialiser le CAPTCHA"
+
+msgid "Check the status of a user account creation request"
+msgstr "Vérifier le statut d'une demande de création de compte"
+
+msgid "Please provide the email linked with user account creation request"
+msgstr ""
+"Veuillez fournir l'adresse email associée à la demande de création de compte"
+
+msgid "Check status"
+msgstr "Vérifier le statut"
+
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Welcome to the UCLouvain registration application platform"
 msgstr "Bienvenue sur la plateforme de demande d’inscription à l’UCLouvain"
@@ -239,9 +252,6 @@ msgstr "Refuser"
 
 msgid "Send"
 msgstr "Envoyer"
-
-msgid "Cancel"
-msgstr "Annuler"
 
 msgid "Agreement is required to proceed with registration"
 msgstr "L'accord est nécessaire pour continuer l'inscription"
@@ -546,6 +556,18 @@ msgstr ""
 
 msgid "Some parameters are missing for the password check"
 msgstr "Des paramètres sont manquants pour la vérification du mot de passe"
+
+msgid ""
+"No account creation request been found with the given email. You may have to "
+"create an account first: <br/><a href='{}'>Create account</a>"
+msgstr ""
+"Nous n'avons trouvé aucune demande de création de compte associée à "
+"l'adresse e-mail fournie. Vous devrez peut-être créer un compte d'abord : "
+"<br/><a href='{}'>Créer un compte</a>"
+
+msgid "A mail with instructions to validate your email has been sent to {}"
+msgstr ""
+"Un email avec les instructions pour valider votre compte a été envoyé à {}"
 
 msgid ""
 "No account has been found with the given email. Please verify you are using "
