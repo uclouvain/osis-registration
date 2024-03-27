@@ -28,6 +28,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 from django.views.generic.edit import FormView
 from ratelimit.decorators import ratelimit
@@ -67,7 +68,13 @@ class RecoverPasswordFormView(FormView):
             send_reset_password_mail(self.request, uprr)
             self._log_reset_password_mail_sent(email=uprr.email)
         except RetrieveUserAccountInformationErrorException:
-            form.add_error('email', "Email not found")
+            form.add_error(
+                'email',
+                mark_safe(_("No account has been found with the given email. Please verify you are using your private email. <br/>"
+                  "If your mail domain @uclouvain.be / @student.uclouvain.be, please use the following form: <br/>"
+                  "<a href='{}'>UCLouvain password recovery</a>").format(settings.LOST_PASSWORD_URL))
+            )
+            return super().form_invalid(form)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
