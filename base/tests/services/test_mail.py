@@ -40,6 +40,7 @@ class MailTestCase(TestCase):
         request = RequestFactory().get('/')
         request.user = UserFactory()
         request.session = {}
+        request.LANGUAGE_CODE = 'en'
 
         uacr_dataclass = SimpleNamespace(
             request=UserAccountRequestFactory(),
