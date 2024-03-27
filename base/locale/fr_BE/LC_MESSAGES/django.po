@@ -376,10 +376,10 @@ msgstr ""
 "fonctionner correctement."
 
 msgid "Are you decided? Do you wish to pursue your studies at UCLouvain?"
-msgstr "Alors, décidé.e... Vous souhaitez suivre votre cursus à l'UCLouvain ?"
+msgstr "Alors, décidé·e... Vous souhaitez suivre votre cursus à l'UCLouvain ?"
 
 msgid "Welcome to the online registration page!"
-msgstr "Soyez le.la bienvenu.e sur la page d'inscription en ligne !"
+msgstr "Soyez le·la bienvenu·e sur la page d'inscription en ligne !"
 
 msgid "Modify your password"
 msgstr "Modifier le mot de passe"
