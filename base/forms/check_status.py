@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,30 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from types import SimpleNamespace
-from unittest import mock
 
-from django.test import TestCase, RequestFactory
-
-from base.services.mail import send_validation_mail
-from base.tests.factories.user import UserFactory
-from base.tests.factories.user_account_request import UserAccountRequestFactory
+from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
-class MailTestCase(TestCase):
-
-    @mock.patch('base.messaging.send_message.send_messages')
-    def test_should_send_validation_mail(self, mock_send_msg):
-        request = RequestFactory().get('/')
-        request.user = UserFactory()
-        request.session = {}
-        request.LANGUAGE_CODE = 'en'
-
-        uacr_dataclass = SimpleNamespace(
-            request=UserAccountRequestFactory(),
-        )
-        send_validation_mail(request, uacr_dataclass.request)
-        self.assertTrue(mock_send_msg.called)
-
-        _, kwargs = mock_send_msg.call_args
-        self.assertTrue(uacr_dataclass.request.email in str(kwargs['message_content']['receivers']))
+class CheckStatusForm(forms.Form):
+    email = forms.EmailField(label=_('Private email address'), max_length=100, required=True)

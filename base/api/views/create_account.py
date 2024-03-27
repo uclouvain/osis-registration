@@ -70,7 +70,7 @@ class CreateAccount(generics.CreateAPIView):
 
             ldap_response = create_ldap_user_account(user_account_creation_request)
             if ldap_response.get('status') == SUCCESS:
-                mail.send_validation_mail(self.request, user_account_creation_request)
+                mail.send_validation_mail(self.request, user_account_creation_request.request)
 
         except (KeyError, ValueError) as e:
             raise ValidationError(f"Missing data or wrong format: {str(e)}")

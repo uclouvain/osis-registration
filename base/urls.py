@@ -7,6 +7,7 @@ from django.urls import path, include
 
 from base.api import url_v1
 from base.views import common
+from base.views.check_status import CheckStatusFormView
 from base.views.common import edit_language
 from base.views.recover_password import RecoverPasswordFormView, ModifyPasswordFormView
 from base.views.registration import RegistrationFormView
@@ -24,6 +25,7 @@ urlpatterns = [
     path('lang/edit/<lang>/', edit_language, name='lang_edit'),
     path('user_account_status/<uacr_uuid>/', UserAccountCreationStatusView.as_view(), name=UserAccountCreationStatusView.name),
     path('validate_email/<uacr_uuid>/<token>', ValidateEmailView.as_view(), name=ValidateEmailView.name),
+    path('check_status/', CheckStatusFormView.as_view(), name=CheckStatusFormView.name),
     path('api/v1/', include(url_v1.urlpatterns)),
 ]
 

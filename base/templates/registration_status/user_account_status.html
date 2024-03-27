@@ -30,6 +30,7 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="page-header">
         <h3>{% trans 'UCLouvain user account creation request' %}</h3>
     </div>
@@ -64,8 +65,31 @@
             <div class="message">
                 {% trans "In order to complete the registration process, we sent you an email with a validation link." %}
                 <br/>
-                {% trans "Please check your mailbox and validate your account following the link." %}</div>
+                {% trans "Please check your mailbox and validate your account following the link." %}
+                <span>
+                    <form id="form" method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="email" value="{{ account_request.email }}">
+                        {% trans "Mail not received ? Check the spam folder or" %}
+                        <span id="timer">{% trans 'wait' %} 15s {% trans 'to send again' %}.</span>
+                        <input id="send-again" style="padding: 0; display: none;" class="btn btn-link" id="btn-submit" type="submit" value="{% trans 'send again' %}.">
+                    </form>
+                </span>
+            </div>
         </div>
+
+        {% if mail_sent %}
+            <div id="mail-sent-msg" class="alert alert-success panel-top-alert" role="alert">
+                <div class="icon"><i class="glyphicon glyphicon-ok-sign"></i></div>
+                <div class="message">
+                    <span>{% trans 'A mail with instructions to validate your account has been sent to ' %}{{ account_request.email }}</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% block messages %}
+            {% include "blocks/template_messages.html" %}
+        {% endblock %}
 
     {% else %}
 
@@ -143,5 +167,35 @@
         </div>
 
     {% endif %}
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // timer to send mail again
+
+        const countDownTimer = document.getElementById('timer');
+        const sendAgainButton = document.getElementById('send-again');
+        const endTime = new Date().getTime() + 15 * 1000; // 15 seconds from now
+
+        const timerInterval = setInterval(function() {
+            const currentTime = new Date().getTime();
+            const timeLeft = Math.max((endTime - currentTime) / 1000, 0);
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                countDownTimer.style.display = 'none';
+                sendAgainButton.style.display = 'inline';
+                $('#mail-sent-msg').hide();
+            } else {
+                const seconds = Math.floor(timeLeft % 60);
+                countDownTimer.innerHTML = `{% trans 'wait' %} ${seconds}s {% trans 'to send again' %}.`;
+            }
+        }, 1000);
+    });
+</script>
 
 {% endblock %}
