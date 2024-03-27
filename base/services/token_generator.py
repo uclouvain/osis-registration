@@ -50,7 +50,7 @@ class EmailPasswordResetTokenGenerator(PasswordResetTokenGenerator):
         Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually invalidates the token.
         """
         uprr = user_password_reset_request
-        return f'{uprr.pk}{uprr.email}{uprr.updated_at}{uprr.status}'
+        return f'{uprr.pk}{uprr.email}{uprr.updated_at}{uprr.status}{timestamp}'
 
 
 password_reset_token_generator = EmailPasswordResetTokenGenerator()
