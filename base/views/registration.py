@@ -128,7 +128,11 @@ class RegistrationFormView(FormView):
 
         try:
             redirection_url = self.subscriber.redirection_url if self.subscriber else settings.OSIS_PORTAL_URL
-            user_account_creation_response = create_ldap_user_account(user_account_creation_request, redirection_url)
+            user_account_creation_response = create_ldap_user_account(
+                user_account_creation_request,
+                redirection_url,
+                request=self.request
+            )
         except CreateUserAccountErrorException as e:
             self._log_user_creation_error(user_account_creation_request)
             messages.add_message(self.request, message=mark_safe(e.msg), level=messages.ERROR)
@@ -140,7 +144,7 @@ class RegistrationFormView(FormView):
 
         if 'status' in user_account_creation_response and user_account_creation_response['status'] == 'success':
             self.user_account_request.save()
-            mail.send_validation_mail(self.request, user_account_creation_request)
+            mail.send_validation_mail(self.request, user_account_creation_request.request)
         else:
             messages.add_message(
                 self.request,

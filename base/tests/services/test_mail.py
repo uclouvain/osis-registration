@@ -44,7 +44,7 @@ class MailTestCase(TestCase):
         uacr_dataclass = SimpleNamespace(
             request=UserAccountRequestFactory(),
         )
-        send_validation_mail(request, uacr_dataclass)
+        send_validation_mail(request, uacr_dataclass.request)
         self.assertTrue(mock_send_msg.called)
 
         _, kwargs = mock_send_msg.call_args

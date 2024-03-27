@@ -32,6 +32,8 @@ from requests import Response
 from requests.exceptions import Timeout
 
 from base import settings
+from base.models.user_account_request import UserAccountRequest
+from base.services import mail
 from base.services.mock_service import mock_ldap_service
 from base.services.service_exceptions import CreateUserAccountErrorException
 
@@ -39,7 +41,7 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request, redirection_url=None) -> Union[Response, dict]:
+def create_ldap_user_account(user_creation_request, redirection_url=None, **kwargs) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
         response = mock_ldap_service()
     else:
@@ -78,10 +80,18 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
                 already_exists_msg = _('a user account with the given email &lt;{}&gt; already exists').format(
                     user_creation_request.request.email
                 )
-                log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
-                raise CreateUserAccountErrorException(
-                    error_msg=f"{already_exists_msg}.<br/>{log_in_link_msg}"
-                )
+                existing_account_request = _get_existing_account_request(user_creation_request.request.email)
+                if not existing_account_request.email_validated:
+                    mail_sent_msg = _('Please follow instructions sent by email to validate your account')
+                    mail.send_validation_mail(kwargs['request'], existing_account_request)
+                    raise CreateUserAccountErrorException(
+                        error_msg=f"{already_exists_msg}.<br/>{mail_sent_msg}."
+                    )
+                else:
+                    log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
+                    raise CreateUserAccountErrorException(
+                        error_msg=f"{already_exists_msg}.<br/>{log_in_link_msg}"
+                    )
             if _is_ldap_constraint_wrong_password_raised(response):
                 raise CreateUserAccountErrorException(
                     error_msg=_("The used password contains an unaccepted character")
@@ -104,6 +114,10 @@ def _is_email_already_used(response):
         'message' in response.keys()
         and 'SQL Integrity Error UNIQUE constraint failed: oi_users.email' in response['message']
     )
+
+
+def _get_existing_account_request(email):
+    return UserAccountRequest.objects.filter(email=email).order_by('-updated_at').first()
 
 
 def _is_ldap_constraint_wrong_password_raised(response):

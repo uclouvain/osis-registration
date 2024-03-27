@@ -24,11 +24,13 @@
 #
 ##############################################################################
 
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from ratelimit.decorators import ratelimit
 
 from base import settings
 from base.models.user_account_request import UserAccountRequest
-from base.services import logging
+from base.services import logging, mail
 
 
 @logging.log_event_decorator(
@@ -39,6 +41,23 @@ from base.services import logging
 class UserAccountCreationStatusView(TemplateView):
     name = 'user_account_status'
     template_name = 'registration_status/user_account_status.html'
+
+    @method_decorator(
+        ratelimit(key='ip', rate=settings.RESET_SEND_MAIL_RATE_LIMIT, block=True, method='POST'), name='post'
+    )
+    def post(self, request, uacr_uuid):
+        try:
+            account_creation_request = UserAccountRequest.objects.get(uuid=uacr_uuid)
+        except UserAccountRequest.DoesNotExist:
+            account_creation_request = None
+
+        context = self.get_context_data(uacr_uuid=uacr_uuid)
+
+        if account_creation_request and not account_creation_request.email_validated:
+            mail.send_validation_mail(self.request, account_creation_request)
+            context['mail_sent'] = True
+
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         account_request = UserAccountRequest.objects.get(uuid=kwargs['uacr_uuid'])

@@ -27,9 +27,11 @@
 
 import logging as default_logging
 
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.translation import gettext
 from django.views import View
 
 from base.models.enum import UserAccountRequestStatus
@@ -37,7 +39,6 @@ from base.models.user_account_request import UserAccountRequest
 from base.services import logging
 from base.services.token_generator import mail_validation_token_generator
 from base.services.user_account_activation import activate_ldap_user_account
-from base.views.registration import UserAccountCreationRequest
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
@@ -47,13 +48,15 @@ class ValidateEmailView(View):
     def get(self, request, uacr_uuid, token):
         try:
             account_creation_request = UserAccountRequest.objects.get(uuid=uacr_uuid)
-        except UserAccountCreationRequest.DoesNotExist:
+        except UserAccountRequest.DoesNotExist:
             account_creation_request = None
+
+        token_valid = mail_validation_token_generator.check_token(account_creation_request, token)
 
         if account_creation_request \
                 and not account_creation_request.email_validated \
-                and mail_validation_token_generator.check_token(account_creation_request, token) \
-                and account_creation_request.status == UserAccountRequestStatus.PENDING.value:
+                and token_valid \
+                and account_creation_request.status != UserAccountRequestStatus.SUCCESS.value:
             response = activate_ldap_user_account(account_creation_request)
             if 'status' in response and response['status'] == 'success':
                 account_creation_request.email_validated = True
@@ -63,10 +66,26 @@ class ValidateEmailView(View):
                 account_creation_request.status = UserAccountRequestStatus.ERROR.value
                 self._log_account_activation_error(account_creation_request)
 
-            try:
-                account_creation_request.save()
-            except ValidationError:
-                self._log_save_request_error(account_creation_request)
+        elif not token_valid:
+            if account_creation_request.email_validated:
+                messages.add_message(
+                    self.request,
+                    message=gettext("Your email has been validated. You may log in already."),
+                    level=messages.SUCCESS
+                )
+            else:
+                messages.add_message(
+                    self.request,
+                    message=gettext("The link provided for mail validation is invalid or expired. Please try again."),
+                    level=messages.ERROR
+                )
+                self._log_mail_validation_error(account_creation_request)
+            return redirect(reverse('registration') + "?source=admission")
+
+        try:
+            account_creation_request.save()
+        except ValidationError:
+            self._log_save_request_error(account_creation_request)
 
         return redirect(reverse(UserAccountCreationStatusView.name, kwargs={'uacr_uuid': uacr_uuid}))
 
@@ -85,6 +104,15 @@ class ValidateEmailView(View):
             domain='osis-registration',
             level=default_logging.ERROR,
             description=f"error occured during user account activation for <{account_creation_request.email}>"
+        )
+
+    def _log_mail_validation_error(self, account_creation_request):
+        logging.log_event(
+            self.request,
+            event_type=logging.EventType.ERROR,
+            domain='osis-registration',
+            level=default_logging.ERROR,
+            description=f"error occured during mail validation for <{account_creation_request.email}>"
         )
 
     def _log_save_request_error(self, account_creation_request):

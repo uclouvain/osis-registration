@@ -45,6 +45,7 @@ def send_email(template_references, receivers, data, connected_user=None):
         connected_user=connected_user
     )
 
+
 def send_validation_mail(request, user_account_creation_request):
     template_references = {
         'html': 'osis_registration_mail_validation_html',
@@ -53,14 +54,14 @@ def send_validation_mail(request, user_account_creation_request):
 
     receivers = [
         message_config.create_receiver(
-            receiver_email=user_account_creation_request.request.email,
+            receiver_email=user_account_creation_request.email,
             receiver_lang=request.LANGUAGE_CODE
         )
     ]
-    token = mail_validation_token_generator.make_token(user_account_creation_request.request)
+    token = mail_validation_token_generator.make_token(user_account_creation_request)
     data = {
         'template': {'link': request.build_absolute_uri(reverse('validate_email', kwargs={
-            'uacr_uuid': user_account_creation_request.request.uuid,
+            'uacr_uuid': user_account_creation_request.uuid,
             'token': token
         }))},
         'subject': {}
@@ -71,7 +72,7 @@ def send_validation_mail(request, user_account_creation_request):
         request=request,
         event_type=logging.EventType.VIEW,
         domain="osis-registration",
-        description=f"validation mail sent to {user_account_creation_request.request.email}"
+        description=f"validation mail sent to {user_account_creation_request.email}"
     )
 
 
