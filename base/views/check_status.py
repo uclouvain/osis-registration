@@ -41,7 +41,7 @@ from base.services.user_account_information import get_ldap_user_account_informa
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
-@method_decorator(ratelimit(key='ip', rate=settings.RESET_SEND_MAIL_RATE_LIMIT, block=True, method='POST'), name='post')
+@method_decorator(ratelimit(key='ip', rate=settings.REQUESTS_RATE_LIMIT, block=True, method='POST'), name='post')
 @logging.log_event_decorator(
     logging.EventType.VIEW,
     "osis-registration",
