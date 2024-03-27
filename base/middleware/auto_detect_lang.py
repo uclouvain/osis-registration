@@ -13,7 +13,7 @@ class AutoDetectLanguage:
         return response
 
     def auto_detect_french(self, request):
-        if "fr" in request.META['HTTP_ACCEPT_LANGUAGE'] and not request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME):
+        if "fr" in request.META.get('HTTP_ACCEPT_LANGUAGE', '') and not request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME):
             translation.activate("fr-be")
             request.session[settings.LANGUAGE_COOKIE_NAME] = translation.get_language()
             request.LANGUAGE_CODE = "fr-be"
