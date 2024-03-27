@@ -8,6 +8,7 @@ from django.urls import path, include
 from base.api import url_v1
 from base.views import common
 from base.views.common import edit_language
+from base.views.recover_password import RecoverPasswordFormView, ModifyPasswordFormView
 from base.views.registration import RegistrationFormView
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 from base.views.validate_email import ValidateEmailView
@@ -15,6 +16,8 @@ from base.views.validate_email import ValidateEmailView
 urlpatterns = [
     path('', RegistrationFormView.as_view(), name=RegistrationFormView.name),
     path('home/', RegistrationFormView.as_view(), name=RegistrationFormView.name),
+    path('recover_password/', RecoverPasswordFormView.as_view(), name=RecoverPasswordFormView.name),
+    path('recover_password/<uprr_uuid>/<token>', ModifyPasswordFormView.as_view(), name=ModifyPasswordFormView.name),
     path('admin/', admin.site.urls),
     path('noscript/', common.noscript, name='noscript'),
     path('captcha/', include('captcha.urls')),

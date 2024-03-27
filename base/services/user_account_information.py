@@ -38,7 +38,7 @@ ERROR = "error"
 
 def get_ldap_user_account_information(email) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service(id="fake_id", email=email)
+        response = mock_ldap_service(id="fake_id", email=email, prenom="prenom", nom="nom")
     else:
         try:
             response = requests.get(

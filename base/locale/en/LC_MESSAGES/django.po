@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-12 16:19+0100\n"
+"POT-Creation-Date: 2024-03-13 11:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,13 +27,13 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+msgid "Private email address"
+msgstr ""
+
 msgid "First name"
 msgstr ""
 
 msgid "Last name"
-msgstr ""
-
-msgid "Private email address"
 msgstr ""
 
 msgid "Date of birth"
@@ -79,16 +79,14 @@ msgid "An error occured while renewing user account validity: {}"
 msgstr ""
 
 msgid ""
-"The given email \"{}\" is already linked as a private email address for an "
-"existing UCLouvain account"
+"The given email &lt;{}&gt; is already linked as a private email address for "
+"an existing UCLouvain account"
 msgstr ""
 
-msgid ""
-"Please log in using your UCLouvain email address - @student.uclouvain.be / "
-"@uclouvain.be"
+msgid "Please log in using your UCLouvain email address &lt;{}&gt;"
 msgstr ""
 
-msgid "a user account with the given email \"{}\" already exists"
+msgid "a user account with the given email &lt;{}&gt; already exists"
 msgstr ""
 
 msgid "The used password contains an unaccepted character"
@@ -318,6 +316,48 @@ msgstr ""
 msgid "Welcome to the online registration page!"
 msgstr ""
 
+msgid "Modify your password"
+msgstr ""
+
+msgid "Please provide a new password"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Reset password mail sent"
+msgstr ""
+
+msgid "A mail has been sent to "
+msgstr ""
+
+msgid "Please check the instructions to reset your password"
+msgstr ""
+
+msgid "Mail not received ? Check the spam folder or"
+msgstr ""
+
+msgid "wait"
+msgstr ""
+
+msgid "to send again"
+msgstr ""
+
+msgid "send again"
+msgstr ""
+
+msgid "Back to registration page"
+msgstr ""
+
+msgid "Forgot your password ?"
+msgstr ""
+
+msgid "Enter your email and we'll send you instructions to reset your password"
+msgstr ""
+
+msgid "Reset password"
+msgstr ""
+
 msgid "UCLouvain user account creation request"
 msgstr ""
 
@@ -412,6 +452,16 @@ msgid "This password has been found in a password database leaked publicly"
 msgstr ""
 
 msgid "Some parameters are missing for the password check"
+msgstr ""
+
+msgid "A mail with instructions to reset password has been sent to {}"
+msgstr ""
+
+msgid ""
+"The link provided for password reset is invalid or expired. Please try again."
+msgstr ""
+
+msgid "Password successfully reset for {}. You may now try to log in."
 msgstr ""
 
 msgid ""

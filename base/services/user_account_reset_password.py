@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import date, timedelta
 from typing import Union
 
 import requests as requests
@@ -39,49 +38,24 @@ SUCCESS = "success"
 ERROR = "error"
 
 
-def create_ldap_user_account(user_creation_request, redirection_url=None) -> Union[Response, dict]:
+def reset_password_ldap_user_account(user_account, password) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
-        response = mock_ldap_service()
+        response = mock_ldap_service(id=user_account['id'])
     else:
         try:
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
                 json={
-                    "id": str(user_creation_request.request.uuid),
-                    "datenaissance": user_creation_request.birth_date.strftime('%Y%m%d%fZ'),
-                    "prenom": user_creation_request.first_name,
-                    "nom": user_creation_request.last_name,
-                    "email": user_creation_request.request.email,
-                    "password": user_creation_request.password,
-                    "validite": (date.today() - timedelta(days=1)).strftime('%Y%m%d'),
-                    "type": "A",
+                    "id": user_account['id'],
+                    "password": password,
                 },
-                url=settings.LDAP_ACCOUNT_CREATION_URL,
+                url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
             ).json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            if _is_ldap_constraint_email_exists_raised(response):
-                used_for_recovery = _('The given email &lt;{}&gt; is already linked as a private email address for an existing UCLouvain account').format(
-                    user_creation_request.request.email
-                )
-                please_try_with_uclouvain = _('Please log in using your UCLouvain email address &lt;{}&gt;').format(
-                    response['conflit'].get('mail', '- @student.uclouvain.be / @uclouvain.be')
-                )
-                log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
-                raise CreateUserAccountErrorException(
-                    error_msg=f"{used_for_recovery}. {please_try_with_uclouvain}. {log_in_link_msg}."
-                )
-            if _is_email_already_used(response):
-                already_exists_msg = _('a user account with the given email &lt;{}&gt; already exists').format(
-                    user_creation_request.request.email
-                )
-                log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
-                raise CreateUserAccountErrorException(
-                    error_msg=f"{already_exists_msg}.<br/>{log_in_link_msg}"
-                )
             if _is_ldap_constraint_wrong_password_raised(response):
                 raise CreateUserAccountErrorException(
                     error_msg=_("The used password contains an unaccepted character")
@@ -89,21 +63,6 @@ def create_ldap_user_account(user_creation_request, redirection_url=None) -> Uni
             raise CreateUserAccountErrorException(error_msg=_("Unknown error"))
 
     return response
-
-
-def _is_ldap_constraint_email_exists_raised(response):
-    return (
-        'message' in response.keys()
-        and 'Another entry with the same attribute value already exists' in response['message']
-        or 'Adresse existante' in response['message']
-    )
-
-
-def _is_email_already_used(response):
-    return (
-        'message' in response.keys()
-        and 'SQL Integrity Error UNIQUE constraint failed: oi_users.email' in response['message']
-    )
 
 
 def _is_ldap_constraint_wrong_password_raised(response):
