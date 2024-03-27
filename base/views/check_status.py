@@ -48,7 +48,7 @@ from base.views.user_account_creation_status import UserAccountCreationStatusVie
     "access check status form"
 )
 class CheckStatusFormView(FormView):
-    name = 'check_status'
+    name = 'check-status'
     template_name = 'check_status.html'
     form_class = CheckStatusForm
 

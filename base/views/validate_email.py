@@ -31,6 +31,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext
 from django.views import View
 
@@ -39,6 +40,7 @@ from base.models.user_account_request import UserAccountRequest
 from base.services import logging
 from base.services.token_generator import mail_validation_token_generator
 from base.services.user_account_activation import activate_ldap_user_account
+from base.views.check_status import CheckStatusFormView
 from base.views.user_account_creation_status import UserAccountCreationStatusView
 
 
@@ -76,7 +78,10 @@ class ValidateEmailView(View):
             else:
                 messages.add_message(
                     self.request,
-                    message=gettext("The link provided for mail validation is invalid or expired. Please try again."),
+                    message=mark_safe(gettext(
+                        "The link provided for mail validation is invalid or expired. "
+                        "Please try again. You may also <a href='{}'>check the status of your request</a>."
+                    ).format(reverse(CheckStatusFormView.name))),
                     level=messages.ERROR
                 )
                 self._log_mail_validation_error(account_creation_request)
