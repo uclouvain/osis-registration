@@ -49,7 +49,7 @@ def get_ldap_user_account_information(email) -> Union[Response, dict]:
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
-        if response.get('status') == ERROR:
+        if not response or response.get('status') == ERROR:
             raise RetrieveUserAccountInformationErrorException(error_msg=response['message'])
 
     return response
