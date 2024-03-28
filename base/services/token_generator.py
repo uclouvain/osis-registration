@@ -36,7 +36,7 @@ class MailValidationTokenGenerator(PasswordResetTokenGenerator):
         """
         uar = user_account_request
         email_validated = False
-        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}'
+        return f'{uar.pk}{uar.email}{uar.updated_at}{email_validated}{timestamp}'
 
 
 mail_validation_token_generator = MailValidationTokenGenerator()
