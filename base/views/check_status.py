@@ -75,6 +75,7 @@ class CheckStatusFormView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
+            'check_status': True,
             'admission_registration_url': reverse('registration') + f"?source=admission"
         })
         return context
