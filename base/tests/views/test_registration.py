@@ -63,11 +63,11 @@ class RegistrationFormViewTestCase(TestCase):
 
     def test_access_view(self):
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'home.html')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/?source=admission')
 
     @mock.patch('base.views.registration.create_ldap_user_account', return_value={'status': 'success'})
-    @mock.patch('base.views.registration.RegistrationFormView.password_valid', return_value=True)
+    @mock.patch('base.services.password_validation_check.password_valid', return_value=True)
     def test_post_form_valid_should_create_request_and_redirect_to_user_account_status_view(
             self, mock_create, mock_chk_pwd
     ):
@@ -77,7 +77,7 @@ class RegistrationFormViewTestCase(TestCase):
         self.assertRedirects(response, success_url)
 
     @mock.patch('base.views.registration.create_ldap_user_account', return_value={'status': 'error'})
-    @mock.patch('base.views.registration.RegistrationFormView.password_valid', return_value=True)
+    @mock.patch('base.services.password_validation_check.password_valid', return_value=True)
     def test_service_should_reload_view_with_error_msg(self, mock_create, mock_chk_pwd):
         response = self.client.post(self.url, data=self.user_info)
         msg_level = next(m.level for m in get_messages(response.wsgi_request))

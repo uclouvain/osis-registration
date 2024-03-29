@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from datetime import date, timedelta
 from typing import Union
 
 import requests as requests
@@ -43,12 +44,21 @@ def reset_password_ldap_user_account(user_account, password) -> Union[Response, 
         response = mock_ldap_service(id=user_account['id'])
     else:
         try:
+            data = {
+                "id": user_account['id'],
+                "password": password,
+            }
+
+            if not user_account['active']:
+                # a password change should also activate and reset account validity if not active yet
+                data.update({
+                    "validite": (date.today() + timedelta(days=int(settings.LDAP_ACCOUNT_VALIDITY_DAYS))).strftime('%Y%m%d'),
+                    "active": True,
+                })
+
             response = requests.post(
                 headers={'Content-Type': 'application/json'},
-                json={
-                    "id": user_account['id'],
-                    "password": password,
-                },
+                json=data,
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
             ).json()
