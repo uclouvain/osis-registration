@@ -89,9 +89,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            {% if 'source' in request.GET and request.GET.source == 'admission' or recover_password or check_status%}
-                background-color: #eeeeee;
-            {% endif %}
+            background-color: #eeeeee;
         }
     </style>
 </head>
@@ -144,7 +142,7 @@
 
 <span id="anchor" style="scroll-margin: 100px;"></span>
 
-<div class="container" id="main" {% if 'source' in request.GET and request.GET.source == 'admission' or recover_password or check_status %} style="font-family: 'Montserrat', sans-serif;" {% endif %}>
+<div class="container" id="main" style="font-family: 'Montserrat', sans-serif;">
 
     {% block header_content %}{% endblock %}
     {% block content %}{% endblock %}
