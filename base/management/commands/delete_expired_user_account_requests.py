@@ -24,6 +24,7 @@ class Command(BaseCommand):
         # Delete the requests
         deleted_count = requests_to_delete.delete()[0]
 
-        self.stdout.write(self.style.SUCCESS(
-            f'Successfully deleted {deleted_count} expired user account creation requests'
-        ))
+        for request in requests_to_delete:
+            self.stdout.write(self.style.SUCCESS(
+                f'will be deleted: {request.email}'
+            ))
