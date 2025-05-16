@@ -197,6 +197,8 @@ MAIL_SENDER_CLASSES = os.environ.get(
 
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
+APPLICATION_URL = os.environ.get('APPLICATION_URL', 'http://localhost:8000')
+
 # set token validity to 24 hours
 PASSWORD_RESET_TIMEOUT = 86400
 

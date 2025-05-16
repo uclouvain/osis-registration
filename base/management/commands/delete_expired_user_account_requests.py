@@ -1,7 +1,10 @@
 import datetime
+import requests
+import os
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.conf import settings
 
 from base.models.enum import UserAccountRequestType
 from base.models.user_account_request import UserAccountRequest
@@ -21,10 +24,31 @@ class Command(BaseCommand):
             updated_at__lte=time_threshold
         )
 
-        # Delete the requests
-        deleted_count = requests_to_delete.delete()[0]
-
+        deleted_count = 0
         for request in requests_to_delete:
-            self.stdout.write(self.style.SUCCESS(
-                f'will be deleted: {request.email}'
-            ))
+            try:
+                # Call the delete_account API
+                api_url = os.path.join(settings.APPLICATION_URL, 'api/v1/delete_account/')
+                data = {'email': request.email}
+                response = requests.post(api_url, data=data)
+
+                if response.status_code == 201:  # Assuming 201 Created is the success status
+                    # Delete the request if the API call was successful
+                    request.delete()
+                    deleted_count += 1
+                    self.stdout.write(self.style.SUCCESS(
+                        f'Successfully deleted account for email: {request.email}'
+                    ))
+                else:
+                    self.stdout.write(self.style.ERROR(
+                        f'Failed to delete account for email: {request.email}. API returned status code: {response.status_code}'
+                    ))
+
+            except requests.exceptions.RequestException as e:
+                self.stdout.write(self.style.ERROR(
+                    f'Failed to delete account for email: {request.email}. An error occurred: {e}'
+                ))
+
+        self.stdout.write(self.style.SUCCESS(
+            f'Successfully deleted {deleted_count} expired user account creation requests'
+        ))
