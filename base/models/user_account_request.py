@@ -34,6 +34,7 @@ from base.models.polling_subscriber import PollingSubscriber
 
 
 class UserAccountRequestAdmin(admin.ModelAdmin):
+    list_display = ('email', 'type', 'status', 'created_at')
     fields = ('email', 'email_validated', 'type', 'status')
     list_display = ('uuid', 'email', 'email_validated', 'type', 'status')
 
