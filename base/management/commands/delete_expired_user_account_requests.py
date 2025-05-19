@@ -31,6 +31,17 @@ class Command(BaseCommand):
 
         requests_to_delete = [request for request in requests_to_delete if request.email not in already_deleted]
 
+        if requests_to_delete:
+            self.stdout.write(f"Found {len(requests_to_delete)} expired user account creation requests:")
+            for request in requests_to_delete:
+                self.stdout.write(f"  - {request.email}")
+            self.stdout.write("Do you want to delete them? (yes/no)")
+            confirmation = input().lower()
+
+            if confirmation != 'yes':
+                self.stdout.write("Deletion cancelled.")
+                return
+
         deleted_count = 0
         for request in requests_to_delete:
             try:
@@ -57,11 +68,11 @@ class Command(BaseCommand):
                     f'Failed to delete account for email: {request.email}. An error occurred: {e}'
                 ))
 
-        if requests_to_delete:
+        if requests_to_delete and deleted_count > 0:
             self.stdout.write(self.style.SUCCESS(
                 f'Successfully deleted {deleted_count} expired user account creation requests'
             ))
         else:
             self.stdout.write(self.style.WARNING(
-                'No expired user account creation requests found'
+                'No expired user account creation requests found or there were some errors during deletion.'
             ))
