@@ -22,6 +22,8 @@ ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'LOCAL')
 
+APPLICATION_TOKEN = os.environ.get('APPLICATION_TOKEN', '')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -197,7 +199,7 @@ MAIL_SENDER_CLASSES = os.environ.get(
 
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 
-APPLICATION_URL = os.environ.get('APPLICATION_URL', 'http://localhost:8000')
+APPLICATION_URL = os.environ.get('APPLICATION_URL', '')
 
 # set token validity to 24 hours
 PASSWORD_RESET_TIMEOUT = 86400

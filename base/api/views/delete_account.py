@@ -29,21 +29,22 @@ from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.polling_subscriber import PollingSubscriber
-from base.services.service_exceptions import CreateUserAccountErrorException
-from base.services.user_account_deletion import delete_ldap_user_account
+from base.services.service_exceptions import CreateUserAccountErrorException, \
+    RetrieveUserAccountInformationErrorException
+from base.services.user_account_deletion import delete_ldap_user_account, SUCCESS
 from base.services.user_account_information import get_ldap_user_account_information
 
 
-class DeleteAccount(generics.CreateAPIView):
+class DeleteAccount(generics.DestroyAPIView):
     """
        Delete account request
     """
     name = 'delete-account'
     serializer_class = UserAccountRequestSerializer
 
-    def create(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         try:
             email = request.data['email']
 
@@ -53,10 +54,16 @@ class DeleteAccount(generics.CreateAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            user_account_request = serializer.save()
+            user_account_deletion_request = serializer.save()
 
             get_ldap_user_account_information(email=email)
-            delete_ldap_user_account(user_account_request)
+            response = delete_ldap_user_account(user_account_deletion_request)
+
+            if response['status'] == SUCCESS:
+                user_account_deletion_request.status = UserAccountRequestStatus.SUCCESS.value
+                user_account_deletion_request.save()
+
+
 
         except (KeyError, ValueError) as e:
             raise ValidationError(f"Missing data or wrong format: {str(e)}")
@@ -64,8 +71,11 @@ class DeleteAccount(generics.CreateAPIView):
             return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while deleting account")
+        except RetrieveUserAccountInformationErrorException as e:
+            return HttpResponseServerError(f"An error occured while retrieving account information: {str(e)}")
+
 
         return HttpResponse(
             status=status.HTTP_200_OK,
-            content="Account {} deleted".format(user_account_request.email)
+            content="Account {} deleted".format(user_account_deletion_request.email)
         )

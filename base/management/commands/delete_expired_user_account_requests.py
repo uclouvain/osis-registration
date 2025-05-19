@@ -1,12 +1,12 @@
 import datetime
-import requests
 import os
 
+import requests
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.conf import settings
 
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.user_account_request import UserAccountRequest
 
 
@@ -24,24 +24,32 @@ class Command(BaseCommand):
             updated_at__lte=time_threshold
         )
 
+        already_deleted = UserAccountRequest.objects.filter(
+            type=UserAccountRequestType.DELETION.value,
+            status=UserAccountRequestStatus.SUCCESS.value
+        ).values_list('email', flat=True)
+
+        requests_to_delete = [request for request in requests_to_delete if request.email not in already_deleted]
+
         deleted_count = 0
         for request in requests_to_delete:
             try:
                 # Call the delete_account API
                 api_url = os.path.join(settings.APPLICATION_URL, 'api/v1/delete_account/')
                 data = {'email': request.email}
-                response = requests.post(api_url, data=data)
+                headers = {'Authorization': f"Token {settings.APPLICATION_TOKEN}"}
 
-                if response.status_code == 201:  # Assuming 201 Created is the success status
-                    # Delete the request if the API call was successful
-                    request.delete()
+                response = requests.delete(api_url, data=data, headers=headers)
+
+                if response.status_code == 200:
                     deleted_count += 1
                     self.stdout.write(self.style.SUCCESS(
                         f'Successfully deleted account for email: {request.email}'
                     ))
                 else:
                     self.stdout.write(self.style.ERROR(
-                        f'Failed to delete account for email: {request.email}. API returned status code: {response.status_code}'
+                        f'Failed to delete account for email: {request.email}. API returned status code: {response.status_code} \n'
+                        f'Detailed error message: {response.text}'
                     ))
 
             except requests.exceptions.RequestException as e:
@@ -49,6 +57,11 @@ class Command(BaseCommand):
                     f'Failed to delete account for email: {request.email}. An error occurred: {e}'
                 ))
 
-        self.stdout.write(self.style.SUCCESS(
-            f'Successfully deleted {deleted_count} expired user account creation requests'
-        ))
+        if requests_to_delete:
+            self.stdout.write(self.style.SUCCESS(
+                f'Successfully deleted {deleted_count} expired user account creation requests'
+            ))
+        else:
+            self.stdout.write(self.style.WARNING(
+                'No expired user account creation requests found'
+            ))
