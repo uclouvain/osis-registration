@@ -13,36 +13,32 @@ from base.models.user_account_request import UserAccountRequest
 class Command(BaseCommand):
     help = 'Deletes user account creation requests that are expired and unvalidated'
 
-    def handle(self, *args, **options):
-        # Calculate the time threshold (24 hours ago)
-        time_threshold = timezone.now() - datetime.timedelta(hours=24)
-
-        # Query for requests that match the criteria
-        requests_to_delete = UserAccountRequest.objects.filter(
-            type=UserAccountRequestType.CREATION.value,
-            email_validated=False,
-            updated_at__lte=time_threshold
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--force_delete',
+            action='store_true',
+            help='Force deletion without confirmation',
         )
 
-        already_deleted = UserAccountRequest.objects.filter(
-            type=UserAccountRequestType.DELETION.value,
-            status=UserAccountRequestStatus.SUCCESS.value
-        ).values_list('email', flat=True)
-
-        requests_to_delete = [request for request in requests_to_delete if request.email not in already_deleted]
+    def handle(self, *args, **options):
+        force_delete = options['force_delete']
+        requests_to_delete = get_accounts_to_delete()
 
         if requests_to_delete:
             self.stdout.write(f"Found {len(requests_to_delete)} expired user account creation requests:")
             for request in requests_to_delete:
                 self.stdout.write(f"  - {request.email}")
-            self.stdout.write("Do you want to delete them? (yes/no)")
-            confirmation = input().lower()
-
+            if force_delete:
+                confirmation = 'yes'
+            else:
+                self.stdout.write("Do you want to delete them? (yes/no)")
+                confirmation = input().lower()
             if confirmation != 'yes':
                 self.stdout.write("Deletion cancelled.")
                 return
 
         deleted_count = 0
+        errors = []
         for request in requests_to_delete:
             try:
                 # Call the delete_account API
@@ -62,11 +58,13 @@ class Command(BaseCommand):
                         f'Failed to delete account for email: {request.email}. API returned status code: {response.status_code} \n'
                         f'Detailed error message: {response.text}'
                     ))
+                    errors += [response.text]
 
             except requests.exceptions.RequestException as e:
                 self.stdout.write(self.style.ERROR(
                     f'Failed to delete account for email: {request.email}. An error occurred: {e}'
                 ))
+                self.stderr.write(f"Error during deletion: {e}")
 
         if requests_to_delete and deleted_count > 0:
             self.stdout.write(self.style.SUCCESS(
@@ -76,3 +74,22 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(
                 'No expired user account creation requests found or there were some errors during deletion.'
             ))
+
+        if errors:
+            raise Exception('<br/>'.join(errors))
+
+def get_accounts_to_delete():
+    # Calculate the time threshold (24 hours ago)
+    time_threshold = timezone.now() - datetime.timedelta(hours=24)
+    # Query for requests that match the criteria
+    requests_to_delete = UserAccountRequest.objects.filter(
+        type=UserAccountRequestType.CREATION.value,
+        email_validated=False,
+        updated_at__lte=time_threshold
+    )
+    already_deleted = UserAccountRequest.objects.filter(
+        type=UserAccountRequestType.DELETION.value,
+        status=UserAccountRequestStatus.SUCCESS.value
+    ).values_list('email', flat=True)
+    requests_to_delete = [request for request in requests_to_delete if request.email not in already_deleted]
+    return requests_to_delete

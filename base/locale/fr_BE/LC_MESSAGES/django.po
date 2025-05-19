@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 15:09+0100\n"
+"POT-Creation-Date: 2025-05-19 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées ?"
+msgstr ""
+
+msgid "Les demandes expirées ont été supprimées."
+msgstr ""
+
+msgid "Veuillez confirmer la suppression."
+msgstr ""
+
+msgid "Supprimer les demandes expirées"
+msgstr ""
 
 msgid "This field is required."
 msgstr "Ce champ est requis."
@@ -80,6 +92,11 @@ msgstr ""
 msgid "An error occured while creating user account: {}"
 msgstr "Une erreur est survenue pendant la création du compte utilisateur: {}"
 
+#, fuzzy
+#| msgid "An error occured while creating user account: {}"
+msgid "An error occured while deleting user account: {}"
+msgstr "Une erreur est survenue pendant la création du compte utilisateur: {}"
+
 msgid "An error occured while renewing user account validity: {}"
 msgstr ""
 "Une erreur est survenue lors du renouvellement de validité du compte: {}"
@@ -113,6 +130,15 @@ msgstr "Français"
 
 msgid "English"
 msgstr "Anglais"
+
+msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées suivantes ?"
+msgstr ""
+
+msgid "Confirmer la suppression"
+msgstr ""
+
+msgid "Annuler"
+msgstr ""
 
 msgid "Play CAPTCHA as audio file"
 msgstr "Écouter la version audio"
@@ -611,4 +637,5 @@ msgid ""
 "again. You may also <a href='{}'>check the status of your request</a>."
 msgstr ""
 "Le lien fourni pour la validation de l'adresse email est invalide ou expiré. "
-"Veuillez réessayer. Vous pouvez aussi <a href='{}'>vérifier le statut de votre demande</a>."
+"Veuillez réessayer. Vous pouvez aussi <a href='{}'>vérifier le statut de "
+"votre demande</a>."

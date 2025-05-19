@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 15:09+0100\n"
+"POT-Creation-Date: 2025-05-19 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées ?"
+msgstr ""
+
+msgid "Les demandes expirées ont été supprimées."
+msgstr ""
+
+msgid "Veuillez confirmer la suppression."
+msgstr ""
+
+msgid "Supprimer les demandes expirées"
+msgstr ""
 
 msgid "This field is required."
 msgstr ""
@@ -75,6 +87,9 @@ msgstr ""
 msgid "An error occured while creating user account: {}"
 msgstr ""
 
+msgid "An error occured while deleting user account: {}"
+msgstr ""
+
 msgid "An error occured while renewing user account validity: {}"
 msgstr ""
 
@@ -102,6 +117,15 @@ msgid "French"
 msgstr ""
 
 msgid "English"
+msgstr ""
+
+msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées suivantes ?"
+msgstr ""
+
+msgid "Confirmer la suppression"
+msgstr ""
+
+msgid "Annuler"
 msgstr ""
 
 msgid "Play CAPTCHA as audio file"

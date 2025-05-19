@@ -45,6 +45,7 @@ class DeleteAccount(generics.DestroyAPIView):
     serializer_class = UserAccountRequestSerializer
 
     def delete(self, request, *args, **kwargs):
+        user_account_deletion_request = None
         try:
             email = request.data['email']
 
@@ -72,6 +73,8 @@ class DeleteAccount(generics.DestroyAPIView):
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while deleting account")
         except RetrieveUserAccountInformationErrorException as e:
+            if user_account_deletion_request:
+                user_account_deletion_request.delete()
             return HttpResponseServerError(f"An error occured while retrieving account information: {str(e)}")
 
 
