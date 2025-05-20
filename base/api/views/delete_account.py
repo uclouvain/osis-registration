@@ -31,6 +31,7 @@ from rest_framework.exceptions import ValidationError
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
 from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.polling_subscriber import PollingSubscriber
+from base.models.user_account_request import UserAccountRequest
 from base.services.service_exceptions import CreateUserAccountErrorException, \
     RetrieveUserAccountInformationErrorException
 from base.services.user_account_deletion import delete_ldap_user_account, SUCCESS
@@ -46,6 +47,7 @@ class DeleteAccount(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         user_account_deletion_request = None
+        user_account_creation_request = None
         try:
             email = request.data['email']
 
@@ -57,13 +59,21 @@ class DeleteAccount(generics.DestroyAPIView):
             serializer.is_valid(raise_exception=True)
             user_account_deletion_request = serializer.save()
 
+            user_account_creation_request = UserAccountRequest.objects.get(
+                type=UserAccountRequestType.CREATION.name,
+                status=UserAccountRequestStatus.PENDING.name,
+                email=email,
+            )
+
             get_ldap_user_account_information(email=email)
             response = delete_ldap_user_account(user_account_deletion_request)
 
             if response['status'] == SUCCESS:
-                user_account_deletion_request.status = UserAccountRequestStatus.SUCCESS.value
+                user_account_deletion_request.status = UserAccountRequestStatus.SUCCESS.name
                 user_account_deletion_request.save()
 
+                user_account_creation_request.status = UserAccountRequestStatus.DELETED.name
+                user_account_creation_request.save()
 
 
         except (KeyError, ValueError) as e:
