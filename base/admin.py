@@ -67,18 +67,18 @@ class UserAccountRequestAdmin(user_account_request.UserAccountRequestAdmin):
             if form.is_valid() and form.cleaned_data['confirm']:
                 try:
                     call_command('delete_expired_user_account_requests', force_delete=True)
-                    self.message_user(request, _("Les demandes expirées ont été supprimées."), level=messages.SUCCESS)
+                    self.message_user(request, _("The expired requests have been deleted"), level=messages.SUCCESS)
                     return redirect("..")
                 except Exception as e:
                     self.message_user(request, mark_safe(e), level=messages.ERROR)
             else:
-                self.message_user(request, _("Veuillez confirmer la suppression."), level=messages.ERROR)
+                self.message_user(request, _("Please confirm deletion"), level=messages.ERROR)
         else:
             form = DeleteExpiredRequestsForm()
 
         context = dict(
             self.admin_site.each_context(request),
-            title=_('Supprimer les demandes expirées'),
+            title=_('Delete expired requests'),
             form=form,
             emails_to_delete=emails_to_delete,
         )

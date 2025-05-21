@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 16:44+0200\n"
+"POT-Creation-Date: 2025-05-21 11:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées ?"
+msgid "Are you sure you want to proceed with the deletion?"
 msgstr ""
 
-msgid "Les demandes expirées ont été supprimées."
+msgid "The expired requests have been deleted"
 msgstr ""
 
-msgid "Veuillez confirmer la suppression."
+msgid "Please confirm deletion"
 msgstr ""
 
-msgid "Supprimer les demandes expirées"
+msgid "Delete expired requests"
 msgstr ""
 
 msgid "This field is required."
@@ -119,13 +119,13 @@ msgstr ""
 msgid "English"
 msgstr ""
 
-msgid "Êtes-vous sûr de vouloir supprimer les demandes expirées suivantes ?"
+msgid "Are you sure you want to delete these expired requests?"
 msgstr ""
 
-msgid "Confirmer la suppression"
+msgid "Delete"
 msgstr ""
 
-msgid "Annuler"
+msgid "Cancel"
 msgstr ""
 
 msgid "Play CAPTCHA as audio file"
@@ -141,9 +141,6 @@ msgid "Please provide the email linked with user account creation request"
 msgstr ""
 
 msgid "Check status"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "Welcome to the UCLouvain registration application platform"
