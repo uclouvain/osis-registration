@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n static admin_urls %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}">
+    <style>
+        .module h2, .module caption, .baskets h2 {
+            margin-bottom: 10px;
+        }
+    </style>
+    {{ form.media }}
+{% endblock %}
+
+
+{% block content %}
+    <div id="content-main" class="delete-confirmation">
+        <form method="post">
+            {% csrf_token %}
+            <fieldset class="module aligned wide">
+                <h2>{% trans 'Are you sure you want to delete these expired requests?' %}</h2>
+                <ul>
+                    {% for email in emails_to_delete %}
+                        <li>{{ email }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="form-row">
+                    {{ form.confirm.errors }}
+                    <label class="required" for="id_confirm">
+                        {{ form.confirm.label }}
+                    </label>
+                    {{ form.confirm }}
+                </div>
+            </fieldset>
+            <div class="submit-row">
+                <input type="submit" value="{% trans 'Delete' %}" class="button btn-danger deletelink">
+                <a href="{% url 'admin:base_useraccountrequest_changelist' %}" class="button btn-default cancel-link">{% trans 'Cancel' %}</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -44,6 +44,9 @@ class RetrieveUserAccountInformationErrorException(OsisRegistrationServiceExcept
 class CreateUserAccountErrorException(OsisRegistrationServiceException):
     msg = _("An error occured while creating user account: {}")
 
+class DeleteUserAccountErrorException(OsisRegistrationServiceException):
+    msg = _("An error occured while deleting user account: {}")
+
 
 class RenewUserAccountValidityErrorException(OsisRegistrationServiceException):
     msg = _("An error occured while renewing user account validity: {}")
