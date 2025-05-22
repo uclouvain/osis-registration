@@ -62,6 +62,11 @@ class UserAccountRequestAdmin(user_account_request.UserAccountRequestAdmin):
         expired_requests = get_accounts_to_delete()
         emails_to_delete = [req.email for req in expired_requests]
 
+        if not emails_to_delete:
+            self.message_user(request, _("No expired requests found"), level=messages.WARNING)
+            return redirect("..")
+
+
         if request.method == 'POST':
             form = DeleteExpiredRequestsForm(request.POST)
             if form.is_valid() and form.cleaned_data['confirm']:
