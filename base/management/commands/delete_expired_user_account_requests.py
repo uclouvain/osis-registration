@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.user_account_request import UserAccountRequest
+from base.services.service_exceptions import RetrieveUserAccountInformationErrorException
 
 
 class Command(BaseCommand):
@@ -45,9 +46,7 @@ class Command(BaseCommand):
                 api_url = os.path.join(settings.APPLICATION_URL, 'api/v1/delete_account/')
                 data = {'email': request.email}
                 headers = {'Authorization': f"Token {settings.APPLICATION_TOKEN}"}
-
                 response = requests.delete(api_url, data=data, headers=headers)
-
                 if response.status_code == 200:
                     deleted_count += 1
                     self.stdout.write(self.style.SUCCESS(
@@ -65,6 +64,11 @@ class Command(BaseCommand):
                     f'Failed to delete account for email: {request.email}. An error occurred: {e}'
                 ))
                 self.stderr.write(f"Error during deletion: {e}")
+
+            except RetrieveUserAccountInformationErrorException as e:
+                self.stdout.write(self.style.ERROR(
+                    f'Failed to retrieve account for email: {request.email}. An error occurred: {e}'
+                ))
 
         if requests_to_delete and deleted_count > 0:
             self.stdout.write(self.style.SUCCESS(
