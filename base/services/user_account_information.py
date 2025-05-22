@@ -48,6 +48,8 @@ def get_ldap_user_account_information(email) -> Union[Response, dict]:
             )
             if response.status_code == 200:
                 response = response.json()
+            else:
+                response = {"status": ERROR, "status_code": response.status_code, "message": response.text}
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 
