@@ -45,7 +45,9 @@ def get_ldap_user_account_information(email) -> Union[Response, dict]:
                 headers={'Content-Type': 'application/json'},
                 url=f"{settings.LDAP_ACCOUNT_DESCRIBE_EMAIL_URL}{email}",
                 timeout=60,
-            ).json()
+            )
+            if response.status_code == 200:
+                response = response.json()
         except Timeout:
             response = {"status": ERROR, "message": "Request timed out"}
 

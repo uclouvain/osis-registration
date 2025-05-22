@@ -65,7 +65,16 @@ class DeleteAccount(generics.DestroyAPIView):
                 email=email,
             )
 
-            get_ldap_user_account_information(email=email)
+            try:
+                get_ldap_user_account_information(email=email)
+            except RetrieveUserAccountInformationErrorException as e:
+                if 'Entry not found' in str(e):
+                    user_account_deletion_request.status = UserAccountRequestStatus.ERROR.name
+                    user_account_deletion_request.save()
+                    user_account_creation_request.status = UserAccountRequestStatus.DELETED.name
+                    user_account_creation_request.save()
+                raise e
+
             response = delete_ldap_user_account(user_account_deletion_request)
 
             if response['status'] == SUCCESS:
@@ -74,7 +83,6 @@ class DeleteAccount(generics.DestroyAPIView):
 
                 user_account_creation_request.status = UserAccountRequestStatus.DELETED.name
                 user_account_creation_request.save()
-
 
         except (KeyError, ValueError) as e:
             raise ValidationError(f"Missing data or wrong format: {str(e)}")
@@ -85,7 +93,9 @@ class DeleteAccount(generics.DestroyAPIView):
         except RetrieveUserAccountInformationErrorException as e:
             if user_account_deletion_request:
                 user_account_deletion_request.delete()
-            return HttpResponseServerError(f"An error occured while retrieving account information: {str(e)}")
+            return HttpResponseServerError(
+                f"An error occured while retrieving account information: {str(e)} -> Request has been updated"
+            )
 
 
         return HttpResponse(
