@@ -29,21 +29,25 @@ from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.polling_subscriber import PollingSubscriber
-from base.services.service_exceptions import CreateUserAccountErrorException
-from base.services.user_account_deletion import delete_ldap_user_account
+from base.models.user_account_request import UserAccountRequest
+from base.services.service_exceptions import CreateUserAccountErrorException, \
+    RetrieveUserAccountInformationErrorException
+from base.services.user_account_deletion import delete_ldap_user_account, SUCCESS
 from base.services.user_account_information import get_ldap_user_account_information
 
 
-class DeleteAccount(generics.CreateAPIView):
+class DeleteAccount(generics.DestroyAPIView):
     """
        Delete account request
     """
     name = 'delete-account'
     serializer_class = UserAccountRequestSerializer
 
-    def create(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
+        user_account_deletion_request = None
+        user_account_creation_request = None
         try:
             email = request.data['email']
 
@@ -53,19 +57,48 @@ class DeleteAccount(generics.CreateAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            user_account_request = serializer.save()
+            user_account_deletion_request = serializer.save()
 
-            get_ldap_user_account_information(email=email)
-            delete_ldap_user_account(user_account_request)
+            user_account_creation_request = UserAccountRequest.objects.get(
+                type=UserAccountRequestType.CREATION.name,
+                status=UserAccountRequestStatus.PENDING.name,
+                email=email,
+            )
+
+            try:
+                get_ldap_user_account_information(email=email)
+            except RetrieveUserAccountInformationErrorException as e:
+                if 'Entry not found' in repr(e):
+                    user_account_deletion_request.status = UserAccountRequestStatus.ERROR.name
+                    user_account_deletion_request.save()
+                    user_account_creation_request.status = UserAccountRequestStatus.DELETED.name
+                    user_account_creation_request.save()
+                raise e
+
+            response = delete_ldap_user_account(user_account_deletion_request)
+
+            if response['status'] == SUCCESS:
+                user_account_deletion_request.status = UserAccountRequestStatus.SUCCESS.name
+                user_account_deletion_request.save()
+
+                user_account_creation_request.status = UserAccountRequestStatus.DELETED.name
+                user_account_creation_request.save()
 
         except (KeyError, ValueError) as e:
-            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+            raise ValidationError(f"Missing data or wrong format: {repr(e)}")
         except PollingSubscriber.DoesNotExist:
             return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:
             return HttpResponseServerError("An error occured while deleting account")
+        except RetrieveUserAccountInformationErrorException as e:
+            if user_account_deletion_request:
+                user_account_deletion_request.delete()
+            return HttpResponseServerError(
+                f"An error occured while retrieving account information: {repr(e)} -> Request has been updated"
+            )
+
 
         return HttpResponse(
             status=status.HTTP_200_OK,
-            content="Account {} deleted".format(user_account_request.email)
+            content="Account {} deleted".format(user_account_deletion_request.email)
         )

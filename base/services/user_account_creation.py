@@ -70,7 +70,7 @@ def create_ldap_user_account(user_creation_request, redirection_url=None, **kwar
                     user_creation_request.request.email
                 )
                 please_try_with_uclouvain = _('Please log in using your UCLouvain email address &lt;{}&gt;').format(
-                    response['conflit'].get('mail', '- @student.uclouvain.be / @uclouvain.be')
+                    response.get('conflit', {}).get('mail', '- @student.uclouvain.be / @uclouvain.be')
                 )
                 log_in_link_msg = f"<a href='{redirection_url}'>{_('Log in')}</a>" if redirection_url else ""
                 raise CreateUserAccountErrorException(

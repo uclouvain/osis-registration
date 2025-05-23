@@ -36,6 +36,9 @@ from base.models.polling_subscriber import PollingSubscriber
 class UserPasswordResetRequestAdmin(admin.ModelAdmin):
     fields = ('email', 'status')
     list_display = ('uuid', 'email', 'status')
+    list_filter = ('status',)
+    search_fields = ('email',)
+
 
 
 class UserPasswordResetRequest(models.Model):

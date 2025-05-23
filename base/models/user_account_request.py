@@ -35,7 +35,9 @@ from base.models.polling_subscriber import PollingSubscriber
 
 class UserAccountRequestAdmin(admin.ModelAdmin):
     fields = ('email', 'email_validated', 'type', 'status')
-    list_display = ('uuid', 'email', 'email_validated', 'type', 'status')
+    list_display = ('uuid', 'email', 'email_validated', 'type', 'status', 'updated_at')
+    search_fields = ('email', 'uuid')
+    list_filter = ('type', 'status', 'email_validated')
 
 
 class UserAccountRequest(models.Model):

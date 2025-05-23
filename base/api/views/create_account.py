@@ -73,7 +73,7 @@ class CreateAccount(generics.CreateAPIView):
                 mail.send_validation_mail(self.request, user_account_creation_request.request)
 
         except (KeyError, ValueError) as e:
-            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+            raise ValidationError(f"Missing data or wrong format: {repr(e)}")
         except PollingSubscriber.DoesNotExist:
             return HttpResponseServerError("No matching subscriber")
         except CreateUserAccountErrorException:

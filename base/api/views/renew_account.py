@@ -70,9 +70,8 @@ class RenewAccount(generics.CreateAPIView):
             )
 
         except (KeyError, ValueError) as e:
-            raise ValidationError(f"Missing data or wrong format: {str(e)}")
+            raise ValidationError(f"Missing data or wrong format: {repr(e)}")
         except PollingSubscriber.DoesNotExist:
             return HttpResponseServerError("No matching subscriber")
         except RenewUserAccountValidityErrorException as e:
             return HttpResponseServerError(e.msg)
-

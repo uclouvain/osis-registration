@@ -31,10 +31,10 @@ from requests.exceptions import Timeout
 
 from base import settings
 from base.services.mock_service import mock_ldap_service
-from base.services.service_exceptions import CreateUserAccountErrorException
+from base.services.service_exceptions import DeleteUserAccountErrorException
 
 ERROR = "error"
-
+SUCCESS = "success"
 
 def delete_ldap_user_account(user_deletion_request) -> Union[Response, dict]:
     if settings.MOCK_LDAP_CALLS:
@@ -51,6 +51,6 @@ def delete_ldap_user_account(user_deletion_request) -> Union[Response, dict]:
             response = {"status": ERROR, "message": "Request timed out"}
 
         if response.get('status') == ERROR:
-            raise CreateUserAccountErrorException(error_msg=response['message'])
+            raise DeleteUserAccountErrorException(error_msg=response['message'])
 
     return response

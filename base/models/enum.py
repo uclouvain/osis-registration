@@ -15,6 +15,7 @@ class UserAccountRequestStatus(Enum):
     SUCCESS = "SUCCESS"
     ERROR = "ERROR"
     PENDING = "PENDING"
+    DELETED = "DELETED"
 
     @classmethod
     def choices(cls):
