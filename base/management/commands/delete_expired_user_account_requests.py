@@ -92,6 +92,7 @@ def get_accounts_to_delete():
     # Query for requests that match the criteria
     requests_to_delete = UserAccountRequest.objects.filter(
         type=UserAccountRequestType.CREATION.value,
+        status=UserAccountRequestStatus.PENDING.value,
         email_validated=False,
         updated_at__lte=time_threshold
     )
