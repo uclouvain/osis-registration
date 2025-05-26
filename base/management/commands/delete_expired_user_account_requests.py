@@ -53,11 +53,15 @@ class Command(BaseCommand):
                         f'Successfully deleted account for email: {request.email}'
                     ))
                 else:
+
+                    # limit response text to 500 chars
+                    error_message = response.text[:500] + ('...' if len(response.text) > 500 else '')
+
                     self.stdout.write(self.style.ERROR(
                         f'Failed to delete account for email: {request.email}. API returned status code: {response.status_code} \n'
-                        f'Detailed error message: {response.text}'
+                        f'Detailed error message: {error_message}'
                     ))
-                    errors += [response.text]
+                    errors += [error_message]
 
             except requests.exceptions.RequestException as e:
                 self.stdout.write(self.style.ERROR(
