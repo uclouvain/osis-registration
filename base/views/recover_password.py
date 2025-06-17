@@ -35,7 +35,7 @@ from ratelimit.decorators import ratelimit
 from requests.exceptions import MissingSchema
 
 from base import settings
-from base.forms.recover_password import RecoverPasswordForm, ModifyPasswordForm
+from base.forms.recover_password import RecoverPasswordForm, ModifyPasswordForm, ACCOUNT_TYPE_INTERNAL
 from base.models.enum import UserPasswordResetRequestStatus
 from base.models.user_password_reset_request import UserPasswordResetRequest
 from base.services import logging
@@ -62,6 +62,10 @@ class RecoverPasswordFormView(FormView):
     user_account = None
 
     def form_valid(self, form):
+        account_type = form.check_account_type()
+        if account_type == ACCOUNT_TYPE_INTERNAL:
+            return redirect(settings.LOST_PASSWORD_LDAP_URL)
+
         try:
             self.user_account = get_ldap_user_account_information(form.cleaned_data['email'])
             uprr = UserPasswordResetRequest.objects.create(email=self.user_account['email'])
@@ -70,9 +74,9 @@ class RecoverPasswordFormView(FormView):
         except RetrieveUserAccountInformationErrorException:
             form.add_error(
                 'email',
-                mark_safe(_("No account has been found with the given email. Please verify you are using your private email. <br/>"
-                  "If your mail domain @uclouvain.be / @student.uclouvain.be, please use the following form: <br/>"
-                  "<a href='{}'>UCLouvain password recovery</a>").format(settings.LOST_PASSWORD_URL))
+                mark_safe(
+                    _("No account has been found with the given email. Please verify you are using your private email.")
+                )
             )
             return super().form_invalid(form)
         return super().form_valid(form)
