@@ -24,16 +24,33 @@
 #
 ##############################################################################
 
+import requests
 from django import forms
+from django.conf import settings
 from django.contrib.auth.password_validation import MinimumLengthValidator, UserAttributeSimilarityValidator, \
     NumericPasswordValidator, CommonPasswordValidator
 from django.utils.translation import gettext_lazy as _
 
 from base.admin import User
 
+ACCOUNT_TYPE_INTERNAL = 'internal'
+ACCOUNT_TYPE_EXTERNAL = 'external'
 
 class RecoverPasswordForm(forms.Form):
     email = forms.EmailField(label=_('Private email address'), max_length=100, required=True)
+
+    def check_account_type(self):
+        email = self.cleaned_data['email']
+        try:
+            response = requests.get(
+                f"{settings.LDAP_ACCOUNT_IS_SWITCHED_EMAIL_URL}{email}",
+                timeout=60
+            )
+            if response.status_code == 200 and response.json()['status'] == 'success':
+                return ACCOUNT_TYPE_INTERNAL
+        except requests.RequestException:
+            return ACCOUNT_TYPE_EXTERNAL
+        return ACCOUNT_TYPE_EXTERNAL
 
 
 class ModifyPasswordForm(forms.Form):
