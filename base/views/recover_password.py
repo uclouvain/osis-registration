@@ -64,7 +64,7 @@ class RecoverPasswordFormView(FormView):
     def form_valid(self, form):
         account_type = form.check_account_type()
         if account_type == ACCOUNT_TYPE_INTERNAL:
-            return redirect(settings.LOST_PASSWORD_LDAP_URL)
+            return redirect(settings.LOST_PASSWORD_URL)
 
         try:
             self.user_account = get_ldap_user_account_information(form.cleaned_data['email'])
