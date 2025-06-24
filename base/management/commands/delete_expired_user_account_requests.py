@@ -96,9 +96,5 @@ def get_accounts_to_delete():
         email_validated=False,
         updated_at__lte=time_threshold
     )
-    already_deleted = UserAccountRequest.objects.filter(
-        type=UserAccountRequestType.DELETION.value,
-        status=UserAccountRequestStatus.SUCCESS.value
-    ).values_list('email', flat=True)
-    requests_to_delete = [request for request in requests_to_delete if request.email not in already_deleted]
+    requests_to_delete = [request for request in requests_to_delete]
     return requests_to_delete
