@@ -108,10 +108,10 @@ class RegistrationFormView(FormView):
             ):
                 return super().form_invalid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
-            self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
+            self._log_password_check_attempt_failed(self.request.POST['email'].lower(), e.msg)
 
         self.user_account_request = UserAccountRequest(
-            email=self.request.POST['email'],
+            email=self.request.POST['email'].lower(),
             type=UserAccountRequestType.CREATION.value,
             subscriber=self.subscriber
         )

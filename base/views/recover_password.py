@@ -182,7 +182,7 @@ class ModifyPasswordFormView(FormView):
             )
             return super().form_valid(form)
         except (PasswordCheckServiceBadRequestException, MissingSchema) as e:
-            self._log_password_check_attempt_failed(self.request.POST['email'], e.msg)
+            self._log_password_check_attempt_failed(self.request.POST['email'].lower(), e.msg)
 
     def get_success_url(self):
         messages.add_message(
