@@ -63,7 +63,7 @@ class DeleteAccount(generics.DestroyAPIView):
                 user_account_creation_request = UserAccountRequest.objects.get(
                     type=UserAccountRequestType.CREATION.name,
                     status__in=[UserAccountRequestStatus.SUCCESS.name, UserAccountRequestStatus.PENDING.name],
-                    email=email,
+                    email__iexact=email,
                 )
             except UserAccountRequest.DoesNotExist:
                 return HttpResponseServerError(
