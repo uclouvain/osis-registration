@@ -59,11 +59,17 @@ class DeleteAccount(generics.DestroyAPIView):
             serializer.is_valid(raise_exception=True)
             user_account_deletion_request = serializer.save()
 
-            user_account_creation_request = UserAccountRequest.objects.get(
-                type=UserAccountRequestType.CREATION.name,
-                status=UserAccountRequestStatus.PENDING.name,
-                email=email,
-            )
+            try:
+                user_account_creation_request = UserAccountRequest.objects.get(
+                    type=UserAccountRequestType.CREATION.name,
+                    status__in=[UserAccountRequestStatus.SUCCESS.name, UserAccountRequestStatus.PENDING.name],
+                    email=email,
+                )
+            except UserAccountRequest.DoesNotExist:
+                return HttpResponseServerError(
+                    "The user account creation request could not be found."
+                    " It may have already been processed, cancelled, or the account may have been deleted."
+                )
 
             try:
                 get_ldap_user_account_information(email=email)
