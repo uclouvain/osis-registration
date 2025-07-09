@@ -34,6 +34,7 @@ from base.api.serializers.user_account_request import UserAccountRequestSerializ
 from base.models.enum import UserAccountRequestType
 from base.models.polling_subscriber import PollingSubscriber
 from base.services.service_exceptions import RenewUserAccountValidityErrorException
+from base.services.user_account_creation import SUCCESS
 from base.services.user_account_information import get_ldap_user_account_information
 from base.services.user_account_renewal import renew_ldap_user_account_validity
 
@@ -54,7 +55,7 @@ class RenewAccount(generics.CreateAPIView):
                 "subscriber": PollingSubscriber.objects.get(app_name=self.request.user).pk
             })
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            user_account_request_renewal = serializer.save()
 
             account_information = get_ldap_user_account_information(email=email)
             response = renew_ldap_user_account_validity(
@@ -64,10 +65,20 @@ class RenewAccount(generics.CreateAPIView):
                 validity_days=request.data.get('validity_days', settings.LDAP_ACCOUNT_VALIDITY_DAYS)
             )
             new_validity_date = datetime.strptime(response['validite'], '%Y%m%d').strftime('%Y-%m-%d')
-            return HttpResponse(
-                status=status.HTTP_200_OK,
-                content=f"New validity set for {account_information['email']} until {new_validity_date}"
-            )
+
+            if response['status'] == SUCCESS:
+                user_account_request_renewal.status = user_account_request_renewal.SUCCESS.name
+                user_account_request_renewal.save()
+                return HttpResponse(
+                    status=status.HTTP_200_OK,
+                    content=f"New validity set for {account_information['email']} until {new_validity_date}"
+                )
+            else:
+                user_account_request_renewal.status = user_account_request_renewal.ERROR.name
+                user_account_request_renewal.save()
+                return HttpResponseServerError(
+                    f"An unknown error occured during account renewal for {account_information['email']}"
+                )
 
         except (KeyError, ValueError) as e:
             raise ValidationError(f"Missing data or wrong format: {repr(e)}")
