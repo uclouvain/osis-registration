@@ -31,7 +31,7 @@ from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 
 from base.api.serializers.user_account_request import UserAccountRequestSerializer
-from base.models.enum import UserAccountRequestType
+from base.models.enum import UserAccountRequestType, UserAccountRequestStatus
 from base.models.polling_subscriber import PollingSubscriber
 from base.services.service_exceptions import RenewUserAccountValidityErrorException
 from base.services.user_account_creation import SUCCESS
@@ -67,14 +67,14 @@ class RenewAccount(generics.CreateAPIView):
             new_validity_date = datetime.strptime(response['validite'], '%Y%m%d').strftime('%Y-%m-%d')
 
             if response['status'] == SUCCESS:
-                user_account_request_renewal.status = user_account_request_renewal.SUCCESS.name
+                user_account_request_renewal.status = UserAccountRequestStatus.SUCCESS.name
                 user_account_request_renewal.save()
                 return HttpResponse(
                     status=status.HTTP_200_OK,
                     content=f"New validity set for {account_information['email']} until {new_validity_date}"
                 )
             else:
-                user_account_request_renewal.status = user_account_request_renewal.ERROR.name
+                user_account_request_renewal.status = UserAccountRequestStatus.ERROR.name
                 user_account_request_renewal.save()
                 return HttpResponseServerError(
                     f"An unknown error occured during account renewal for {account_information['email']}"
