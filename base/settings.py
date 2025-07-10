@@ -282,3 +282,9 @@ PREPARING_ARRIVAL_URL_EN = os.environ.get('PREPARING_ARRIVAL_URL_EN', '')
 
 ASSIMILATION_URL_FR = os.environ.get('ASSIMILATION_URL_FR', '')
 ASSIMILATION_URL_EN = os.environ.get('ASSIMILATION_URL_EN', '')
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
