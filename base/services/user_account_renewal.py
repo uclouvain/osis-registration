@@ -51,7 +51,8 @@ def renew_ldap_user_account_validity(request, account_id, email, validity_days) 
                 headers={'Content-Type': 'application/json'},
                 json={
                     "id": account_id,
-                    "validite": (date.today() + timedelta(days=int(validity_days))).strftime('%Y%m%d')
+                    "validite": (date.today() + timedelta(days=int(validity_days))).strftime('%Y%m%d'),
+                    "active": True
                 },
                 url=settings.LDAP_ACCOUNT_MODIFICATION_URL,
                 timeout=60,
